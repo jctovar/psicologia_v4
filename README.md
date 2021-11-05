@@ -1,6 +1,6 @@
-# suayed
+# Psicologia SUAyED
 
-A new Flutter project.
+A renew app project for Iztacala.
 
 ## Getting Started
 

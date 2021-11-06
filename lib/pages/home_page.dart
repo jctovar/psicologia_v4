@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -18,12 +17,6 @@ class _MyHomePageState extends State<MyHomePage> {
   static const String placeholderImg = 'assets/no_image.jpg';
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
 
-  updateFeed(feed) {
-    setState(() {
-      _feed = feed;
-    });
-  }
-
   Future<void> openFeed(String url) async {
     if (await canLaunch(url)) {
       await launch(
@@ -36,18 +29,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future load() async {
-    /*SuayedServices.loadFeed().then((result) {
-      if (result.toString().isEmpty) {
-        return;
-      }
-      updateFeed(result.items);
-    });*/
-
     SuayedServices.getWP().then((result) {
       if (result.toString().isEmpty) {
         return;
       }
-      updateFeed(result);
+      _updateFeed(result);
     });
   }
 
@@ -58,71 +44,75 @@ class _MyHomePageState extends State<MyHomePage> {
     load();
   }
 
-  title(title) {
+  _updateFeed(feed) {
+    setState(() {
+      _feed = feed;
+    });
+  }
+
+  _title(title) {
     return Text(
       title,
-      style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
+      style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w300),
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
     );
   }
 
-  subtitle(subTitle) {
+  _subtitle(subTitle) {
     return Text(
       subTitle,
-      style: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w100),
+      style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w100),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );
   }
 
-  thumbnail(imageUrl) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 15.0),
-      child: CachedNetworkImage(
-        placeholder: (context, url) => Image.asset(placeholderImg),
-        imageUrl: imageUrl,
-        height: 70,
-        width: 70,
-        alignment: Alignment.center,
-        fit: BoxFit.fill,
-      ),
+  _thumbnail(imageUrl) {
+    return CachedNetworkImage(
+      placeholder: (context, url) => Image.asset(placeholderImg),
+      imageUrl: imageUrl,
+      alignment: Alignment.center,
+      fit: BoxFit.fill,
     );
   }
 
-  rightIcon() {
-    return const Icon(
-      Icons.keyboard_arrow_right,
-      color: Colors.grey,
-      size: 30.0,
-    );
-  }
-
-  list() {
+  _listPosts() {
     return ListView.builder(
       itemCount: _feed.length,
       itemBuilder: (BuildContext context, int index) {
         final item = _feed[index];
-        return ListTile(
-          title: title(item['title']['rendered']),
-          subtitle: subtitle(item['date'].toString()),
-          leading: thumbnail(item['jetpack_featured_media_url']),
-          trailing: rightIcon(),
-          contentPadding: const EdgeInsets.all(5.0),
-          onTap: () => openFeed(item['link'] ?? ''),
-        );
+        return Card(
+            child: InkWell(
+                splashColor: Colors.blue.withAlpha(30),
+                onTap: () => openFeed(item['link'] ?? ''),
+                child:
+                    Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                      _thumbnail(item['jetpack_featured_media_url']),
+                      ListTile(
+                        title: _title(item['title']['rendered']),
+                        subtitle: _subtitle(_datePub(item['date'])),
+                        contentPadding: const EdgeInsets.all(10.0),
+                      )
+                ])));
       },
     );
   }
 
-  body() {
+  _datePub(String date) {
+    DateTime dt = DateTime.parse(date);
+
+    return timeago.format(dt, locale: 'es');
+  }
+
+  _body() {
     return _feed.isEmpty
         ? const Center(
             child: CircularProgressIndicator(),
           )
         : RefreshIndicator(
             key: _refreshKey,
-            child: list(),
+            child: _listPosts(),
             onRefresh: () => load(),
           );
   }
@@ -133,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: body(),
+      body: _body(),
     );
   }
 }

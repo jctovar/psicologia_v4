@@ -36,15 +36,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future load() async {
-    SuayedServices.loadFeed().then((result) {
+    /*SuayedServices.loadFeed().then((result) {
       if (result.toString().isEmpty) {
         return;
       }
       updateFeed(result.items);
-    });
+    });*/
 
-    SuayedServices.getFeed().then((result) {
-      //log(result);
+    SuayedServices.getWP().then((result) {
+      if (result.toString().isEmpty) {
+        return;
+      }
+      updateFeed(result);
     });
   }
 
@@ -101,12 +104,12 @@ class _MyHomePageState extends State<MyHomePage> {
       itemBuilder: (BuildContext context, int index) {
         final item = _feed[index];
         return ListTile(
-          title: title(item.title),
-          subtitle: subtitle(item.media.toString()),
-          //leading: thumbnail(item.media),
+          title: title(item['title']['rendered']),
+          subtitle: subtitle(item['date'].toString()),
+          leading: thumbnail(item['jetpack_featured_media_url']),
           trailing: rightIcon(),
           contentPadding: const EdgeInsets.all(5.0),
-          onTap: () => openFeed(item.link ?? ''),
+          onTap: () => openFeed(item['link'] ?? ''),
         );
       },
     );

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:suayed/services/suayed_service.dart';
+import 'package:share/share.dart';
+import 'home_detail.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -93,12 +95,44 @@ class _MyHomePageState extends State<MyHomePage> {
                         title: _title(item['title']['rendered']),
                         subtitle: _subtitle(_datePub(item['date'])),
                         contentPadding: const EdgeInsets.all(10.0),
-                      )
+                      ),
+                      _buttonBar(item)
                 ])));
       },
     );
   }
 
+  _buttonBar(var item) {
+    return ButtonBar(
+      children: <Widget>[
+        IconButton(
+          onPressed: () {
+            // You enter here what you want the button to do once the user interacts with it
+            Share.share(item['link'], subject: item['title']['rendered']);
+          },
+          icon: const Icon(
+            Icons.share,
+            color: Colors.black54,
+          ),
+          iconSize: 24.0,
+        ),
+        IconButton(
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => HomeDetail(
+                title: item['title']['rendered'],
+              ),
+            ),
+          ),
+          icon: const Icon(
+            Icons.more_vert,
+            color: Colors.black54,
+          ),
+          iconSize: 24.0,
+        ),
+      ],
+    );
+  }
   _datePub(String date) {
     DateTime dt = DateTime.parse(date);
 

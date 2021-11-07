@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 
 
 class HomeDetail extends StatefulWidget {
@@ -20,6 +20,7 @@ class _HomeDetailState extends State<HomeDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xfffbfbfb),
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
@@ -30,16 +31,14 @@ class _HomeDetailState extends State<HomeDetail> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: _title(widget.item['title']['rendered']),
             ),
             _image(widget.item['jetpack_featured_media_url']),
+            _subtitle(widget.item['date']),
             Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                widget.item['content']['rendered'],
-                style: const TextStyle(fontWeight: FontWeight.normal),
-              ),
+              padding: const EdgeInsets.all(16.0),
+              child: HtmlWidget(widget.item['content']['rendered']),
             ),
             const SizedBox(height: 10),
             const Divider(),
@@ -68,8 +67,17 @@ class _HomeDetailState extends State<HomeDetail> {
   _title(title) {
     return Text(
       title,
-      style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
+      style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.w400),
       maxLines: 3,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  _subtitle(subTitle) {
+    return Text(
+      subTitle,
+      style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w100),
+      maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );
   }

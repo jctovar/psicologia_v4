@@ -156,7 +156,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        centerTitle: true,
+        title: Text(widget.title,
+          style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.w800)),
       ),
       body: _body(),
       bottomNavigationBar: BottomNavigationBar(

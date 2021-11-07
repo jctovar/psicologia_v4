@@ -1,8 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeDetail extends StatefulWidget {
   const HomeDetail({Key? key, required this.title, required this.item}) : super(key: key);
@@ -38,7 +40,7 @@ class _HomeDetailState extends State<HomeDetail> {
             _subtitle(widget.item['date']),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: HtmlWidget(widget.item['content']['rendered']),
+              child: _htmlWidget(widget.item['content']['rendered']),
             ),
             const SizedBox(height: 10),
             const Divider(),
@@ -48,7 +50,7 @@ class _HomeDetailState extends State<HomeDetail> {
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.normal),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
           ]
         )
       )
@@ -66,9 +68,11 @@ class _HomeDetailState extends State<HomeDetail> {
 
   _title(title) {
     return Text(
-      title,
-      style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.w400),
-      maxLines: 3,
+      title.toUpperCase(),
+      style: GoogleFonts.lora(
+        textStyle: const TextStyle(fontSize: 22.0, fontWeight: FontWeight.w800, color: Colors.black54, letterSpacing: -.3),
+      ),
+      maxLines: 4,
       overflow: TextOverflow.ellipsis,
     );
   }
@@ -76,10 +80,28 @@ class _HomeDetailState extends State<HomeDetail> {
   _subtitle(subTitle) {
     return Text(
       subTitle,
-      style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w100),
+      style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w200),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );
+  }
+
+  _htmlWidget(String html) {
+    return HtmlWidget(html,
+        customStylesBuilder: (element) {
+          if (element.classes.contains('foo')) {
+            return {'color': 'red'};
+          }
+
+          return null;
+        },
+        onTapUrl:(url) {
+          _openFeed(url);
+          return true;
+        },
+        onErrorBuilder: (context, element, error) => Text('$element error: $error'),
+        onLoadingBuilder: (context, element, loadingProgress) => const CircularProgressIndicator(),
+        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w300));
   }
 
   PopupMenuButton _popupMenuButton() {
@@ -87,7 +109,7 @@ class _HomeDetailState extends State<HomeDetail> {
         onSelected: (value) {
           switch (value) {
             case 0:
-              openFeed(widget.item['link']);
+              _openFeed(widget.item['link']);
               break;
             case 1:
 
@@ -143,7 +165,7 @@ class _HomeDetailState extends State<HomeDetail> {
         ]);
   }
 
-  Future<void> openFeed(String url) async {
+  Future<void> _openFeed(String url) async {
     if (await canLaunch(url)) {
       await launch(
         url,

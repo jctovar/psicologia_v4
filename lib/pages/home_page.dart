@@ -1,3 +1,4 @@
+import 'package:google_fonts/google_fonts.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -54,9 +55,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _title(title) {
     return Text(
-      title,
-      style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w300),
-      maxLines: 2,
+      title.toUpperCase(),
+      style: GoogleFonts.lora(
+        textStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w800, color: Colors.black54, letterSpacing: -.3),
+      ),
+      maxLines: 3,
       overflow: TextOverflow.ellipsis,
     );
   }

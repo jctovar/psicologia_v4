@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:google_fonts/google_fonts.dart';
+import 'package:suayed/models/post_model.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -20,6 +23,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
   late int _selectedIndex = 0;
 
+  List<PostModel> posts = List.empty();
+
   Future load() async {
     SuayedServices.getWP().then((result) {
       if (result.toString().isEmpty) {
@@ -34,6 +39,13 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _refreshKey;
     load();
+
+    SuayedServices.getPosts().then((postsFromServer) {
+      setState(() {
+        posts = postsFromServer;
+        log(posts[0].date.toString());
+      });
+    });
   }
 
   _openFeed(var item) {

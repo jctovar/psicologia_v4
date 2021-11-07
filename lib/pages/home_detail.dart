@@ -45,11 +45,7 @@ class _HomeDetailState extends State<HomeDetail> {
             const SizedBox(height: 10),
             const Divider(),
             const SizedBox(height: 10),
-            const Text(
-              '- UNAM -',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.normal),
-            ),
+            _footer('UNAM'),
             const SizedBox(height: 20),
           ]
         )
@@ -86,6 +82,17 @@ class _HomeDetailState extends State<HomeDetail> {
     );
   }
 
+  _footer(title) {
+    return Text(
+      title.toUpperCase(),
+      style: GoogleFonts.lora(
+        textStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w800, color: Colors.pinkAccent, letterSpacing: -.3),
+      ),
+      maxLines: 4,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
   _htmlWidget(String html) {
     return HtmlWidget(html,
         customStylesBuilder: (element) {
@@ -101,7 +108,10 @@ class _HomeDetailState extends State<HomeDetail> {
         },
         onErrorBuilder: (context, element, error) => Text('$element error: $error'),
         onLoadingBuilder: (context, element, loadingProgress) => const CircularProgressIndicator(),
-        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w300));
+        textStyle: GoogleFonts.robotoSlab(
+          textStyle: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w300, color: Colors.black87),
+        )
+    );
   }
 
   PopupMenuButton _popupMenuButton() {

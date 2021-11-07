@@ -1,6 +1,5 @@
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:suayed/services/suayed_service.dart';
 import 'package:share/share.dart';
@@ -18,17 +17,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List _feed = List.empty();
   static const String placeholderImg = 'assets/no_image.jpg';
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
-
-  Future<void> openFeed(String url) async {
-    if (await canLaunch(url)) {
-      await launch(
-        url,
-        forceSafariVC: true,
-        forceWebView: false,
-      );
-      return;
-    }
-  }
+  late int _selectedIndex = 0;
 
   Future load() async {
     SuayedServices.getWP().then((result) {
@@ -44,6 +33,17 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _refreshKey;
     load();
+  }
+
+  _openFeed(var item) {
+    Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => HomeDetail(
+              title: item['title']['rendered'],
+              item: item
+          ),
+        )
+    );
   }
 
   _updateFeed(feed) {
@@ -87,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return Card(
             child: InkWell(
                 splashColor: Colors.blue.withAlpha(30),
-                onTap: () => openFeed(item['link'] ?? ''),
+                onTap: () => _openFeed(item),
                 child:
                     Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
                       _thumbnail(item['jetpack_featured_media_url']),
@@ -121,11 +121,12 @@ class _MyHomePageState extends State<MyHomePage> {
             MaterialPageRoute(
               builder: (context) => HomeDetail(
                 title: item['title']['rendered'],
+                item: item
               ),
             ),
           ),
           icon: const Icon(
-            Icons.more_vert,
+            Icons.bookmark,
             color: Colors.black54,
           ),
           iconSize: 24.0,
@@ -158,6 +159,31 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: _body(),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Noticias',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Areas',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.school),
+            label: 'Tramites',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.pink[400],
+        onTap: _onItemTapped,
+      ),
     );
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 }

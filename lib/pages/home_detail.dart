@@ -1,15 +1,15 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:suayed/models/post_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class HomeDetail extends StatefulWidget {
-  const HomeDetail({Key? key, required this.title, required this.item}) : super(key: key);
-  final String title;
-  final item;
+  const HomeDetail({Key? key, required this.item}) : super(key: key);
+  final PostModel item;
 
   @override
   _HomeDetailState createState() => _HomeDetailState();
@@ -22,9 +22,9 @@ class _HomeDetailState extends State<HomeDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xfffbfbfb),
+      backgroundColor: const Color(0xfffafafa),
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.item.title),
         actions: [
           _popupMenuButton(),
         ],
@@ -34,13 +34,16 @@ class _HomeDetailState extends State<HomeDetail> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: _title(widget.item['title']['rendered']),
+              child: _title(widget.item.title),
             ),
-            _image(widget.item['jetpack_featured_media_url']),
-            _subtitle(widget.item['date']),
+            _image(widget.item.image),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: _htmlWidget(widget.item['content']['rendered']),
+              child: _subtitle(timeago.format(widget.item.date, locale: 'es')),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: _htmlWidget(widget.item.content),
             ),
             const SizedBox(height: 10),
             const Divider(),
@@ -76,9 +79,9 @@ class _HomeDetailState extends State<HomeDetail> {
   _subtitle(subTitle) {
     return Text(
       subTitle,
-      style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w200),
+      textAlign: TextAlign.right,
+      style: const TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic, fontWeight: FontWeight.w400),
       maxLines: 1,
-      overflow: TextOverflow.ellipsis,
     );
   }
 
@@ -119,7 +122,7 @@ class _HomeDetailState extends State<HomeDetail> {
         onSelected: (value) {
           switch (value) {
             case 0:
-              _openFeed(widget.item['link']);
+              _openFeed(widget.item.link);
               break;
             case 1:
 

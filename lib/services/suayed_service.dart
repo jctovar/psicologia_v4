@@ -7,6 +7,8 @@ import 'http_service.dart';
 class SuayedServices {
 
   static Future<List> getWP() async {
+    // response['title']['rendered']
+
     final requestUri = Uri.https(
         'suayed.iztacala.unam.mx', '/wp-json/wp/v2/posts', { '_embed' : '' }
     );
@@ -29,7 +31,7 @@ class SuayedServices {
     const String url = 'suayed.iztacala.unam.mx';
     const String path = '/wp-json/wp/v2/posts';
 
-    final response = await http.get(Uri.https(url, path, { '_embed' : '' }));
+    final response = await http.get(Uri.https(url, path, { '_embed' : '', 'per_page': '15' }));
     try {
       if (response.statusCode == 200) {
         List<PostModel> list = parseJson(response.body);

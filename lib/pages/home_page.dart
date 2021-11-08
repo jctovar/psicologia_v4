@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:google_fonts/google_fonts.dart';
 import 'package:suayed/models/post_model.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -18,15 +16,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List _feed = List.empty();
   static const String placeholderImg = 'assets/no_image.jpg';
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
   late int _selectedIndex = 0;
+  List<PostModel> _posts = List.empty();
 
-  List<PostModel> posts = List.empty();
-
-  Future load() async {
-    SuayedServices.getWP().then((result) {
+  Future _load() async {
+    SuayedServices.getPosts().then((result) {
       if (result.toString().isEmpty) {
         return;
       }
@@ -38,21 +34,13 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _refreshKey;
-    load();
-
-    SuayedServices.getPosts().then((postsFromServer) {
-      setState(() {
-        posts = postsFromServer;
-        log(posts[0].date.toString());
-      });
-    });
+    _load();
   }
 
-  _openFeed(var item) {
+  _openFeed(PostModel item) {
     Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => HomeDetail(
-              title: item['title']['rendered'],
               item: item
           ),
         )
@@ -61,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _updateFeed(feed) {
     setState(() {
-      _feed = feed;
+      _posts = feed;
     });
   }
 
@@ -96,19 +84,25 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _listPosts() {
     return ListView.builder(
-      itemCount: _feed.length,
+      itemCount: _posts.length,
       itemBuilder: (BuildContext context, int index) {
-        final item = _feed[index];
+        final item = _posts[index];
         return Card(
             child: InkWell(
                 splashColor: Colors.blue.withAlpha(30),
                 onTap: () => _openFeed(item),
                 child:
                     Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                      _thumbnail(item['jetpack_featured_media_url']),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: _thumbnail(item.image)
+                        ),
+                      ),
                       ListTile(
-                        title: _title(item['title']['rendered']),
-                        subtitle: _subtitle(_datePub(item['date'])),
+                        title: _title(item.title),
+                        subtitle: _subtitle(_datePub(item.date)),
                         contentPadding: const EdgeInsets.all(10.0),
                       ),
                       _buttonBar(item)
@@ -117,13 +111,13 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  _buttonBar(var item) {
+  _buttonBar(PostModel item) {
     return ButtonBar(
       children: <Widget>[
         IconButton(
           onPressed: () {
             // You enter here what you want the button to do once the user interacts with it
-            Share.share(item['link'], subject: item['title']['rendered']);
+            Share.share(item.link, subject: item.title);
           },
           icon: const Icon(
             Icons.share,
@@ -135,7 +129,6 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () => Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => HomeDetail(
-                title: item['title']['rendered'],
                 item: item
               ),
             ),
@@ -149,27 +142,46 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
   }
-  _datePub(String date) {
-    DateTime dt = DateTime.parse(date);
 
-    return timeago.format(dt, locale: 'es');
+  _datePub(DateTime date) {
+    return timeago.format(date, locale: 'es');
   }
 
   _body() {
-    return _feed.isEmpty
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
-        : RefreshIndicator(
-            key: _refreshKey,
-            child: _listPosts(),
-            onRefresh: () => load(),
-          );
+    switch(_selectedIndex) {
+      case 0: {
+        return _posts.isEmpty
+            ? const Center(
+              child: CircularProgressIndicator(),
+            )
+            : RefreshIndicator(
+          key: _refreshKey,
+          child: _listPosts(),
+          onRefresh: () => _load(),
+        );
+      }
+      break;
+      case 1: {
+        //statements;
+      }
+      break;
+      case 2: {
+        //statements;
+      }
+      break;
+      case 3: {
+        //statements;
+      }
+      break;
+    }
+
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xfffafafa),
       appBar: AppBar(
         centerTitle: true,
         title: Text(widget.title,
@@ -183,12 +195,12 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Noticias',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Areas',
+            icon: Icon(Icons.bookmark),
+            label: 'Marcadores',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.school),
-            label: 'Tramites',
+            label: 'Areas',
           ),
         ],
         currentIndex: _selectedIndex,

@@ -6,6 +6,7 @@ import 'http_service.dart';
 
 class SuayedServices {
 
+  // Old function, only for documentation for jsonDecode
   static Future<List> getWP() async {
     // response['title']['rendered']
 
@@ -27,27 +28,16 @@ class SuayedServices {
     }
   }
 
-  static Future<List<PostModel> > getPosts() async {
-    const String url = 'suayed.iztacala.unam.mx';
-    const String path = '/wp-json/wp/v2/posts';
-
-    final response = await http.get(Uri.https(url, path, { '_embed' : '', 'per_page': '15' }));
+  static Future<List<PostModel>> getPosts() async {
     try {
-      if (response.statusCode == 200) {
-        List<PostModel> list = parseJson(response.body);
+      Response response = await dio.request('?per_page=15');
 
-        return list;
-      } else {
-        throw Exception('Failed to load post');
+      return (response.data as List).map((x) => PostModel.fromJson(x)).toList();
+    } on DioError catch (e) {
+      if(e.type == DioErrorType.receiveTimeout){
+        throw Exception("Connection Timeout Exception");
       }
-    }  catch (e) {
-      throw Exception(e.toString());
+      throw Exception(e.message);
     }
   }
-
-  static List<PostModel> parseJson(String responseBody) {
-    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-    return parsed.map<PostModel>((json) => PostModel.fromJson(json)).toList();
-  }
-
 }

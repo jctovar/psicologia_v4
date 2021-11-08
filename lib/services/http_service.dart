@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 var options = BaseOptions(
-  baseUrl: 'https://suayed.iztacala.unam.mx/feed/json',
+  baseUrl: 'https://suayed.iztacala.unam.mx/wp-json/wp/v2/posts',
   connectTimeout: 5000,
   receiveTimeout: 3000,
   receiveDataWhenStatusError: true,

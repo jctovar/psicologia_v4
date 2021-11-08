@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:suayed/models/post_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,7 +21,7 @@ class _HomeDetailState extends State<HomeDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xfffafafa),
+      backgroundColor: const Color(0xfff0f0f0),
       appBar: AppBar(
         title: Text(widget.item.title),
         actions: [

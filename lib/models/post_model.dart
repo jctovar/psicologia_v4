@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 
 class PostModel {
   PostModel({
@@ -23,11 +22,21 @@ class PostModel {
     return PostModel(
         id: json['id'],
         date: DateTime.parse(json['date']),
-        title: json['title']['rendered'].toString(),
-        image: json['jetpack_featured_media_url'].toString(),
-        excerpt: json['jetpack-related-posts'][0]['excerpt'].toString(),
+        title: json['title']['rendered'],
+        image: json['jetpack_featured_media_url'],
+        excerpt: json['jetpack-related-posts'][0]['excerpt'],
         content: json['content']['rendered'],
         link: json['link'].toString()
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "date": date,
+    "title": title,
+    "image": image,
+    "excerpt": excerpt,
+    "content": content,
+    "link": link,
+  };
 }

@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
   _subtitle(subTitle) {
     return Text(
       subTitle,
-      style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w100),
+      style: const TextStyle(fontSize: 14.0,fontWeight: FontWeight.w300),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );
@@ -96,14 +96,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
+                            borderRadius: BorderRadius.circular(10.0),
                             child: _thumbnail(item.image)
                         ),
                       ),
                       ListTile(
                         title: _title(item.title),
                         subtitle: _subtitle(_datePub(item.date)),
-                        contentPadding: const EdgeInsets.all(10.0),
+                        contentPadding: const EdgeInsets.all(8.0),
                       ),
                       _buttonBar(item)
                 ])));
@@ -181,7 +181,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xfffafafa),
+      backgroundColor: const Color(0xfff0f0f0),
       appBar: AppBar(
         centerTitle: true,
         title: Text(widget.title,

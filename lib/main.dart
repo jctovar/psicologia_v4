@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:suayed/pages/about_page.dart';
 import 'package:suayed/pages/home_page.dart';
+import 'package:suayed/routes/routes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +32,10 @@ class _MyAppState extends State<MyApp> {
         fontFamily: 'Roboto',
       ),
       home: HomePage(title: appTitle),
+      routes: {
+        Routes.home: (context) => const HomePage(title: 'Inicio'),
+        Routes.about: (context) => const AboutPage(),
+      },
     );
   }
 }

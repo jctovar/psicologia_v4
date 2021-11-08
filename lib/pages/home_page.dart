@@ -94,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child:
                     Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0),
                         child: ClipRRect(
                             borderRadius: BorderRadius.circular(10.0),
                             child: _thumbnail(item.image)

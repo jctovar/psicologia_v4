@@ -32,7 +32,7 @@ class _HomeDetailState extends State<HomeDetail> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
               child: _title(widget.item.title),
             ),
             _image(widget.item.image),
@@ -68,7 +68,7 @@ class _HomeDetailState extends State<HomeDetail> {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
-        textStyle: const TextStyle(fontSize: 22.0, fontWeight: FontWeight.w800, color: Colors.black54, letterSpacing: -.3),
+        textStyle: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.w800, color: Colors.blue, letterSpacing: -.3),
       ),
       maxLines: 4,
       overflow: TextOverflow.ellipsis,

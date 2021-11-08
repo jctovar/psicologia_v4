@@ -29,7 +29,7 @@ class _MyAppState extends State<MyApp> {
             .copyWith(secondary: Colors.pinkAccent),
         fontFamily: 'Roboto',
       ),
-      home: MyHomePage(title: appTitle),
+      home: HomePage(title: appTitle),
     );
   }
 }

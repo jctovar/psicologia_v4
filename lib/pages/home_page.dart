@@ -1,5 +1,6 @@
 import 'package:google_fonts/google_fonts.dart';
 import 'package:suayed/models/post_model.dart';
+import 'package:suayed/widgets/drawer.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -7,18 +8,18 @@ import 'package:suayed/services/suayed_service.dart';
 import 'package:share/share.dart';
 import 'home_detail.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key, required this.title}) : super(key: key);
+  static const String routeName = 'home';
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   static const String placeholderImg = 'assets/no_image.jpg';
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
-  late int _selectedIndex = 0;
   List<PostModel> _posts = List.empty();
 
   Future _load() async {
@@ -57,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
-        textStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w800, color: Colors.black54, letterSpacing: -.3),
+        textStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w800, color: Colors.blue, letterSpacing: -.3),
       ),
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
@@ -67,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
   _subtitle(subTitle) {
     return Text(
       subTitle,
-      style: const TextStyle(fontSize: 14.0,fontWeight: FontWeight.w300),
+      style: const TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic, fontWeight: FontWeight.w300),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );
@@ -103,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ListTile(
                         title: _title(item.title),
                         subtitle: _subtitle(_datePub(item.date)),
-                        contentPadding: const EdgeInsets.all(8.0),
+                        contentPadding: const EdgeInsets.all(12.0),
                       ),
                       _buttonBar(item)
                 ])));
@@ -148,34 +149,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _body() {
-    switch(_selectedIndex) {
-      case 0: {
-        return _posts.isEmpty
-            ? const Center(
-              child: CircularProgressIndicator(),
-            )
-            : RefreshIndicator(
-          key: _refreshKey,
-          child: _listPosts(),
-          onRefresh: () => _load(),
-        );
-      }
-      break;
-      case 1: {
-        //statements;
-      }
-      break;
-      case 2: {
-        //statements;
-      }
-      break;
-      case 3: {
-        //statements;
-      }
-      break;
-    }
-
-
+    return _posts.isEmpty
+      ? const Center(
+        child: CircularProgressIndicator(),
+      )
+      : RefreshIndicator(
+        key: _refreshKey,
+        child: _listPosts(),
+        onRefresh: () => _load(),
+      );
   }
 
   @override
@@ -187,32 +169,8 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title,
           style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.w800)),
       ),
+      drawer: const AppDrawer(),
       body: _body(),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Noticias',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bookmark),
-            label: 'Marcadores',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'Areas',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.pink[400],
-        onTap: _onItemTapped,
-      ),
     );
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
   }
 }

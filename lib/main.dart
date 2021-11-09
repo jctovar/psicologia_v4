@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:suayed/pages/about_page.dart';
 import 'package:suayed/pages/home_page.dart';
+import 'package:suayed/pages/teachers_page.dart';
 import 'package:suayed/routes/routes.dart';
 
 Future<void> main() async {
@@ -34,6 +35,7 @@ class _MyAppState extends State<MyApp> {
       home: HomePage(title: appTitle),
       routes: {
         Routes.home: (context) => const HomePage(title: 'Inicio'),
+        Routes.teachers: (context) => const TeachersPage(title: 'Profesores'),
         Routes.about: (context) => const AboutPage(),
       },
     );

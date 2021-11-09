@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../widgets/drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'credits_page.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({Key? key}) : super(key: key);
@@ -16,28 +16,46 @@ class AboutPage extends StatelessWidget {
       ),
       drawer: const AppDrawer(),
       body: Center(
-          child: Container(
+          child: SizedBox(
             width: 300,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               textBaseline: TextBaseline.alphabetic,
-              children: const [
-                Image(image: AssetImage('assets/about.png')),
-                SizedBox(height: 30),
-                Text(
+              children: [
+                const Image(image: AssetImage('assets/about.png')),
+                const SizedBox(height: 15),
+                const Text(
                     'Aplicación desarrollada por la Facultad de Estudios Superiores Iztacala, UNAM. '
                         'Hecho en México, Universidad Nacional Autónoma de México (UNAM), '
                         'todos los derechos reservados 2021.',
                     textAlign: TextAlign.center,
-
-                    style: TextStyle(fontSize: 14, color: Colors.white)),
+                    style: TextStyle(fontSize: 12, color: Colors.white)),
+                const SizedBox(height: 10),
+                const Text('apps@iztacala.unam.mx', style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic, color: Colors.white)),
+                const SizedBox(height: 15),
+                SizedBox(
+                  height: 50,
+                  width: 250,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute<void>(
+                        builder: (BuildContext context) {
+                          return const CreditsPage();
+                        },
+                        fullscreenDialog: true,
+                      ));
+                    },
+                    child: const Text(
+                      'Creditos',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ),
+                ),
               ],
             ),
           )
       )
     );
   }
-
-  // Image(image: AssetImage('assets/about.png')),
 }

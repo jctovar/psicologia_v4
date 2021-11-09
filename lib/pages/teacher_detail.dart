@@ -1,0 +1,121 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:suayed/widgets/avatar.dart';
+import 'package:suayed/models/teacher_model.dart';
+
+class TeacherDetail extends StatefulWidget {
+  const TeacherDetail({Key? key, required this.item}): super(key: key);
+  final TeacherModel item;
+
+
+  @override
+  _TeacherDetailState createState() => _TeacherDetailState();
+}
+
+class _TeacherDetailState extends State<TeacherDetail> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        //backgroundColor: const Color(0xfff0f0f0),
+        appBar: AppBar(
+          title: Text('${widget.item.grade} ${widget.item.firstname} ${widget.item.lastname}'),
+        ),
+        body: SingleChildScrollView(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  const SizedBox(height: 20),
+                  Avatar(picturePath: widget.item.picture, sizeAvatar: 96),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 16, 16, 16),
+                    child: _title('${widget.item.grade} ${widget.item.firstname} ${widget.item.lastname}'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: _subtitle(widget.item.email),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: _htmlWidget(widget.item.cv),
+                  ),
+                  const Divider(),
+                  const SizedBox(height: 10),
+                  _footer('UNAM'),
+                  const SizedBox(height: 20),
+                ]
+            )
+        )
+    );
+  }
+
+  Container _lineText(String myText) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(20, 6, 10, 6),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              myText, overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              softWrap: false,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  _title(title) {
+    return Text(
+      title.toUpperCase(),
+      style: GoogleFonts.lora(
+        textStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w800, color: Colors.blue, letterSpacing: -.3),
+      ),
+      maxLines: 3,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  _subtitle(subTitle) {
+    return Text(
+      subTitle,
+      style: GoogleFonts.lora(
+          textStyle: const TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic, fontWeight: FontWeight.w300),
+      ),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  _footer(title) {
+    return Text(
+      title.toUpperCase(),
+      style: GoogleFonts.lora(
+        textStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w800, color: Colors.pinkAccent, letterSpacing: -.3),
+      ),
+      maxLines: 4,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  _htmlWidget(String html) {
+    return HtmlWidget(html,
+        customStylesBuilder: (element) {
+          if (element.classes.contains('foo')) {
+            return {'color': 'red'};
+          }
+
+          return null;
+        },
+        onErrorBuilder: (context, element, error) => Text('$element error: $error'),
+        onLoadingBuilder: (context, element, loadingProgress) => const CircularProgressIndicator(),
+        textStyle: GoogleFonts.robotoSlab(
+          textStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300, color: Colors.black87),
+        )
+    );
+  }
+
+}

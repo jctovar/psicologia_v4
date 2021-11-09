@@ -1,0 +1,46 @@
+{
+  "RECORDS": [
+    {
+      "id": "4",
+      "department_name": "Coordinación",
+      "agent": "DRA. ANABEL DE LA ROSA GÓMEZ",
+      "department_email": "coordinacion@iztacala.unam.mx",
+      "detail": "."
+    },
+    {
+      "id": "3",
+      "department_name": "Desarrollo Academico",
+      "agent": "MTRA. KAREN BELEN ESPINOZA ROSAL",
+      "department_email": "desarrollo.academico@iztacala.unam.mx",
+      "detail": "."
+    },
+    {
+      "id": "2",
+      "department_name": "Plataformas Educativas",
+      "agent": "ING. JUAN CARLOS TOVAR GÓMEZ",
+      "department_email": "asistencia.tecnica@iztacala.unam.mx",
+      "detail": "."
+    },
+    {
+      "id": "1",
+      "department_name": "Asuntos Estudiantiles",
+      "agent": "MTRA. SILVIA TOLEDO DE LEON",
+      "department_email": "asuntos.estudiantiles@iztacala.unam.mx",
+      "detail": "."
+    },
+    {
+      "id": "6",
+      "department_name": "Proyectos Educativos",
+      "agent": "MTRA. ALEJANDRA PAMELA SALDAÑA BADILLO",
+      "department_email": "proyectos.educativos@iztacala.unam.mx",
+      "detail": "."
+    },
+    {
+      "id": "5",
+      "department_name": "Seguimiento Escolar",
+      "agent": "LIC. KATHYA EVELIN PEREZ PEÑA GÓMEZ",
+      "department_email": "seguimientoestudiantes@iztacala.unam.mx",
+      "detail": "."
+    }
+  ]
+}

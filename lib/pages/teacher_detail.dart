@@ -28,7 +28,7 @@ class _TeacherDetailState extends State<TeacherDetail> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   const SizedBox(height: 20),
-                  Avatar(picturePath: widget.item.picture, sizeAvatar: 96),
+                  Avatar(picturePath: widget.item.picture, sizeAvatar: 128),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 16, 16, 16),
                     child: _title('${widget.item.grade} ${widget.item.firstname} ${widget.item.lastname}'),
@@ -37,6 +37,11 @@ class _TeacherDetailState extends State<TeacherDetail> {
                     padding: const EdgeInsets.all(16.0),
                     child: _subtitle(widget.item.email),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: _subtitle(widget.item.fields),
+                  ),
+                  const Divider(),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: _htmlWidget(widget.item.cv),

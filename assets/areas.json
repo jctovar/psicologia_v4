@@ -2,7 +2,7 @@
   "RECORDS": [
     {
       "id": "4",
-      "department_name": "Coordinación",
+      "department_name": "Coordinación SUAyED",
       "agent": "DRA. ANABEL DE LA ROSA GÓMEZ",
       "department_email": "coordinacion@iztacala.unam.mx",
       "detail": "."
@@ -39,7 +39,7 @@
       "id": "5",
       "department_name": "Seguimiento Escolar",
       "agent": "LIC. KATHYA EVELIN PEREZ PEÑA GÓMEZ",
-      "department_email": "seguimientoestudiantes@iztacala.unam.mx",
+      "department_email": "seguimiento.estudiantes@iztacala.unam.mx",
       "detail": "."
     }
   ]

@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                 child:
                     Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0),
+                        padding: const EdgeInsets.all(8.0),
                         child: ClipRRect(
                             borderRadius: BorderRadius.circular(10.0),
                             child: _thumbnail(item.image)
@@ -104,7 +104,6 @@ class _HomePageState extends State<HomePage> {
                       ListTile(
                         title: _title(item.title),
                         subtitle: _subtitle(_datePub(item.date)),
-                        contentPadding: const EdgeInsets.all(12.0),
                       ),
                       _buttonBar(item)
                 ])));

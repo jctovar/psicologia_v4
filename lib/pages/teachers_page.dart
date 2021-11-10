@@ -3,7 +3,7 @@ import 'package:suayed/pages/teacher_detail.dart';
 import 'package:suayed/widgets/avatar.dart';
 import 'package:suayed/widgets/drawer.dart';
 import 'package:suayed/models/teacher_model.dart';
-import 'package:suayed/services/teacher_service.dart';
+import 'package:suayed/services/local_service.dart';
 
 class TeachersPage extends StatefulWidget {
   static const String routeName = 'teachers';
@@ -131,7 +131,7 @@ class _TeachersPageState extends State<TeachersPage> {
   }
 
   _loadData() {
-    Services.readJson().then((itemsFromServer) {
+    Services.readJsonTeachers().then((itemsFromServer) {
       setState(() {
         _items = itemsFromServer;
         _filteredItems = _items;

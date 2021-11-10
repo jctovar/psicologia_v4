@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:share/share.dart';
 
 class HomeDetail extends StatefulWidget {
   const HomeDetail({Key? key, required this.item}) : super(key: key);
@@ -124,7 +125,10 @@ class _HomeDetailState extends State<HomeDetail> {
               _openFeed(widget.item.link);
               break;
             case 1:
-
+              _shareFeed(widget.item.link, widget.item.title);
+              break;
+            case 2:
+              _shareFeed(widget.item.link, widget.item.title);
               break;
           }
         },
@@ -186,6 +190,10 @@ class _HomeDetailState extends State<HomeDetail> {
       );
       return;
     }
+  }
+
+  Future<void> _shareFeed(String url, String title) async {
+    Share.share(url, subject: title);
   }
 
 }

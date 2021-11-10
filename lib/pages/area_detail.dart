@@ -1,68 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:suayed/models/area_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:suayed/widgets/avatar.dart';
-import 'package:suayed/models/teacher_model.dart';
 
-class TeacherDetail extends StatefulWidget {
-  const TeacherDetail({Key? key, required this.item}): super(key: key);
-  final TeacherModel item;
+class AreaDetail extends StatefulWidget {
+  const AreaDetail({Key? key, required this.item}): super(key: key);
+  final AreaModel item;
 
 
   @override
-  _TeacherDetailState createState() => _TeacherDetailState();
+  _AreaDetailState createState() => _AreaDetailState();
 }
 
-class _TeacherDetailState extends State<TeacherDetail> {
+class _AreaDetailState extends State<AreaDetail> {
   Future<void>? _launched;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       //backgroundColor: const Color(0xfff0f0f0),
-      appBar: AppBar(
-        title: Text('${widget.item.grade} ${widget.item.firstname} ${widget.item.lastname}'),
-      ),
-      body: SingleChildScrollView(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                const SizedBox(height: 20),
-                Avatar(picturePath: widget.item.picture, sizeAvatar: 128),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 16, 16, 16),
-                  child: _title('${widget.item.grade} ${widget.item.firstname} ${widget.item.lastname}'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: _subtitle(widget.item.email),
-                ),
-                const Divider(),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: _subtitle(widget.item.fields),
-                ),
-                const Divider(),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: _htmlWidget(widget.item.cv),
-                ),
-                const Divider(),
-                const SizedBox(height: 10),
-                _footer('UNAM'),
-                const SizedBox(height: 20),
-              ]
-          )
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.mail, color: Colors.white,),
-        onPressed: () => setState(() {
-            _launched = _makeMailTo('mailto:${widget.item.email}');
-          }
+        appBar: AppBar(
+          title: Text(widget.item.department_name),
         ),
-      )
+        body: SingleChildScrollView(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  const SizedBox(height: 20),
+                  //Avatar(picturePath: widget.item.picture, sizeAvatar: 128),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 16, 16, 16),
+                    child: _title(widget.item.agent),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: _subtitle(widget.item.department_email),
+                  ),
+                  const Divider(),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: _htmlWidget(widget.item.detail),
+                  ),
+                  const Divider(),
+                  const SizedBox(height: 10),
+                  _footer('UNAM'),
+                  const SizedBox(height: 20),
+                ]
+            )
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.mail, color: Colors.white,),
+          onPressed: () => setState(() {
+            _launched = _makeMailTo('mailto:${widget.item.department_email}');
+          }
+          ),
+        )
     );
   }
 
@@ -106,7 +101,7 @@ class _TeacherDetailState extends State<TeacherDetail> {
     return Text(
       subTitle,
       style: GoogleFonts.lora(
-          textStyle: const TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic, fontWeight: FontWeight.w300),
+        textStyle: const TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic, fontWeight: FontWeight.w300),
       ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
@@ -140,5 +135,4 @@ class _TeacherDetailState extends State<TeacherDetail> {
         )
     );
   }
-
 }

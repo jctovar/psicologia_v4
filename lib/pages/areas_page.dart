@@ -103,10 +103,12 @@ class _AreasPageState extends State<AreasPage> {
             itemBuilder: (context, index) {
               final item = _filteredItems[index];
               return ListTile(
-                  //leading: Avatar(picturePath: item.picture, sizeAvatar: 48),
-                  title: Text('${item.agent}\n${item.department_name}',
+                  leading: Avatar(picturePath: '', emailUser: item.personal_email, sizeAvatar: 48),
+                  title: Text(item.agent,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis),
-                  subtitle: Text('${item.department_email}',
+                  subtitle: Text(item.department_name,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis),
                   isThreeLine: true,
                   onTap: () {

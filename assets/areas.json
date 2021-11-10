@@ -2,45 +2,57 @@
   "RECORDS": [
     {
       "id": "4",
-      "department_name": "Coordinación SUAyED",
+      "department_name": "Coordinación de Educación a Distancia",
+      "title": "Coordinadora de Educación a Distancia",
       "agent": "DRA. ANABEL DE LA ROSA GÓMEZ",
       "department_email": "coordinacion@iztacala.unam.mx",
-      "detail": "."
+      "personal_email": "anabel.delarosa@iztacala.unam.mx",
+      "detail": "<ul><li>Representar a la licenciatura de Psicología en línea ante la CUAIEED</li><li>Velar por la aplicacion del plan de estudios</li><li>Medir los resultados obtenidos para el egreso y continuidad del alumnado</li></ul>"
     },
     {
       "id": "3",
-      "department_name": "Desarrollo Academico",
+      "department_name": "Departamento de Desarrollo Academico y Extensión Universitaria",
+      "title": "Jefa de la Departamento de Desarrollo Académico y Extensión",
       "agent": "MTRA. KAREN BELEN ESPINOZA ROSAL",
       "department_email": "desarrollo.academico@iztacala.unam.mx",
-      "detail": "."
+      "personal_email": "karen.espinoza@iztacala.unam.mx",
+      "detail": "<ul><li>Apoyar en la organización y difusión de eventos académicos de carácter extracurricular como cursos, coloquios, congresos, foros, conferencias, entre otros</li><li>Atención de alumnos por abandono, falta de retroalimentación y calificación de profesores en las aulas.</li></ul>"
     },
     {
       "id": "2",
-      "department_name": "Plataformas Educativas",
+      "department_name": "Departamento de Plataformas Educativas",
+      "title": "Jefe del Departamento de Plataformas Educativas",
       "agent": "ING. JUAN CARLOS TOVAR GÓMEZ",
       "department_email": "asistencia.tecnica@iztacala.unam.mx",
-      "detail": "."
+      "personal_email": "jctovar@iztacala.unam.mx",
+      "detail": "<ul><li>Mantener disponible y actualizadas las plataformas de aulas virtuales y su sistema operativo, monitoreo constante de la plataforma y su rendimiento</li></ul>"
     },
     {
       "id": "1",
-      "department_name": "Asuntos Estudiantiles",
+      "department_name": "Departamento de Asuntos Estudiantiles",
+      "title": "Jefa del Departamento de Asuntos Estudiantiles",
       "agent": "MTRA. SILVIA TOLEDO DE LEON",
       "department_email": "asuntos.estudiantiles@iztacala.unam.mx",
-      "detail": "."
+      "personal_email": "silvia.toledo@iztacala.unam.mx",
+      "detail": "<ul><li>Proporcionar informes sobre reinscripciones y tramites escolares, como reposiciones de documentos y becas</li><li>Apoyar al ingreso de las plataformas SICE Y SIAE</li><li>Informar sobre las bajas y extraordinarios</li><li>Apoyar a los tramites de titulación</li></ul>"
     },
     {
       "id": "6",
-      "department_name": "Proyectos Educativos",
+      "department_name": "Seccion de Proyectos Educativos",
+      "title": "Jefa de Sección Académica de Vinculación y Proyectos Educativos",
       "agent": "MTRA. ALEJANDRA PAMELA SALDAÑA BADILLO",
       "department_email": "proyectos.educativos@iztacala.unam.mx",
-      "detail": "."
+      "personal_email": "pamela.saldana@iztacala.unam.mx",
+      "detail": "<ul><li>Cursos de actualización en TIC para profesores y estudiantes</li><li>Creación de recursos educativos digitales</li><li>Coordinación y Producción del Boletín SUAyED Psicología</li><li>Responsable de los curso de inducción y el programa de tutorías</li></ul>"
     },
     {
       "id": "5",
-      "department_name": "Seguimiento Escolar",
+      "department_name": "Área de Seguimiento Escolar",
+      "title": "Responsable de Area de Seguimiento Escolar",
       "agent": "LIC. KATHYA EVELIN PEREZ PEÑA GÓMEZ",
-      "department_email": "seguimiento.estudiantes@iztacala.unam.mx",
-      "detail": "."
+      "department_email": "seguimientoestudiantes@iztacala.unam.mx",
+      "personal_email": "evelin.perez@iztacala.unam.mx",
+      "detail": "Documentar la causas de deserción y abandono en aulas ."
     }
   ]
 }

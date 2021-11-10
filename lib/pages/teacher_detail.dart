@@ -30,7 +30,7 @@ class _TeacherDetailState extends State<TeacherDetail> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 const SizedBox(height: 20),
-                Avatar(picturePath: widget.item.picture, sizeAvatar: 128),
+                Avatar(picturePath: widget.item.picture, emailUser: widget.item.email, sizeAvatar: 128),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 16, 16, 16),
                   child: _title('${widget.item.grade} ${widget.item.firstname} ${widget.item.lastname}'),

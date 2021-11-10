@@ -30,10 +30,14 @@ class _AreaDetailState extends State<AreaDetail> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   const SizedBox(height: 20),
-                  //Avatar(picturePath: widget.item.picture, sizeAvatar: 128),
+                  Avatar(picturePath: '', emailUser: widget.item.personal_email, sizeAvatar: 128),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 16, 16, 16),
                     child: _title(widget.item.agent),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(widget.item.title),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -131,7 +135,7 @@ class _AreaDetailState extends State<AreaDetail> {
         onErrorBuilder: (context, element, error) => Text('$element error: $error'),
         onLoadingBuilder: (context, element, loadingProgress) => const CircularProgressIndicator(),
         textStyle: GoogleFonts.robotoSlab(
-          textStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300, color: Colors.black87),
+          textStyle: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w300, color: Colors.black87),
         )
     );
   }

@@ -100,7 +100,7 @@ class _TeachersPageState extends State<TeachersPage> {
             itemBuilder: (context, index) {
               final item = _filteredItems[index];
               return ListTile(
-                  leading: Avatar(picturePath: item.picture, sizeAvatar: 48),
+                  leading: Avatar(picturePath: item.picture, emailUser: item.email, sizeAvatar: 48),
                   title: Text('${item.grade} ${item.firstname} ${item.lastname}',
                       overflow: TextOverflow.ellipsis),
                   subtitle: Text(item.email,

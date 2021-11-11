@@ -162,7 +162,7 @@ class _HomePageState extends State<HomePage> {
       item.toJson(),
       encrypt: true,
     );
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Post guardado en marcadores')));
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Elemento guardado en marcadores...')));
     var end = DateTime.now().millisecondsSinceEpoch;
     print('time taken to store post: ${end - start}ms');
     setState(() {});

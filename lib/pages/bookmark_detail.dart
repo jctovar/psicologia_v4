@@ -213,6 +213,7 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
 
   Future<void> _deleteBookmark(int id) async {
     await JsonStore().deleteItem('post-$id');
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Elemento eliminado de marcadores...')));
     //await _loadFromStorage();
     Navigator.pop(context);
   }

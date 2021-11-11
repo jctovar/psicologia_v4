@@ -44,7 +44,7 @@ class _AppDrawerState extends State<AppDrawer> {
               icon: Icons.school, text: 'Profesores', onTap: () =>
               Navigator.pushReplacementNamed(context, Routes.teachers)),
           _createDrawerItem(
-              icon: Icons.groups, text: 'Areas', onTap: () =>
+              icon: Icons.groups, text: 'Coordinación', onTap: () =>
               Navigator.pushReplacementNamed(context, Routes.areas)),
           const Divider(),
           _createDrawerItem(

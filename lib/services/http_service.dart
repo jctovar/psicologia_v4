@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 var options = BaseOptions(
-  baseUrl: 'https://suayed.iztacala.unam.mx/wp-json/wp/v2/posts',
+  baseUrl: 'https://suayed.iztacala.unam.mx/',
   connectTimeout: 5000,
   receiveTimeout: 3000,
   receiveDataWhenStatusError: true,
@@ -10,6 +10,7 @@ var options = BaseOptions(
 Dio dio = Dio(options);
 
 class CustomInterceptor extends Interceptor {
+
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     print("onRequest");

@@ -1,4 +1,5 @@
 import 'package:google_fonts/google_fonts.dart';
+import 'package:json_store/json_store.dart';
 import 'package:suayed/models/post_model.dart';
 import 'package:suayed/widgets/drawer.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -21,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   static const String placeholderImg = 'assets/no_image.jpg';
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
   List<PostModel> _posts = List.empty();
+  get jsonStore => null;
 
   Future _load() async {
     SuayedServices.getPosts().then((result) {
@@ -126,13 +128,7 @@ class _HomePageState extends State<HomePage> {
           iconSize: 24.0,
         ),
         IconButton(
-          onPressed: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => HomeDetail(
-                item: item
-              ),
-            ),
-          ),
+          onPressed: () => _savePost(item),
           icon: const Icon(
             Icons.bookmark,
             color: Colors.black54,
@@ -157,6 +153,19 @@ class _HomePageState extends State<HomePage> {
         child: _listPosts(),
         onRefresh: () => _load(),
       );
+  }
+
+  Future<void> _savePost(PostModel item) async {
+    var start = DateTime.now().millisecondsSinceEpoch;
+    await JsonStore().setItem(
+      'post-${item.id}',
+      item.toJson(),
+      encrypt: true,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Post guardado en marcadores')));
+    var end = DateTime.now().millisecondsSinceEpoch;
+    print('time taken to store post: ${end - start}ms');
+    setState(() {});
   }
 
   @override

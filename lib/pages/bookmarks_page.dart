@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:json_store/json_store.dart';
 import 'package:suayed/widgets/drawer.dart';
-import 'area_detail.dart';
+import 'bookmark_detail.dart';
+import 'package:suayed/models/storage_post_model.dart';
 
 class BookmarksPage extends StatefulWidget {
   static const String routeName = 'bookmarks';
@@ -14,6 +16,7 @@ class BookmarksPage extends StatefulWidget {
 }
 
 class _BookmarksPageState extends State<BookmarksPage> {
+  static const String placeholderImg = 'assets/no_image.jpg';
   List<StoragePost> _posts = [];
   get jsonStore => null;
 
@@ -32,11 +35,6 @@ class _BookmarksPageState extends State<BookmarksPage> {
     setState(() {});
   }
 
-  /*_deleteFromStorage() async {
-    await JsonStore().deleteLike('post-%');
-    await _loadFromStorage();
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,18 +50,19 @@ class _BookmarksPageState extends State<BookmarksPage> {
         itemBuilder: (context, index) {
           final item = _posts[index];
           return ListTile(
-              title: Text(item.title.toUpperCase(),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis),
-              subtitle: Text(_datePub(item.date),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis),
-              isThreeLine: true,
-              onTap: () {
-
-              }
+            contentPadding: const EdgeInsets.all(8.0),
+            leading: _thumbnail(item.image),
+            title: Text(item.title.toUpperCase(),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis),
+            subtitle: Text(_datePub(item.date),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis),
+            isThreeLine: true,
+            onTap: () {
+              _openFeed(item);
+            }
           );
-
         },
         separatorBuilder: (BuildContext context, int index) {
           return const Divider(
@@ -77,46 +76,28 @@ class _BookmarksPageState extends State<BookmarksPage> {
   _datePub(DateTime date) {
     return timeago.format(date, locale: 'es_short');
   }
-}
 
-class StoragePost {
-  StoragePost({
-    required this.id,
-    required this.date,
-    required this.title,
-    required this.link,
-    required this.excerpt,
-    required this.image,
-    required this.content,
-  });
-
-  final int id;
-  final DateTime date;
-  final String title;
-  final String link;
-  final String image;
-  final String excerpt;
-  final String content;
-
-  factory StoragePost.fromJson(Map<String, dynamic> json) {
-    return StoragePost(
-      id: json['id'],
-      date: DateTime.parse(json['date']),
-      title: json['title'],
-      link: json['link'].toString(),
-      image: json['image'],
-      excerpt: json['excerpt'],
-      content: json['content'],
+  _thumbnail(imageUrl) {
+    return CachedNetworkImage(
+      placeholder: (context, url) => Image.asset(placeholderImg),
+      imageUrl: imageUrl,
+      alignment: Alignment.center,
+      fit: BoxFit.fill,
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "date": date.toString(),
-    "title": title,
-    "link": link,
-    "image": image,
-    "excerpt": excerpt,
-    "content": content,
-  };
+  _openFeed(StoragePost item) {
+    Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => BookmarkDetail(
+              item: item
+          ),
+        )
+    ).then((value) {
+      setState(() {
+        _loadFromStorage();
+      });
+    });
+  }
 }
+

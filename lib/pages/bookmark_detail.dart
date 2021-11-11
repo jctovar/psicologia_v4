@@ -1,59 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:suayed/models/post_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:share/share.dart';
+import 'package:suayed/models/storage_post_model.dart';
 import 'package:json_store/json_store.dart';
 
-class HomeDetail extends StatefulWidget {
-  const HomeDetail({Key? key, required this.item}) : super(key: key);
-  final PostModel item;
+class BookmarkDetail extends StatefulWidget {
+  const BookmarkDetail({Key? key, required this.item}) : super(key: key);
+  final StoragePost item;
 
   @override
-  _HomeDetailState createState() => _HomeDetailState();
+  _BookmarkDetailState createState() => _BookmarkDetailState();
 }
 
-class _HomeDetailState extends State<HomeDetail> {
+class _BookmarkDetailState extends State<BookmarkDetail> {
   get jsonStore => null;
   static const String placeholderImg = 'assets/no_image.jpg';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xfff0f0f0),
-      appBar: AppBar(
-        title: Text(widget.item.title),
-        actions: [
-          _popupMenuButton(),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
-              child: _title(widget.item.title),
-            ),
-            _image(widget.item.image),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: _subtitle(timeago.format(widget.item.date, locale: 'es')),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: _htmlWidget(widget.item.content),
-            ),
-            const SizedBox(height: 10),
-            const Divider(),
-            const SizedBox(height: 10),
-            _footer('UNAM'),
-            const SizedBox(height: 20),
-          ]
+        backgroundColor: const Color(0xfff0f0f0),
+        appBar: AppBar(
+          title: Text(widget.item.title),
+          actions: [
+            _popupMenuButton(),
+          ],
+        ),
+        body: SingleChildScrollView(
+            child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
+                    child: _title(widget.item.title),
+                  ),
+                  _image(widget.item.image),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: _subtitle(
+                        timeago.format(widget.item.date, locale: 'es')),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: _htmlWidget(widget.item.content),
+                  ),
+                  const SizedBox(height: 10),
+                  const Divider(),
+                  const SizedBox(height: 10),
+                  _footer('UNAM'),
+                  const SizedBox(height: 20),
+                ]
+            )
         )
-      )
     );
   }
 
@@ -70,7 +71,10 @@ class _HomeDetailState extends State<HomeDetail> {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
-        textStyle: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.w800, color: Colors.blue, letterSpacing: -.3),
+        textStyle: const TextStyle(fontSize: 24.0,
+            fontWeight: FontWeight.w800,
+            color: Colors.blue,
+            letterSpacing: -.3),
       ),
       maxLines: 4,
       overflow: TextOverflow.ellipsis,
@@ -81,7 +85,9 @@ class _HomeDetailState extends State<HomeDetail> {
     return Text(
       subTitle,
       textAlign: TextAlign.right,
-      style: const TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic, fontWeight: FontWeight.w400),
+      style: const TextStyle(fontSize: 14.0,
+          fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.w400),
       maxLines: 1,
     );
   }
@@ -90,7 +96,10 @@ class _HomeDetailState extends State<HomeDetail> {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
-        textStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w800, color: Colors.pinkAccent, letterSpacing: -.3),
+        textStyle: const TextStyle(fontSize: 18.0,
+            fontWeight: FontWeight.w800,
+            color: Colors.pinkAccent,
+            letterSpacing: -.3),
       ),
       maxLines: 4,
       overflow: TextOverflow.ellipsis,
@@ -106,14 +115,18 @@ class _HomeDetailState extends State<HomeDetail> {
 
           return null;
         },
-        onTapUrl:(url) {
+        onTapUrl: (url) {
           _openFeed(url);
           return true;
         },
-        onErrorBuilder: (context, element, error) => Text('$element error: $error'),
-        onLoadingBuilder: (context, element, loadingProgress) => const CircularProgressIndicator(),
+        onErrorBuilder: (context, element, error) =>
+            Text('$element error: $error'),
+        onLoadingBuilder: (context, element,
+            loadingProgress) => const CircularProgressIndicator(),
         textStyle: GoogleFonts.robotoSlab(
-          textStyle: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w300, color: Colors.black87),
+          textStyle: const TextStyle(fontSize: 16.0,
+              fontWeight: FontWeight.w300,
+              color: Colors.black87),
         )
     );
   }
@@ -126,14 +139,15 @@ class _HomeDetailState extends State<HomeDetail> {
               _openFeed(widget.item.link);
               break;
             case 1:
-              _savePost(widget.item);
+              _deleteBookmark(widget.item.id);
               break;
             case 2:
               _shareFeed(widget.item.link, widget.item.title);
               break;
           }
         },
-        itemBuilder: (context) => [
+        itemBuilder: (context) =>
+        [
           PopupMenuItem(
             child: Row(
               children: const [
@@ -153,13 +167,13 @@ class _HomeDetailState extends State<HomeDetail> {
             child: Row(
               children: const [
                 Icon(
-                  Icons.bookmark,
+                  Icons.delete,
                   color: Colors.pink,
                 ),
                 SizedBox(
                   width: 7,
                 ),
-                Text('Guardar')
+                Text('Borrar')
               ],
             ),
             value: 1,
@@ -197,17 +211,9 @@ class _HomeDetailState extends State<HomeDetail> {
     Share.share(url, subject: title);
   }
 
-  Future<void> _savePost(PostModel item) async {
-    var start = DateTime.now().millisecondsSinceEpoch;
-      await JsonStore().setItem(
-        'post-${item.id}',
-        item.toJson(),
-        encrypt: true,
-      );
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Post guardado en marcadores')));
-    var end = DateTime.now().millisecondsSinceEpoch;
-    print('time taken to store post: ${end - start}ms');
-    setState(() {});
+  Future<void> _deleteBookmark(int id) async {
+    await JsonStore().deleteItem('post-$id');
+    //await _loadFromStorage();
+    Navigator.pop(context);
   }
-
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:suayed/models/post_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:share/share.dart';
+import 'package:json_store/json_store.dart';
 
 class HomeDetail extends StatefulWidget {
   const HomeDetail({Key? key, required this.item}) : super(key: key);
@@ -16,7 +19,7 @@ class HomeDetail extends StatefulWidget {
 }
 
 class _HomeDetailState extends State<HomeDetail> {
-
+  get jsonStore => null;
   static const String placeholderImg = 'assets/no_image.jpg';
 
   @override
@@ -125,7 +128,7 @@ class _HomeDetailState extends State<HomeDetail> {
               _openFeed(widget.item.link);
               break;
             case 1:
-              _shareFeed(widget.item.link, widget.item.title);
+              _savePost(widget.item);
               break;
             case 2:
               _shareFeed(widget.item.link, widget.item.title);
@@ -194,6 +197,19 @@ class _HomeDetailState extends State<HomeDetail> {
 
   Future<void> _shareFeed(String url, String title) async {
     Share.share(url, subject: title);
+  }
+
+  Future<void> _savePost(PostModel item) async {
+    var start = DateTime.now().millisecondsSinceEpoch;
+      await JsonStore().setItem(
+        'post-${item.id}',
+        item.toJson(),
+        encrypt: true,
+      );
+
+    var end = DateTime.now().millisecondsSinceEpoch;
+    print('time taken to store post: ${end - start}ms');
+    setState(() {});
   }
 
 }

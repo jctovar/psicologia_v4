@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:suayed/pages/about_page.dart';
 import 'package:suayed/pages/areas_page.dart';
+import 'package:suayed/pages/bookmarks_page.dart';
 import 'package:suayed/pages/home_page.dart';
 import 'package:suayed/pages/teachers_page.dart';
 import 'package:suayed/routes/routes.dart';
+import 'package:json_store/json_store.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +23,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   bool userIsLoggedIn = false;
   final appTitle = 'Psicología SUAyED';
+  final _jsonStore = JsonStore(dbName: 'suayed');
 
   // This widget is the root of your application.
   @override
@@ -38,6 +41,7 @@ class _MyAppState extends State<MyApp> {
         Routes.home: (context) => const HomePage(title: 'SUAyED'),
         Routes.teachers: (context) => const TeachersPage(title: 'Profesores'),
         Routes.areas: (context) => const AreasPage(title: 'Coordinación SUAyED'),
+        Routes.bookmarks: (context) => const BookmarksPage(title: 'Marcadores'),
         Routes.about: (context) => const AboutPage(),
       },
     );

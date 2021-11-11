@@ -20,23 +20,23 @@ class PostModel {
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
-        id: json['id'],
-        date: DateTime.parse(json['date']),
-        title: json['title']['rendered'],
-        image: json['jetpack_featured_media_url'],
-        excerpt: json['jetpack-related-posts'][0]['excerpt'],
-        content: json['content']['rendered'],
-        link: json['link'].toString()
+      id: json['id'],
+      date: DateTime.parse(json['date']),
+      title: json['title']['rendered'],
+      link: json['link'].toString(),
+      image: json['jetpack_featured_media_url'],
+      excerpt: json['jetpack-related-posts'][0]['excerpt'],
+      content: json['content']['rendered'],
     );
   }
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "date": date,
+    "date": date.toString(),
     "title": title,
+    "link": link,
     "image": image,
     "excerpt": excerpt,
     "content": content,
-    "link": link,
   };
 }

@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:json_store/json_store.dart';
 import 'package:suayed/models/post_model.dart';
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
   List<PostModel> _posts = List.empty();
   get jsonStore => null;
+  late FirebaseMessaging messaging;
 
   Future _load() async {
     SuayedServices.getPosts().then((result) {
@@ -38,6 +40,15 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _refreshKey;
     _load();
+    //_pushMessaging();
+  }
+
+  _pushMessaging() {
+    messaging = FirebaseMessaging.instance;
+    messaging.getToken().then((value){
+      print('valor:');
+      print(value);
+    });
   }
 
   _openFeed(PostModel item) {

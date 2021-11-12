@@ -1,3 +1,4 @@
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:suayed/pages/about_page.dart';
 import 'package:suayed/pages/areas_page.dart';
@@ -16,12 +17,13 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
 
+  print("Tratando de inicializar FirebaseMessaging");
   print("Handling a background message: ${message.messageId}");
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   runApp(const MyApp());
 }
@@ -45,20 +47,41 @@ class _MyAppState extends State<MyApp> {
   static FirebaseAnalytics analytics = FirebaseAnalytics();
   static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
 
+
+  late FirebaseMessaging messaging;
+
   // Define an async function to initialize FlutterFire
   void initializeFlutterFire() async {
     try {
       // Wait for Firebase to initialize and set `_initialized` state to true
       await Firebase.initializeApp();
       setState(() {
+        print('inicializada...');
+        _pushMessaging();
         _initialized = true;
       });
     } catch(e) {
       // Set `_error` state to true if Firebase initialization fails
       setState(() {
+        print('error grave...');
         _error = true;
       });
     }
+  }
+
+  _pushMessaging() {
+    messaging = FirebaseMessaging.instance;
+    messaging.getToken().then((value){
+      print('token: $value');
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      print("message recieved");
+      print(event.notification!.body);
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print('Message clicked!');
+    });
   }
 
   @override

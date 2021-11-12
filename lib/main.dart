@@ -11,6 +11,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:suayed/utils/messaging_push.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
@@ -57,7 +59,7 @@ class _MyAppState extends State<MyApp> {
       await Firebase.initializeApp();
       setState(() {
         print('inicializada...');
-        _pushMessaging();
+        _pushMessaging(context);
         _initialized = true;
       });
     } catch(e) {
@@ -69,15 +71,34 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  _pushMessaging() {
+  _pushMessaging(BuildContext context) {
     messaging = FirebaseMessaging.instance;
     messaging.getToken().then((value){
       print('token: $value');
     });
 
+    MessagingPush.messagingRecieved(context);
+
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       print("message recieved");
       print(event.notification!.body);
+
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Notification"),
+              content: Text(event.notification!.body!),
+              actions: [
+                TextButton(
+                  child: Text("Ok"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
     });
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       print('Message clicked!');
@@ -102,6 +123,14 @@ class _MyAppState extends State<MyApp> {
         fontFamily: 'Roboto',
       ),
       home: HomePage(title: appTitle),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', 'US'),
+      ],
       routes: {
         Routes.home: (context) => const HomePage(title: 'SUAyED'),
         Routes.teachers: (context) => const TeachersPage(title: 'Profesores'),

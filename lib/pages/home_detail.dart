@@ -201,8 +201,7 @@ class _HomeDetailState extends State<HomeDetail> {
     var start = DateTime.now().millisecondsSinceEpoch;
       await JsonStore().setItem(
         'post-${item.id}',
-        item.toJson(),
-        encrypt: true,
+        item.toJson()
       );
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Elemento guardado en marcadores...')));
     var end = DateTime.now().millisecondsSinceEpoch;

@@ -126,6 +126,7 @@ class _HomePageState extends State<HomePage> {
 
   _buttonBar(PostModel item) {
     return ButtonBar(
+      buttonPadding: const EdgeInsets.all(0.0),
       children: <Widget>[
         IconButton(
           onPressed: () {
@@ -170,8 +171,7 @@ class _HomePageState extends State<HomePage> {
     var start = DateTime.now().millisecondsSinceEpoch;
     await JsonStore().setItem(
       'post-${item.id}',
-      item.toJson(),
-      encrypt: true,
+      item.toJson()
     );
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Elemento guardado en marcadores...')));
     var end = DateTime.now().millisecondsSinceEpoch;

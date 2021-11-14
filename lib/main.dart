@@ -1,4 +1,3 @@
-import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:suayed/pages/about_page.dart';
 import 'package:suayed/pages/areas_page.dart';
@@ -6,13 +5,10 @@ import 'package:suayed/pages/bookmarks_page.dart';
 import 'package:suayed/pages/home_page.dart';
 import 'package:suayed/pages/teachers_page.dart';
 import 'package:suayed/routes/routes.dart';
-import 'package:json_store/json_store.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:suayed/utils/messaging_push.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
@@ -25,10 +21,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   runApp(const MyApp());
 }
+////////////////////////////////////////////////////////////////////////////////
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -40,74 +37,12 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   bool userIsLoggedIn = false;
   final appTitle = 'Psicología SUAyED';
-  final _jsonStore = JsonStore(dbName: 'suayed');
-
-  // Set default `_initialized` and `_error` state to false
-  bool _initialized = false;
-  bool _error = false;
 
   static FirebaseAnalytics analytics = FirebaseAnalytics();
   static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
 
-
-  late FirebaseMessaging messaging;
-
-  // Define an async function to initialize FlutterFire
-  void initializeFlutterFire() async {
-    try {
-      // Wait for Firebase to initialize and set `_initialized` state to true
-      await Firebase.initializeApp();
-      setState(() {
-        print('inicializada...');
-        _pushMessaging(context);
-        _initialized = true;
-      });
-    } catch(e) {
-      // Set `_error` state to true if Firebase initialization fails
-      setState(() {
-        print('error grave...');
-        _error = true;
-      });
-    }
-  }
-
-  _pushMessaging(BuildContext context) {
-    messaging = FirebaseMessaging.instance;
-    messaging.getToken().then((value){
-      print('token: $value');
-    });
-
-    MessagingPush.messagingRecieved(context);
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message recieved");
-      print(event.notification!.body);
-
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Notification"),
-              content: Text(event.notification!.body!),
-              actions: [
-                TextButton(
-                  child: Text("Ok"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            );
-          });
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print('Message clicked!');
-    });
-  }
-
   @override
   void initState() {
-    initializeFlutterFire();
     super.initState();
   }
 
@@ -123,14 +58,6 @@ class _MyAppState extends State<MyApp> {
         fontFamily: 'Roboto',
       ),
       home: HomePage(title: appTitle),
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en', 'US'),
-      ],
       routes: {
         Routes.home: (context) => const HomePage(title: 'SUAyED'),
         Routes.teachers: (context) => const TeachersPage(title: 'Profesores'),
@@ -141,4 +68,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-

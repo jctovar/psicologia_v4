@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:suayed/utils/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -95,7 +96,7 @@ class _TeacherDetailState extends State<TeacherDetail> {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
-        textStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w800, color: Colors.blue, letterSpacing: -.3),
+        textStyle: Constants.mainStyleTitle,
       ),
       maxLines: 3,
       overflow: TextOverflow.ellipsis,

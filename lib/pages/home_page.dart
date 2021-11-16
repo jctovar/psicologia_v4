@@ -1,11 +1,10 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:suayed/utils/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:json_store/json_store.dart';
 import 'package:suayed/models/post_model.dart';
 import 'package:suayed/widgets/drawer.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:suayed/services/suayed_service.dart';
 import 'package:share/share.dart';
@@ -25,7 +24,6 @@ class _HomePageState extends State<HomePage> {
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
   List<PostModel> _posts = List.empty();
   get jsonStore => null;
-  late FirebaseMessaging messaging;
 
   Future _load() async {
     SuayedServices.getPosts().then((result) {
@@ -41,16 +39,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _refreshKey;
     _load();
-    _pushMessaging();
 
-  }
-
-  _pushMessaging() {
-    messaging = FirebaseMessaging.instance;
-    messaging.getToken().then((value){
-      print('valor:');
-      print(value);
-    });
   }
 
   _openFeed(PostModel item) {
@@ -73,7 +62,7 @@ class _HomePageState extends State<HomePage> {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
-        textStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w800, color: Colors.blue, letterSpacing: -.3),
+        textStyle: Constants.mainStyleTitle,
       ),
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
@@ -83,7 +72,7 @@ class _HomePageState extends State<HomePage> {
   _subtitle(subTitle) {
     return Text(
       subTitle,
-      style: const TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic, fontWeight: FontWeight.w300),
+      style: Constants.mainStyleSubtitle,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );

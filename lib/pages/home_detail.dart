@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:suayed/models/post_model.dart';
+import 'package:suayed/utils/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
@@ -70,7 +71,7 @@ class _HomeDetailState extends State<HomeDetail> {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
-        textStyle: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.w800, color: Colors.blue, letterSpacing: -.3),
+        textStyle: Constants.mainStyleTitle,
       ),
       maxLines: 4,
       overflow: TextOverflow.ellipsis,
@@ -81,7 +82,7 @@ class _HomeDetailState extends State<HomeDetail> {
     return Text(
       subTitle,
       textAlign: TextAlign.right,
-      style: const TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic, fontWeight: FontWeight.w400),
+      style: Constants.mainStyleSubtitle,
       maxLines: 1,
     );
   }

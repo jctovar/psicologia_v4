@@ -1,30 +1,22 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-class MessagingPush {
+class PushNotificationService {
+  final FirebaseMessaging _fcm;
 
-  static void messagingRecieved(BuildContext context) {
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message recieved");
-      print(event.notification!.body);
+  PushNotificationService(this._fcm);
 
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Notification"),
-              content: Text(event.notification!.body!),
-              actions: [
-                TextButton(
-                  child: Text("Ok"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            );
-          });
-    });
+  Future initialise() async {
+    if (Platform.isIOS) {
+      //_fcm.requestNotificationPermissions(IosNotificationSettings());
+    }
+
+    // If you want to test the push notification locally,
+    // you need to get the token and input to the Firebase console
+    // https://console.firebase.google.com/project/YOUR_PROJECT_ID/notification/compose
+    String? token = await _fcm.getToken();
+    print("FirebaseMessaging token: $token");
+
+
   }
-
 }

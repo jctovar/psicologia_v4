@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:json_store/json_store.dart';
@@ -40,7 +41,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _refreshKey;
     _load();
-    //_pushMessaging();
+    _pushMessaging();
+
   }
 
   _pushMessaging() {

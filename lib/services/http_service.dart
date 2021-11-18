@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:suayed/utils/app_constants.dart';
 
 var options = BaseOptions(
-  baseUrl: 'https://suayed.iztacala.unam.mx/',
+  baseUrl: Constants.uriHttp,
   connectTimeout: 5000,
   receiveTimeout: 3000,
   receiveDataWhenStatusError: true,

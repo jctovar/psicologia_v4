@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:suayed/utils/constants.dart';
+import 'package:suayed/utils/app_constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:json_store/json_store.dart';
 import 'package:suayed/models/post_model.dart';
@@ -25,8 +25,8 @@ class _HomePageState extends State<HomePage> {
   List<PostModel> _posts = List.empty();
   get jsonStore => null;
 
-  Future _load() async {
-    SuayedServices.getPosts().then((result) {
+  Future _loadData(bool refreshData) async {
+    SuayedServices.getPosts(refreshData).then((result) {
       if (result.toString().isEmpty) {
         return;
       }
@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _refreshKey;
-    _load();
+    _loadData(false);
 
   }
 
@@ -154,7 +154,7 @@ class _HomePageState extends State<HomePage> {
       : RefreshIndicator(
         key: _refreshKey,
         child: _listPosts(),
-        onRefresh: () => _load(),
+        onRefresh: () => _loadData(true),
       );
   }
 

@@ -1,11 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class Constants {
   //App related strings
   static String appName = 'Psicología SUAyED';
-  static String uriSUAyED="https://suayed.iztacala.unam.mx/feed/json";
+  static String uriHttp="https://suayed.iztacala.unam.mx/";
 
   static Color mainColor = const Color.fromARGB(0xff, 0xe1, 0x0c, 0x35);
 

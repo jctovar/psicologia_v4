@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:suayed/utils/constants.dart';
+import 'package:suayed/utils/app_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:google_fonts/google_fonts.dart';

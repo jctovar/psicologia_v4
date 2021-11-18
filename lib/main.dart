@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:suayed/utils/constants.dart';
+import 'package:suayed/utils/app_constants.dart';
 import 'package:suayed/pages/about_page.dart';
 import 'package:suayed/pages/areas_page.dart';
 import 'package:suayed/pages/bookmarks_page.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:suayed/models/post_model.dart';
-import 'package:suayed/utils/constants.dart';
+import 'package:suayed/utils/app_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';

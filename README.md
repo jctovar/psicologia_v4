@@ -20,3 +20,7 @@ samples, guidance on mobile development, and a full API reference.
 https://suayed.iztacala.unam.mx/?rest_route=/wp/v2/posts&per_page=15
 
 Main color: "#d81b60"
+
+
+flutter pub run flutter_launcher_icons:main
+flutter pub run flutter_native_splash:create

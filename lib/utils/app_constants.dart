@@ -5,6 +5,7 @@ class Constants {
   //App related strings
   static String appName = 'Psicología SUAyED';
   static String uriHttp="https://suayed.iztacala.unam.mx/";
+  static const String placeholderImg = 'assets/no_image.jpg';
 
   static Color mainColor = const Color.fromARGB(0xff, 0xe1, 0x0c, 0x35);
 

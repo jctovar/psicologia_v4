@@ -14,16 +14,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  //await Firebase.initializeApp();
-
   print("Handling a background message: ${message.messageId}");
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await FirebaseMessaging.instance.subscribeToTopic('posts');
 
@@ -39,10 +36,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool userIsLoggedIn = false;
-  final appTitle = Constants.appName;
-  //late FirebaseMessaging messaging;
-
   static FirebaseAnalytics analytics = FirebaseAnalytics();
   static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
 
@@ -67,23 +60,22 @@ class _MyAppState extends State<MyApp> {
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       print('Message clicked!');
     });
-
   }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: appTitle,
+      title: Constants.appName,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.pink)
             .copyWith(secondary: Colors.pinkAccent),
         fontFamily: 'Roboto',
       ),
-      home: HomePage(title: appTitle),
+      home: HomePage(title: Constants.appName),
       routes: {
-        Routes.home: (context) => const HomePage(title: 'SUAyED'),
+        Routes.home: (context) => HomePage(title: Constants.appName),
         Routes.teachers: (context) => const TeachersPage(title: 'Profesores'),
         Routes.areas: (context) => const AreasPage(title: 'Coordinación SUAyED'),
         Routes.bookmarks: (context) => const BookmarksPage(title: 'Marcadores'),

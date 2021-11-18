@@ -4,7 +4,6 @@ class StoragePost {
     required this.date,
     required this.title,
     required this.link,
-    required this.excerpt,
     required this.image,
     required this.content,
   });
@@ -14,7 +13,6 @@ class StoragePost {
   final String title;
   final String link;
   final String image;
-  final String excerpt;
   final String content;
 
   factory StoragePost.fromJson(Map<String, dynamic> json) {
@@ -24,7 +22,6 @@ class StoragePost {
       title: json['title'],
       link: json['link'].toString(),
       image: json['image'],
-      excerpt: json['excerpt'],
       content: json['content'],
     );
   }
@@ -35,7 +32,6 @@ class StoragePost {
     "title": title,
     "link": link,
     "image": image,
-    "excerpt": excerpt,
     "content": content,
   };
 }

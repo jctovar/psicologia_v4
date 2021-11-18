@@ -8,7 +8,7 @@ class SuayedServices {
   static Future<List<PostModel>> getPosts(bool refreshCache) async {
     DioCacheManager _dioCacheManager = DioCacheManager(CacheConfig());
 
-    Options _cacheOptions = buildCacheOptions(const Duration(days: 7), forceRefresh: refreshCache);
+    Options _cacheOptions = buildCacheOptions(const Duration(days: 3), forceRefresh: refreshCache);
 
     dio.interceptors.add(_dioCacheManager.interceptor);
 

@@ -5,7 +5,6 @@ class PostModel {
     required this.date,
     required this.title,
     required this.link,
-    required this.excerpt,
     required this.image,
     required this.content,
   });
@@ -15,7 +14,6 @@ class PostModel {
   final String title;
   final String link;
   final String image;
-  final String excerpt;
   final String content;
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
@@ -25,7 +23,6 @@ class PostModel {
       title: json['title']['rendered'],
       link: json['link'].toString(),
       image: json['jetpack_featured_media_url'],
-      excerpt: json['jetpack-related-posts'][0]['excerpt'],
       content: json['content']['rendered'],
     );
   }
@@ -36,7 +33,6 @@ class PostModel {
     "title": title,
     "link": link,
     "image": image,
-    "excerpt": excerpt,
     "content": content,
   };
 }

@@ -20,7 +20,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const String placeholderImg = 'assets/no_image.jpg';
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
   List<PostModel> _posts = List.empty();
   get jsonStore => null;
@@ -39,7 +38,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _refreshKey;
     _loadData(false);
-
   }
 
   _openFeed(PostModel item) {
@@ -52,9 +50,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _updateFeed(feed) {
+  _updateFeed(result) {
     setState(() {
-      _posts = feed;
+      _posts = result;
     });
   }
 
@@ -80,7 +78,7 @@ class _HomePageState extends State<HomePage> {
 
   _thumbnail(imageUrl) {
     return CachedNetworkImage(
-      placeholder: (context, url) => Image.asset(placeholderImg),
+      placeholder: (context, url) => Image.asset(Constants.placeholderImg),
       imageUrl: imageUrl,
       alignment: Alignment.center,
       fit: BoxFit.fill,
@@ -94,7 +92,7 @@ class _HomePageState extends State<HomePage> {
         final item = _posts[index];
         return Card(
             child: InkWell(
-                splashColor: Colors.blue.withAlpha(30),
+                splashColor: Colors.pink.withAlpha(60),
                 onTap: () => _openFeed(item),
                 child:
                     Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
@@ -117,7 +115,7 @@ class _HomePageState extends State<HomePage> {
 
   _buttonBar(PostModel item) {
     return ButtonBar(
-      buttonPadding: const EdgeInsets.all(0.0),
+      buttonPadding: const EdgeInsets.all(2.0),
       children: <Widget>[
         IconButton(
           onPressed: () {
@@ -159,15 +157,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _savePost(PostModel item) async {
-    var start = DateTime.now().millisecondsSinceEpoch;
     await JsonStore().setItem(
       'post-${item.id}',
       item.toJson()
     );
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Elemento guardado en marcadores...')));
-    var end = DateTime.now().millisecondsSinceEpoch;
-    print('time taken to store post: ${end - start}ms');
-    setState(() {});
+    //setState(() {});
   }
 
   @override

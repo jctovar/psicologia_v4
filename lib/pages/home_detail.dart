@@ -199,15 +199,11 @@ class _HomeDetailState extends State<HomeDetail> {
   }
 
   Future<void> _savePost(PostModel item) async {
-    var start = DateTime.now().millisecondsSinceEpoch;
-      await JsonStore().setItem(
-        'post-${item.id}',
-        item.toJson()
-      );
+    await JsonStore().setItem(
+      'post-${item.id}',
+      item.toJson()
+    );
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Elemento guardado en marcadores...')));
-    var end = DateTime.now().millisecondsSinceEpoch;
-    print('time taken to store post: ${end - start}ms');
-    setState(() {});
   }
 
 }

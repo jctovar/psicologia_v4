@@ -15,3 +15,8 @@ For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 # psicologia4
+
+
+https://suayed.iztacala.unam.mx/?rest_route=/wp/v2/posts&per_page=15
+
+Main color: "#d81b60"

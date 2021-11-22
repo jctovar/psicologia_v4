@@ -23,6 +23,21 @@ Future<void> main() async {
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await FirebaseMessaging.instance.subscribeToTopic('posts');
+  await FirebaseMessaging.instance.subscribeToTopic('alerts');
+
+  NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    badge: true,
+    provisional: false,
+    sound: true,
+  );
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    print('User granted permission');
+    // TODO: handle the received notifications
+  } else {
+    print('User declined or has not accepted permission');
+  }
 
   runApp(const MyApp());
 }

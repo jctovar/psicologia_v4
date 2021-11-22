@@ -75,5 +75,4 @@ class _AreasPageState extends State<AreasPage> {
       body: _buildList(),
     );
   }
-
 }

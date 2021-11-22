@@ -26,7 +26,7 @@ class AboutPage extends StatelessWidget {
                 const Image(image: AssetImage('assets/about.png')),
                 const SizedBox(height: 15),
                 const Text(
-                    'Aplicación desarrollada por la Facultad de Estudios Superiores Iztacala, UNAM. '
+                    'Aplicación desarrollada por la Facultad de Estudios Superiores Iztacala. '
                         'Hecho en México, Universidad Nacional Autónoma de México (UNAM), '
                         'todos los derechos reservados 2021.',
                     textAlign: TextAlign.center,

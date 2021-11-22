@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:suayed/utils/app_constants.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:json_store/json_store.dart';
 import 'package:suayed/widgets/drawer.dart';
@@ -37,19 +38,6 @@ class _BookmarksPageState extends State<BookmarksPage> {
         ? json.map((messageJson) => StoragePost.fromJson(messageJson)).toList()
         : [];
     setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xfff0f0f0),
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(widget.title),
-      ),
-      drawer: const AppDrawer(),
-      body: _body()
-    );
   }
 
   _datePub(DateTime date) {
@@ -132,6 +120,19 @@ class _BookmarksPageState extends State<BookmarksPage> {
             color: Colors.black12,
           );
         }
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Constants.backgroundColor,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(widget.title),
+        ),
+        drawer: const AppDrawer(),
+        body: _body()
     );
   }
 }

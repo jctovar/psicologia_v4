@@ -21,7 +21,7 @@ class _TeacherDetailState extends State<TeacherDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: const Color(0xfff0f0f0),
+      backgroundColor: Constants.backgroundColor,
       appBar: AppBar(
         title: Text('${widget.item.grade} ${widget.item.firstname} ${widget.item.lastname}'),
       ),

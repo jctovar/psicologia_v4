@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:suayed/pages/teacher_detail.dart';
+import 'package:suayed/utils/app_constants.dart';
 import 'package:suayed/widgets/avatar.dart';
 import 'package:suayed/widgets/drawer.dart';
 import 'package:suayed/models/teacher_model.dart';
@@ -17,7 +19,7 @@ class _TeachersPageState extends State<TeachersPage> {
   List<TeacherModel> _items = List.empty();
   List<TeacherModel> _filteredItems = List.empty();
   final TextEditingController _filter = TextEditingController();
-  Icon _searchIcon = const Icon(Icons.search);
+  Icon _searchIcon = const Icon(LineIcons.search);
   Widget _appBarTitle = const Text('Profesores');
   late String _searchText = "";
 
@@ -38,22 +40,22 @@ class _TeachersPageState extends State<TeachersPage> {
 
   void _searchPressed() {
     setState(() {
-      if (_searchIcon.icon == Icons.search) {
-        _searchIcon = const Icon(Icons.close);
+      if (_searchIcon.icon == LineIcons.search) {
+        _searchIcon = const Icon(LineIcons.times);
         _appBarTitle = TextField(
           autocorrect: true,
           autofocus: true,
           style: const TextStyle(color: Colors.white),
           controller: _filter,
           decoration: const InputDecoration(
-            prefixIcon: Icon(Icons.search, color: Colors.white,),
+            prefixIcon: Icon(LineIcons.search, color: Colors.white,),
             enabledBorder: InputBorder.none,
             hintText: 'Buscar por nombre...',
             hintStyle: TextStyle(color: Colors.white),
           ),
         );
       } else {
-        _searchIcon = const Icon(Icons.search);
+        _searchIcon = const Icon(LineIcons.search);
         _appBarTitle = Text(widget.title!);
         _filteredItems = _items;
         _filter.clear();
@@ -70,6 +72,7 @@ class _TeachersPageState extends State<TeachersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Constants.backgroundColor,
       appBar: AppBar(
         title: _appBarTitle,
         actions: <Widget>[

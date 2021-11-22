@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:suayed/models/post_model.dart';
 import 'package:suayed/utils/app_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,40 +25,9 @@ class _HomeDetailState extends State<HomeDetail> {
   static const String placeholderImg = 'assets/no_image.jpg';
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xfff0f0f0),
-      appBar: AppBar(
-        title: Text(widget.item.title),
-        actions: [
-          _popupMenuButton(),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
-              child: _title(widget.item.title),
-            ),
-            _image(widget.item.image),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: _subtitle(timeago.format(widget.item.date, locale: 'es')),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: _htmlWidget(widget.item.content),
-            ),
-            const SizedBox(height: 10),
-            const Divider(),
-            const SizedBox(height: 10),
-            _footer('UNAM'),
-            const SizedBox(height: 20),
-          ]
-        )
-      )
-    );
+  void initState() {
+    super.initState();
+    initializeDateFormatting();
   }
 
   _image(imageUrl) {
@@ -81,7 +53,7 @@ class _HomeDetailState extends State<HomeDetail> {
   _subtitle(subTitle) {
     return Text(
       subTitle,
-      textAlign: TextAlign.right,
+      textAlign: TextAlign.left,
       style: Constants.mainStyleSubtitle,
       maxLines: 1,
     );
@@ -139,7 +111,7 @@ class _HomeDetailState extends State<HomeDetail> {
             child: Row(
               children: const [
                 Icon(
-                  Icons.open_in_browser,
+                  LineIcons.alternateExternalLink,
                   color: Colors.pink,
                 ),
                 SizedBox(
@@ -154,7 +126,7 @@ class _HomeDetailState extends State<HomeDetail> {
             child: Row(
               children: const [
                 Icon(
-                  Icons.bookmark,
+                  LineIcons.bookmark,
                   color: Colors.pink,
                 ),
                 SizedBox(
@@ -169,7 +141,7 @@ class _HomeDetailState extends State<HomeDetail> {
             child: Row(
               children: const [
                 Icon(
-                  Icons.share,
+                  LineIcons.share,
                   color: Colors.pink,
                 ),
                 SizedBox(
@@ -206,4 +178,43 @@ class _HomeDetailState extends State<HomeDetail> {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Elemento guardado en marcadores...')));
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Constants.backgroundColor,
+        appBar: AppBar(
+          title: Text(widget.item.title),
+          actions: [
+            _popupMenuButton(),
+          ],
+        ),
+        body: SingleChildScrollView(
+            child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 18, 8, 18),
+                    child: _title(widget.item.title),
+                  ),
+                  _image(widget.item.image),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: SizedBox(
+                        width: double.infinity,
+                        child: _subtitle(DateFormat.yMMMMd('es_MX').format(widget.item.date))
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: _htmlWidget(widget.item.content),
+                  ),
+                  const SizedBox(height: 10),
+                  const Divider(),
+                  const SizedBox(height: 10),
+                  _footer('UNAM'),
+                  const SizedBox(height: 20),
+                ]
+            )
+        )
+    );
+  }
 }

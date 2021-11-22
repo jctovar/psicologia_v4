@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:suayed/utils/app_constants.dart';
 
 class CreditsPage extends StatelessWidget {
   const CreditsPage({Key? key}) : super(key: key);
@@ -30,7 +31,7 @@ class CreditsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color(0xfff0f0f0),
+        backgroundColor: Constants.backgroundColor,
         appBar: AppBar(
           title: const Text("Creditos"),
         ),

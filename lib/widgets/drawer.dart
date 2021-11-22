@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icon.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:suayed/routes/routes.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -38,21 +40,21 @@ class _AppDrawerState extends State<AppDrawer> {
         children: <Widget>[
           _createHeader(),
           _createDrawerItem(
-              icon: Icons.home, text: 'Inicio', onTap: () =>
+              icon: LineIcons.home, text: 'Inicio', onTap: () =>
               Navigator.pushReplacementNamed(context, Routes.home)),
           _createDrawerItem(
-              icon: Icons.school, text: 'Profesores', onTap: () =>
+              icon: LineIcons.graduationCap, text: 'Profesores', onTap: () =>
               Navigator.pushReplacementNamed(context, Routes.teachers)),
           _createDrawerItem(
-              icon: Icons.groups, text: 'Coordinación', onTap: () =>
+              icon: LineIcons.users, text: 'Coordinación', onTap: () =>
               Navigator.pushReplacementNamed(context, Routes.areas)),
           const Divider(),
           _createDrawerItem(
-              icon: Icons.bookmark, text: 'Marcadores', onTap: () =>
+              icon: LineIcons.bookmark, text: 'Marcadores', onTap: () =>
               Navigator.pushReplacementNamed(context, Routes.bookmarks)),
           const Divider(),
           _createDrawerItem(
-              icon: Icons.help_outline, text: 'Acerca de', onTap: () =>
+              icon: LineIcons.info, text: 'Acerca de', onTap: () =>
               Navigator.pushReplacementNamed(context, Routes.about)),
           ListTile(
             title: Text('Version: ' + _packageInfo.version + ' / Build: ' + _packageInfo.buildNumber),
@@ -84,10 +86,11 @@ class _AppDrawerState extends State<AppDrawer> {
     return ListTile(
       title: Row(
         children: <Widget>[
-          Icon(icon),
+          Icon(icon, color: Colors.pink.shade800),
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
-            child: Text(text),
+            child: Text(text,
+                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w400, color: Colors.pink.shade800)),
           )
         ],
       ),

@@ -20,7 +20,7 @@ class _AreaDetailState extends State<AreaDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: const Color(0xfff0f0f0),
+        backgroundColor: Constants.backgroundColor,
         appBar: AppBar(
           title: Text(widget.item.department_name),
         ),

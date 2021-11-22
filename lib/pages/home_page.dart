@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:suayed/utils/app_constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:json_store/json_store.dart';
@@ -123,7 +124,7 @@ class _HomePageState extends State<HomePage> {
             Share.share(item.link, subject: item.title);
           },
           icon: const Icon(
-            Icons.share,
+            LineIcons.share,
             color: Colors.black54,
           ),
           iconSize: 24.0,
@@ -131,7 +132,7 @@ class _HomePageState extends State<HomePage> {
         IconButton(
           onPressed: () => _savePost(item),
           icon: const Icon(
-            Icons.bookmark,
+            LineIcons.bookmark,
             color: Colors.black54,
           ),
           iconSize: 24.0,
@@ -168,7 +169,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xfff0f0f0),
+      backgroundColor: Constants.backgroundColor,
       appBar: AppBar(
         centerTitle: true,
         title: Text(widget.title,

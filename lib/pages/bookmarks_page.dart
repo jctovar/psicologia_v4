@@ -30,13 +30,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
 
   _loadFromStorage() async {
     List<Map<String, dynamic>>? json = await JsonStore().getListLike('post-%');
-
-    if(json == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Todavía no hay elementos guardados...')));
-    }
-    _posts = json != null
-        ? json.map((messageJson) => StoragePost.fromJson(messageJson)).toList()
-        : [];
+    _posts = json!.map((messageJson) => StoragePost.fromJson(messageJson)).toList();
     setState(() {});
   }
 

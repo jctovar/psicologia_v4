@@ -23,7 +23,7 @@ class _NotificationPushState extends State<NotificationPush> {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           child: Text('Regret'),
           onPressed: () {
             Navigator.of(context).pop();

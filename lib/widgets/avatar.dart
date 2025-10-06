@@ -19,7 +19,7 @@ class _AvatarState extends State<Avatar> {
     super.initState();
   }
 
-  _loadImage(String picturePath, String emailUser) {
+  String _loadImage(String picturePath, String emailUser) {
     String url;
 
     if (picturePath.isEmpty) {
@@ -44,7 +44,7 @@ class _AvatarState extends State<Avatar> {
     );
   }
 
-  CircleAvatar _picture(context, picturePath, emailUser) {
+  CircleAvatar _picture(context, String picturePath, String emailUser) {
     return CircleAvatar(
       backgroundColor: const Color(0xffFDCF09),
       radius: widget.sizeAvatar,

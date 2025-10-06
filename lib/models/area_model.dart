@@ -1,39 +1,39 @@
 class AreaModel {
   AreaModel({
     required this.id,
-    required this.department_name,
+    required this.departmentName,
     required this.title,
     required this.agent,
-    required this.department_email,
-    required this.personal_email,
+    required this.departmentEmail,
+    required this.personalEmail,
     required this.detail,
   });
 
   final int id;
-  final String department_name;
+  final String departmentName;
   final String title;
   final String agent;
-  final String department_email;
-  final String personal_email;
+  final String departmentEmail;
+  final String personalEmail;
   final String detail;
 
   factory AreaModel.fromJson(Map<String, dynamic> json) => AreaModel(
     id: int.parse(json["id"]),
-    department_name: json["department_name"],
+    departmentName: json["department_name"],
     title: json["title"],
     agent: json["agent"],
-    department_email: json["department_email"],
-    personal_email: json["personal_email"],
+    departmentEmail: json["department_email"],
+    personalEmail: json["personal_email"],
     detail: json["detail"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "department_name": department_name,
+    "department_name": departmentName,
     "title": title,
     "agent": agent,
-    "department_email": department_email,
-    "personal_email": personal_email,
+    "department_email": departmentEmail,
+    "personal_email": personalEmail,
     "detail": detail,
   };
 }

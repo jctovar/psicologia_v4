@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../widgets/drawer.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'credits_page.dart';
 
 class AboutPage extends StatelessWidget {

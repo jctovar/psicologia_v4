@@ -8,7 +8,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:timeago/timeago.dart' as timeago;
 import 'package:share/share.dart';
 import 'package:json_store/json_store.dart';
 
@@ -21,7 +20,7 @@ class HomeDetail extends StatefulWidget {
 }
 
 class _HomeDetailState extends State<HomeDetail> {
-  get jsonStore => null;
+  Null get jsonStore => null;
   static const String placeholderImg = 'assets/no_image.jpg';
 
   @override
@@ -30,7 +29,7 @@ class _HomeDetailState extends State<HomeDetail> {
     initializeDateFormatting();
   }
 
-  _image(imageUrl) {
+  CachedNetworkImage _image(imageUrl) {
     return CachedNetworkImage(
       placeholder: (context, url) => Image.asset(placeholderImg),
       imageUrl: imageUrl,
@@ -39,7 +38,7 @@ class _HomeDetailState extends State<HomeDetail> {
     );
   }
 
-  _title(title) {
+  Text _title(title) {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
@@ -50,7 +49,7 @@ class _HomeDetailState extends State<HomeDetail> {
     );
   }
 
-  _subtitle(subTitle) {
+  Text _subtitle(subTitle) {
     return Text(
       subTitle,
       textAlign: TextAlign.left,
@@ -59,7 +58,7 @@ class _HomeDetailState extends State<HomeDetail> {
     );
   }
 
-  _footer(title) {
+  Text _footer(title) {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
@@ -70,7 +69,7 @@ class _HomeDetailState extends State<HomeDetail> {
     );
   }
 
-  _htmlWidget(String html) {
+  HtmlWidget _htmlWidget(String html) {
     return HtmlWidget(html,
         customStylesBuilder: (element) {
           if (element.classes.contains('foo')) {
@@ -108,6 +107,7 @@ class _HomeDetailState extends State<HomeDetail> {
         },
         itemBuilder: (context) => [
           PopupMenuItem(
+            value: 0,
             child: Row(
               children: const [
                 Icon(
@@ -120,9 +120,9 @@ class _HomeDetailState extends State<HomeDetail> {
                 Text('Ir al sitio')
               ],
             ),
-            value: 0,
           ),
           PopupMenuItem(
+            value: 1,
             child: Row(
               children: const [
                 Icon(
@@ -135,9 +135,9 @@ class _HomeDetailState extends State<HomeDetail> {
                 Text('Guardar')
               ],
             ),
-            value: 1,
           ),
           PopupMenuItem(
+            value: 2,
             child: Row(
               children: const [
                 Icon(
@@ -150,7 +150,6 @@ class _HomeDetailState extends State<HomeDetail> {
                 Text('Compartir')
               ],
             ),
-            value: 2,
           )
         ]);
   }

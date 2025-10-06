@@ -31,11 +31,11 @@ class _AreasPageState extends State<AreasPage> {
         itemBuilder: (context, index) {
           final item = _items[index];
           return ListTile(
-              leading: Avatar(picturePath: '', emailUser: item.personal_email, sizeAvatar: 48),
+              leading: Avatar(picturePath: '', emailUser: item.personalEmail, sizeAvatar: 48),
               title: Text(item.agent,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis),
-              subtitle: Text(item.department_name,
+              subtitle: Text(item.departmentName,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis),
               isThreeLine: true,
@@ -56,7 +56,7 @@ class _AreasPageState extends State<AreasPage> {
         });
   }
 
-  _loadData() {
+  void _loadData() {
     Services.readJsonAreas().then((itemsFromServer) {
       setState(() {
         _items = itemsFromServer;

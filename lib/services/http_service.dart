@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:suayed/utils/app_constants.dart';
 
 var options = BaseOptions(
@@ -11,22 +12,28 @@ var options = BaseOptions(
 Dio dio = Dio(options);
 
 class CustomInterceptor extends Interceptor {
-
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    print("onRequest");
+  void onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
+    if (kDebugMode) {
+      print("onRequest");
+    }
     return super.onRequest(options, handler);
   }
 
   @override
   Future? onResponse(Response response, ResponseInterceptorHandler handler) {
-    print("onResponse");
+    if (kDebugMode) {
+      print("onResponse");
+    }
     return null;
   }
 
   @override
   Future onError(DioError err, ErrorInterceptorHandler handler) async {
-    print("onError: ${err.response!.statusCode}");
-    return handler.next(err);  // <--- THE TIP IS HERE
+    if (kDebugMode) {
+      print("onError: ${err.response!.statusCode}");
+    }
+    return handler.next(err); // <--- THE TIP IS HERE
   }
 }

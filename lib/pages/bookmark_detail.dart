@@ -20,7 +20,7 @@ class BookmarkDetail extends StatefulWidget {
 }
 
 class _BookmarkDetailState extends State<BookmarkDetail> {
-  get jsonStore => null;
+  Null get jsonStore => null;
   static const String placeholderImg = 'assets/no_image.jpg';
 
   @override
@@ -29,7 +29,7 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
     initializeDateFormatting();
   }
 
-  _image(imageUrl) {
+  CachedNetworkImage _image(imageUrl) {
     return CachedNetworkImage(
       placeholder: (context, url) => Image.asset(placeholderImg),
       imageUrl: imageUrl,
@@ -38,7 +38,7 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
     );
   }
 
-  _title(title) {
+  Text _title(String title) {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
@@ -52,7 +52,7 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
     );
   }
 
-  _subtitle(subTitle) {
+  Text _subtitle(String subTitle) {
     return Text(
       subTitle,
       textAlign: TextAlign.left,
@@ -63,7 +63,7 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
     );
   }
 
-  _footer(title) {
+  Text _footer(String title) {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
@@ -77,7 +77,7 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
     );
   }
 
-  _htmlWidget(String html) {
+  HtmlWidget _htmlWidget(String html) {
     return HtmlWidget(html,
         customStylesBuilder: (element) {
           if (element.classes.contains('foo')) {
@@ -120,6 +120,7 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
         itemBuilder: (context) =>
         [
           PopupMenuItem(
+            value: 0,
             child: Row(
               children: const [
                 Icon(
@@ -132,9 +133,9 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
                 Text('Ir al sitio')
               ],
             ),
-            value: 0,
           ),
           PopupMenuItem(
+            value: 1,
             child: Row(
               children: const [
                 Icon(
@@ -147,9 +148,9 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
                 Text('Borrar')
               ],
             ),
-            value: 1,
           ),
           PopupMenuItem(
+            value: 2,
             child: Row(
               children: const [
                 Icon(
@@ -162,7 +163,6 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
                 Text('Compartir')
               ],
             ),
-            value: 2,
           )
         ]);
   }

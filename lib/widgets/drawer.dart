@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:suayed/routes/routes.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -57,7 +56,7 @@ class _AppDrawerState extends State<AppDrawer> {
               icon: LineIcons.info, text: 'Acerca de', onTap: () =>
               Navigator.pushReplacementNamed(context, Routes.about)),
           ListTile(
-            title: Text('Version: ' + _packageInfo.version + ' / Build: ' + _packageInfo.buildNumber),
+            title: Text('Version: ${_packageInfo.version} / Build: ${_packageInfo.buildNumber}'),
           ),
         ],
       ),

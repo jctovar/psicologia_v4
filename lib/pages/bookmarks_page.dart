@@ -20,7 +20,7 @@ class BookmarksPage extends StatefulWidget {
 class _BookmarksPageState extends State<BookmarksPage> {
   static const String placeholderImg = 'assets/no_image.jpg';
   List<StoragePost> _posts = [];
-  get jsonStore => null;
+  Null get jsonStore => null;
 
   @override
   void initState() {
@@ -28,17 +28,17 @@ class _BookmarksPageState extends State<BookmarksPage> {
     _loadFromStorage();
   }
 
-  _loadFromStorage() async {
+  Future<void> _loadFromStorage() async {
     List<Map<String, dynamic>>? json = await JsonStore().getListLike('post-%');
-    _posts = json!.map((messageJson) => StoragePost.fromJson(messageJson)).toList();
+    _posts = (json ?? []).map((messageJson) => StoragePost.fromJson(messageJson)).toList();
     setState(() {});
   }
 
-  _datePub(DateTime date) {
+  String _datePub(DateTime date) {
     return timeago.format(date, locale: 'es');
   }
 
-  _thumbnail(imageUrl) {
+  CachedNetworkImage _thumbnail(imageUrl) {
     return CachedNetworkImage(
       placeholder: (context, url) => Image.asset(placeholderImg),
       imageUrl: imageUrl,
@@ -47,7 +47,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
     );
   }
 
-  _openFeed(StoragePost item) {
+  void _openFeed(StoragePost item) {
     Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => BookmarkDetail(
@@ -61,7 +61,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
     });
   }
 
-  _title(title) {
+  Text _title(title) {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
@@ -72,7 +72,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
     );
   }
 
-  _subtitle(subTitle) {
+  Text _subtitle(subTitle) {
     return Text(
       subTitle,
       textAlign: TextAlign.left,
@@ -81,7 +81,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
     );
   }
 
-  _body() {
+  dynamic _body() {
     return _posts.isEmpty
         ? Center(
           child: _nothing(),
@@ -89,11 +89,11 @@ class _BookmarksPageState extends State<BookmarksPage> {
     : _listPosts();
   }
 
-  _nothing() {
+  Image _nothing() {
     return const Image(image: AssetImage('assets/unam_clasico.png'));
   }
 
-  _listPosts() {
+  ListView _listPosts() {
     return ListView.separated(
         itemCount: _posts.length,
         itemBuilder: (context, index) {

@@ -133,7 +133,7 @@ class _TeachersPageState extends State<TeachersPage> {
     setState(() {});
   }
 
-  _loadData() {
+  void _loadData() {
     Services.readJsonTeachers().then((itemsFromServer) {
       setState(() {
         _items = itemsFromServer;

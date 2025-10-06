@@ -22,7 +22,7 @@ class _AreaDetailState extends State<AreaDetail> {
     return Scaffold(
         backgroundColor: Constants.backgroundColor,
         appBar: AppBar(
-          title: Text(widget.item.department_name),
+          title: Text(widget.item.departmentName),
         ),
         body: SingleChildScrollView(
             child: Column(
@@ -30,7 +30,7 @@ class _AreaDetailState extends State<AreaDetail> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   const SizedBox(height: 20),
-                  Avatar(picturePath: '', emailUser: widget.item.personal_email, sizeAvatar: 128),
+                  Avatar(picturePath: '', emailUser: widget.item.personalEmail, sizeAvatar: 128),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 16, 16, 16),
                     child: _title(widget.item.agent),
@@ -41,7 +41,7 @@ class _AreaDetailState extends State<AreaDetail> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: _subtitle(widget.item.department_email),
+                    child: _subtitle(widget.item.departmentEmail),
                   ),
                   const Divider(),
                   Padding(
@@ -58,7 +58,7 @@ class _AreaDetailState extends State<AreaDetail> {
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.mail, color: Colors.white,),
           onPressed: () => setState(() {
-            _launched = _makeMailTo('mailto:${widget.item.department_email}');
+            _launched = _makeMailTo('mailto:${widget.item.departmentEmail}');
           }
           ),
         )
@@ -90,7 +90,7 @@ class _AreaDetailState extends State<AreaDetail> {
     );
   }
 
-  _title(title) {
+  Text _title(String title) {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
@@ -101,7 +101,7 @@ class _AreaDetailState extends State<AreaDetail> {
     );
   }
 
-  _subtitle(subTitle) {
+  Text _subtitle(String subTitle) {
     return Text(
       subTitle,
       style: GoogleFonts.lora(
@@ -112,7 +112,7 @@ class _AreaDetailState extends State<AreaDetail> {
     );
   }
 
-  _footer(title) {
+  Text _footer(String title) {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
@@ -123,7 +123,7 @@ class _AreaDetailState extends State<AreaDetail> {
     );
   }
 
-  _htmlWidget(String html) {
+  HtmlWidget _htmlWidget(String html) {
     return HtmlWidget(html,
         customStylesBuilder: (element) {
           if (element.classes.contains('foo')) {

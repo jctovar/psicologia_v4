@@ -23,7 +23,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
   List<PostModel> _posts = List.empty();
-  get jsonStore => null;
+  Null get jsonStore => null;
 
   Future _loadData(bool refreshData) async {
     SuayedServices.getPosts(refreshData).then((result) {
@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
     _loadData(false);
   }
 
-  _openFeed(PostModel item) {
+  void _openFeed(PostModel item) {
     Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => HomeDetail(
@@ -51,13 +51,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _updateFeed(result) {
+  void _updateFeed(result) {
     setState(() {
       _posts = result;
     });
   }
 
-  _title(title) {
+  Text _title(String title) {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _subtitle(subTitle) {
+  Text _subtitle(String subTitle) {
     return Text(
       subTitle,
       style: Constants.mainStyleSubtitle,
@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _thumbnail(imageUrl) {
+  CachedNetworkImage _thumbnail(imageUrl) {
     return CachedNetworkImage(
       placeholder: (context, url) => Image.asset(Constants.placeholderImg),
       imageUrl: imageUrl,
@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _listPosts() {
+  ListView _listPosts() {
     return ListView.builder(
       itemCount: _posts.length,
       itemBuilder: (BuildContext context, int index) {
@@ -114,9 +114,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _buttonBar(PostModel item) {
-    return ButtonBar(
-      buttonPadding: const EdgeInsets.all(2.0),
+  OverflowBar _buttonBar(PostModel item) {
+    return OverflowBar(
       children: <Widget>[
         IconButton(
           onPressed: () {
@@ -141,11 +140,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _datePub(DateTime date) {
+  String _datePub(DateTime date) {
     return timeago.format(date, locale: 'es');
   }
 
-  _body() {
+  Widget _body() {
     return _posts.isEmpty
       ? const Center(
         child: CircularProgressIndicator(),

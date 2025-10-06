@@ -92,7 +92,7 @@ class _TeacherDetailState extends State<TeacherDetail> {
     );
   }
 
-  _title(title) {
+  Text _title(title) {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
@@ -103,7 +103,7 @@ class _TeacherDetailState extends State<TeacherDetail> {
     );
   }
 
-  _subtitle(subTitle) {
+  Text _subtitle(subTitle) {
     return Text(
       subTitle,
       style: GoogleFonts.lora(
@@ -114,7 +114,7 @@ class _TeacherDetailState extends State<TeacherDetail> {
     );
   }
 
-  _footer(title) {
+  Text _footer(title) {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
@@ -125,7 +125,7 @@ class _TeacherDetailState extends State<TeacherDetail> {
     );
   }
 
-  _htmlWidget(String html) {
+  HtmlWidget _htmlWidget(String html) {
     return HtmlWidget(html,
         customStylesBuilder: (element) {
           if (element.classes.contains('foo')) {

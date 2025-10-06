@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:suayed/utils/app_constants.dart';
 import 'package:suayed/pages/about_page.dart';
@@ -11,10 +12,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.messageId}");
+  if (kDebugMode) {
+    print("Handling a background message: ${message.messageId}");
+  }
 }
 
 Future<void> main() async {
@@ -33,10 +35,14 @@ Future<void> main() async {
   );
 
   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-    print('User granted permission');
-    // TODO: handle the received notifications
+    if (kDebugMode) {
+      print('User granted permission');
+    }
+
   } else {
-    print('User declined or has not accepted permission');
+    if (kDebugMode) {
+      print('User declined or has not accepted permission');
+    }
   }
 
   runApp(const MyApp());
@@ -69,11 +75,17 @@ class _MyAppState extends State<MyApp> {
     }
 
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message recieved");
-      print(event.notification!.body);
+      if (kDebugMode) {
+        print("message recieved");
+      }
+      if (kDebugMode) {
+        print(event.notification!.body);
+      }
     });
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print('Message clicked!');
+      if (kDebugMode) {
+        print('Message clicked!');
+      }
     });
   }
 

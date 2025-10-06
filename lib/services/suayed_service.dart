@@ -6,15 +6,15 @@ import 'http_service.dart';
 class SuayedServices {
 
   static Future<List<PostModel>> getPosts(bool refreshCache) async {
-    DioCacheManager _dioCacheManager = DioCacheManager(CacheConfig());
+    DioCacheManager dioCacheManager = DioCacheManager(CacheConfig());
 
-    Options _cacheOptions = buildCacheOptions(const Duration(days: 3), forceRefresh: refreshCache);
+    Options cacheOptions = buildCacheOptions(const Duration(days: 3), forceRefresh: refreshCache);
 
-    dio.interceptors.add(_dioCacheManager.interceptor);
+    dio.interceptors.add(dioCacheManager.interceptor);
 
     try {
       Response response = await dio.request('wp-json/wp/v2/posts?per_page=15',
-          options: _cacheOptions);
+          options: cacheOptions);
 
       return (response.data as List).map((x) => PostModel.fromJson(x)).toList();
     } on DioError catch (e) {

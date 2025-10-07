@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:suayed/models/storage_post_model.dart';
 import 'package:json_store/json_store.dart';
 
@@ -43,10 +43,11 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
       title.toUpperCase(),
       style: GoogleFonts.lora(
         textStyle: const TextStyle(
-            fontSize: 24.0,
-            fontWeight: FontWeight.w800,
-            color: Colors.blue,
-            letterSpacing: -.3),
+          fontSize: 24.0,
+          fontWeight: FontWeight.w800,
+          color: Colors.blue,
+          letterSpacing: -.3,
+        ),
       ),
       maxLines: 4,
       overflow: TextOverflow.ellipsis,
@@ -58,9 +59,10 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
       subTitle,
       textAlign: TextAlign.left,
       style: const TextStyle(
-          fontSize: 14.0,
-          fontStyle: FontStyle.italic,
-          fontWeight: FontWeight.w400),
+        fontSize: 14.0,
+        fontStyle: FontStyle.italic,
+        fontWeight: FontWeight.w400,
+      ),
       maxLines: 1,
     );
   }
@@ -70,10 +72,11 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
       title.toUpperCase(),
       style: GoogleFonts.lora(
         textStyle: const TextStyle(
-            fontSize: 18.0,
-            fontWeight: FontWeight.w800,
-            color: Colors.pinkAccent,
-            letterSpacing: -.3),
+          fontSize: 18.0,
+          fontWeight: FontWeight.w800,
+          color: Colors.pinkAccent,
+          letterSpacing: -.3,
+        ),
       ),
       maxLines: 4,
       overflow: TextOverflow.ellipsis,
@@ -81,101 +84,86 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
   }
 
   HtmlWidget _htmlWidget(String html) {
-    return HtmlWidget(html,
-        customStylesBuilder: (element) {
-          if (element.classes.contains('foo')) {
-            return {'color': 'red'};
-          }
+    return HtmlWidget(
+      html,
+      customStylesBuilder: (element) {
+        if (element.classes.contains('foo')) {
+          return {'color': 'red'};
+        }
 
-          return null;
-        },
-        onTapUrl: (url) {
-          _openFeed(url);
-          return true;
-        },
-        onErrorBuilder: (context, element, error) =>
-            Text('$element error: $error'),
-        onLoadingBuilder: (context, element, loadingProgress) =>
-            const CircularProgressIndicator(),
-        textStyle: GoogleFonts.robotoSlab(
-          textStyle: const TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.w300,
-              color: Colors.black87),
-        ));
+        return null;
+      },
+      onTapUrl: (url) {
+        _openFeed(url);
+        return true;
+      },
+      onErrorBuilder: (context, element, error) =>
+          Text('$element error: $error'),
+      onLoadingBuilder: (context, element, loadingProgress) =>
+          const CircularProgressIndicator(),
+      textStyle: GoogleFonts.robotoSlab(
+        textStyle: const TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.w300,
+          color: Colors.black87,
+        ),
+      ),
+    );
   }
 
   PopupMenuButton _popupMenuButton() {
     return PopupMenuButton(
-        onSelected: (value) {
-          switch (value) {
-            case 0:
-              _openFeed(widget.item.link);
-              break;
-            case 1:
-              _deleteBookmark(widget.item.id);
-              break;
-            case 2:
-              _shareFeed(widget.item.link, widget.item.title);
-              break;
-          }
-        },
-        itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 0,
-                child: Row(
-                  children: const [
-                    Icon(
-                      LineIcons.alternateExternalLink,
-                      color: Colors.pink,
-                    ),
-                    SizedBox(
-                      width: 7,
-                    ),
-                    Text('Ir al sitio')
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                value: 1,
-                child: Row(
-                  children: const [
-                    Icon(
-                      LineIcons.trash,
-                      color: Colors.pink,
-                    ),
-                    SizedBox(
-                      width: 7,
-                    ),
-                    Text('Borrar')
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                value: 2,
-                child: Row(
-                  children: const [
-                    Icon(
-                      LineIcons.share,
-                      color: Colors.pink,
-                    ),
-                    SizedBox(
-                      width: 7,
-                    ),
-                    Text('Compartir')
-                  ],
-                ),
-              )
-            ]);
+      onSelected: (value) {
+        switch (value) {
+          case 0:
+            _openFeed(widget.item.link);
+            break;
+          case 1:
+            _deleteBookmark(widget.item.id);
+            break;
+          case 2:
+            _shareFeed(widget.item.link, widget.item.title);
+            break;
+        }
+      },
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          value: 0,
+          child: Row(
+            children: const [
+              Icon(LineIcons.alternateExternalLink, color: Colors.pink),
+              SizedBox(width: 7),
+              Text('Ir al sitio'),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 1,
+          child: Row(
+            children: const [
+              Icon(LineIcons.trash, color: Colors.pink),
+              SizedBox(width: 7),
+              Text('Borrar'),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 2,
+          child: Row(
+            children: const [
+              Icon(LineIcons.share, color: Colors.pink),
+              SizedBox(width: 7),
+              Text('Compartir'),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   Future<void> _openFeed(String url) async {
     if (await canLaunch(url)) {
-      await launch(
-        url,
-        forceSafariVC: true,
-        forceWebView: false,
-      );
+      await launch(url, forceSafariVC: true, forceWebView: false);
       return;
     }
   }
@@ -187,7 +175,8 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
   Future<void> _deleteBookmark(int id) async {
     await JsonStore().deleteItem('post-$id');
     ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Elemento eliminado de marcadores...')));
+      const SnackBar(content: Text('Elemento eliminado de marcadores...')),
+    );
     //await _loadFromStorage();
     Navigator.pop(context);
   }
@@ -195,36 +184,40 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Constants.backgroundColor,
-        appBar: AppBar(
-          title: Text(widget.item.title),
-          actions: [
-            _popupMenuButton(),
-          ],
-        ),
-        body: SingleChildScrollView(
-            child: Column(children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
-            child: _title(widget.item.title),
-          ),
-          _image(widget.item.image),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SizedBox(
+      backgroundColor: Constants.backgroundColor,
+      appBar: AppBar(
+        title: Text(widget.item.title),
+        actions: [_popupMenuButton()],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
+              child: _title(widget.item.title),
+            ),
+            _image(widget.item.image),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SizedBox(
                 width: double.infinity,
                 child: _subtitle(
-                    DateFormat.yMMMMd('es_MX').format(widget.item.date))),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: _htmlWidget(widget.item.content),
-          ),
-          const SizedBox(height: 10),
-          const Divider(),
-          const SizedBox(height: 10),
-          _footer('UNAM'),
-          const SizedBox(height: 20),
-        ])));
+                  DateFormat.yMMMMd('es_MX').format(widget.item.date),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: _htmlWidget(widget.item.content),
+            ),
+            const SizedBox(height: 10),
+            const Divider(),
+            const SizedBox(height: 10),
+            _footer('UNAM'),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
   }
 }

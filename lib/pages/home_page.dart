@@ -8,7 +8,7 @@ import 'package:suayed/widgets/drawer.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:suayed/services/suayed_service.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'home_detail.dart';
 
 class HomePage extends StatefulWidget {
@@ -42,13 +42,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _openFeed(PostModel item) {
-    Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => HomeDetail(
-              item: item
-          ),
-        )
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) => HomeDetail(item: item)));
   }
 
   void _updateFeed(result) {
@@ -60,9 +56,7 @@ class _HomePageState extends State<HomePage> {
   Text _title(String title) {
     return Text(
       title.toUpperCase(),
-      style: GoogleFonts.lora(
-        textStyle: Constants.mainStyleTitle,
-      ),
+      style: GoogleFonts.lora(textStyle: Constants.mainStyleTitle),
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
     );
@@ -92,24 +86,28 @@ class _HomePageState extends State<HomePage> {
       itemBuilder: (BuildContext context, int index) {
         final item = _posts[index];
         return Card(
-            child: InkWell(
-                splashColor: Colors.pink.withAlpha(60),
-                onTap: () => _openFeed(item),
-                child:
-                    Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: _thumbnail(item.image)
-                        ),
-                      ),
-                      ListTile(
-                        title: _title(item.title),
-                        subtitle: _subtitle(_datePub(item.date)),
-                      ),
-                      _buttonBar(item)
-                ])));
+          child: InkWell(
+            splashColor: Colors.pink.withAlpha(60),
+            onTap: () => _openFeed(item),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: _thumbnail(item.image),
+                  ),
+                ),
+                ListTile(
+                  title: _title(item.title),
+                  subtitle: _subtitle(_datePub(item.date)),
+                ),
+                _buttonBar(item),
+              ],
+            ),
+          ),
+        );
       },
     );
   }
@@ -122,18 +120,12 @@ class _HomePageState extends State<HomePage> {
             // You enter here what you want the button to do once the user interacts with it
             Share.share(item.link, subject: item.title);
           },
-          icon: const Icon(
-            LineIcons.share,
-            color: Colors.black54,
-          ),
+          icon: const Icon(LineIcons.share, color: Colors.black54),
           iconSize: 24.0,
         ),
         IconButton(
           onPressed: () => _savePost(item),
-          icon: const Icon(
-            LineIcons.bookmark,
-            color: Colors.black54,
-          ),
+          icon: const Icon(LineIcons.bookmark, color: Colors.black54),
           iconSize: 24.0,
         ),
       ],
@@ -146,22 +138,19 @@ class _HomePageState extends State<HomePage> {
 
   Widget _body() {
     return _posts.isEmpty
-      ? const Center(
-        child: CircularProgressIndicator(),
-      )
-      : RefreshIndicator(
-        key: _refreshKey,
-        child: _listPosts(),
-        onRefresh: () => _loadData(true),
-      );
+        ? const Center(child: CircularProgressIndicator())
+        : RefreshIndicator(
+            key: _refreshKey,
+            child: _listPosts(),
+            onRefresh: () => _loadData(true),
+          );
   }
 
   Future<void> _savePost(PostModel item) async {
-    await JsonStore().setItem(
-      'post-${item.id}',
-      item.toJson()
+    await JsonStore().setItem('post-${item.id}', item.toJson());
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Elemento guardado en marcadores...')),
     );
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Elemento guardado en marcadores...')));
     //setState(() {});
   }
 
@@ -171,8 +160,10 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Constants.backgroundColor,
       appBar: AppBar(
         centerTitle: true,
-        title: Text(widget.title,
-          style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.w800)),
+        title: Text(
+          widget.title,
+          style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.w800),
+        ),
       ),
       drawer: const AppDrawer(),
       body: _body(),

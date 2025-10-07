@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:localstore/localstore.dart';
 import 'package:suayed/utils/app_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -9,7 +10,6 @@ import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:suayed/models/storage_post_model.dart';
-import 'package:json_store/json_store.dart';
 
 class BookmarkDetail extends StatefulWidget {
   const BookmarkDetail({super.key, required this.item});
@@ -20,7 +20,6 @@ class BookmarkDetail extends StatefulWidget {
 }
 
 class _BookmarkDetailState extends State<BookmarkDetail> {
-  Null get jsonStore => null;
   static const String placeholderImg = 'assets/no_image.jpg';
 
   @override
@@ -169,15 +168,17 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
   }
 
   Future<void> _shareFeed(String url, String title) async {
-    Share.share(url, subject: title);
+    SharePlus.instance.share(
+      ShareParams(subject: title, uri: Uri.tryParse(url)),
+    );
   }
 
   Future<void> _deleteBookmark(int id) async {
-    await JsonStore().deleteItem('post-$id');
+    final db = Localstore.instance;
+    await db.collection('bookmarks').doc(id.toString()).delete();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Elemento eliminado de marcadores...')),
     );
-    //await _loadFromStorage();
     Navigator.pop(context);
   }
 

@@ -2,41 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:localstore/localstore.dart';
 import 'package:suayed/models/post_model.dart';
 import 'package:suayed/utils/app_constants.dart';
 import 'package:suayed/widgets/show_snack_bar.dart';
+import 'package:suayed/widgets/thumbnail_image.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:json_store/json_store.dart';
 
-class HomeDetail extends StatefulWidget {
-  const HomeDetail({super.key, required this.item});
+class PostDetail extends StatefulWidget {
+  const PostDetail({super.key, required this.item});
   final PostModel item;
 
   @override
-  State createState() => _HomeDetailState();
+  State createState() => _PostDetailState();
 }
 
-class _HomeDetailState extends State<HomeDetail> {
-  Null get jsonStore => null;
-  static const String placeholderImg = 'assets/no_image.jpg';
-
+class _PostDetailState extends State<PostDetail> {
   @override
   void initState() {
     super.initState();
     initializeDateFormatting();
-  }
-
-  CachedNetworkImage _image(imageUrl) {
-    return CachedNetworkImage(
-      placeholder: (context, url) => Image.asset(placeholderImg),
-      imageUrl: imageUrl,
-      alignment: Alignment.center,
-      fit: BoxFit.fill,
-    );
   }
 
   Text _title(String title) {
@@ -159,11 +147,15 @@ class _HomeDetailState extends State<HomeDetail> {
   }
 
   Future<void> _shareFeed(String url, String title) async {
-    Share.share(url, subject: title);
+    SharePlus.instance.share(
+      ShareParams(subject: title, uri: Uri.tryParse(url)),
+    );
   }
 
   Future<void> _savePost(PostModel item) async {
-    await JsonStore().setItem('post-${item.id}', item.toJson());
+    final db = Localstore.instance;
+    final id = item.id.toString();
+    await db.collection('bookmarks').doc(id).set(item.toJson());
     showSnackBar(context, 'Elemento guardado en marcadores...');
     setState(() {});
   }
@@ -183,7 +175,7 @@ class _HomeDetailState extends State<HomeDetail> {
               padding: const EdgeInsets.fromLTRB(8, 18, 8, 18),
               child: _title(widget.item.title),
             ),
-            _image(widget.item.image),
+            ThumbnailImage(imageUrl: widget.item.image),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: SizedBox(

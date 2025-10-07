@@ -18,7 +18,7 @@ Aplicación móvil desarrollada en Flutter para la comunidad de la carrera de Ps
 *   **Gestión de Estado:** setState / ValueNotifier (implícito por la estructura)
 *   **Peticiones HTTP:** [Dio](https://pub.dev/packages/dio) con [DioCacheInterceptor](https://pub.dev/packages/dio_cache_interceptor) para caché.
 *   **Notificaciones:** [Firebase Cloud Messaging](https://pub.dev/packages/firebase_messaging)
-*   **Almacenamiento Local:** [Shared Preferences](https://pub.dev/packages/shared_preferences) y [JSON Store](https://pub.dev/packages/json_store) para marcadores.
+*   **Almacenamiento Local:** [Shared Preferences](https://pub.dev/packages/shared_preferences) y [localstore](https://pub.dev/packages/localstore) para marcadores.
 *   **Renderizado de HTML:** [flutter_widget_from_html_core](https://pub.dev/packages/flutter_widget_from_html_core)
 
 ## 📂 Estructura del Proyecto

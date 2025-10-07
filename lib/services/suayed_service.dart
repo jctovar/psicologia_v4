@@ -21,8 +21,8 @@ class SuayedServices {
       );
 
       return (response.data as List).map((x) => PostModel.fromJson(x)).toList();
-    } on DioError catch (e) {
-      if (e.type == DioErrorType.receiveTimeout) {
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.receiveTimeout) {
         throw Exception("Connection Timeout Exception");
       }
       throw Exception(e.message);

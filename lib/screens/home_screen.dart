@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:suayed/utils/app_constants.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:json_store/json_store.dart';
+import 'package:localstore/localstore.dart';
 import 'package:suayed/models/post_model.dart';
-import 'package:suayed/widgets/drawer.dart';
-import 'package:timeago/timeago.dart' as timeago;
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:suayed/services/suayed_service.dart';
+import 'package:suayed/utils/app_constants.dart';
+import 'package:suayed/widgets/drawer.dart';
+import 'package:suayed/widgets/show_snack_bar.dart';
+import 'package:suayed/widgets/thumbnail_image.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:share_plus/share_plus.dart';
-import 'home_detail.dart';
+import 'post_detail.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.title});
@@ -23,7 +24,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
   List<PostModel> _posts = List.empty();
-  Null get jsonStore => null;
 
   Future _loadData(bool refreshData) async {
     SuayedServices.getPosts(refreshData).then((result) {
@@ -44,10 +44,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void _openFeed(PostModel item) {
     Navigator.of(
       context,
-    ).push(MaterialPageRoute(builder: (context) => HomeDetail(item: item)));
+    ).push(MaterialPageRoute(builder: (context) => PostDetail(item: item)));
   }
 
-  void _updateFeed(result) {
+  void _updateFeed(List<PostModel> result) {
     setState(() {
       _posts = result;
     });
@@ -71,15 +71,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  CachedNetworkImage _thumbnail(String imageUrl) {
-    return CachedNetworkImage(
-      placeholder: (context, url) => Image.asset(Constants.placeholderImg),
-      imageUrl: imageUrl,
-      alignment: Alignment.center,
-      fit: BoxFit.fill,
-    );
-  }
-
   ListView _listPosts() {
     return ListView.builder(
       itemCount: _posts.length,
@@ -96,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
-                    child: _thumbnail(item.image),
+                    child: ThumbnailImage(imageUrl: item.image),
                   ),
                 ),
                 ListTile(
@@ -117,8 +108,9 @@ class _HomeScreenState extends State<HomeScreen> {
       children: <Widget>[
         IconButton(
           onPressed: () {
-            // You enter here what you want the button to do once the user interacts with it
-            Share.share(item.link, subject: item.title);
+            SharePlus.instance.share(
+              ShareParams(subject: item.link, uri: Uri.tryParse(item.link)),
+            );
           },
           icon: const Icon(LineIcons.share, color: Colors.black54),
           iconSize: 24.0,
@@ -147,10 +139,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _savePost(PostModel item) async {
-    await JsonStore().setItem('post-${item.id}', item.toJson());
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Elemento guardado en marcadores...')),
-    );
+    final db = Localstore.instance;
+    final id = item.id.toString();
+    await db.collection('bookmarks').doc(id).set(item.toJson());
+    showSnackBar(context, 'Elemento guardado en marcadores...');
   }
 
   @override

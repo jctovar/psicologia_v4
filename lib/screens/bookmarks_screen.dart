@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:localstore/localstore.dart';
 import 'package:suayed/utils/app_constants.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:json_store/json_store.dart';
 import 'package:suayed/widgets/drawer.dart';
 import 'bookmark_detail.dart';
 import 'package:suayed/models/storage_post_model.dart';
@@ -20,7 +20,6 @@ class BookmarksPage extends StatefulWidget {
 class _BookmarksPageState extends State<BookmarksPage> {
   static const String placeholderImg = 'assets/no_image.jpg';
   List<StoragePost> _posts = [];
-  Null get jsonStore => null;
 
   @override
   void initState() {
@@ -29,11 +28,15 @@ class _BookmarksPageState extends State<BookmarksPage> {
   }
 
   Future<void> _loadFromStorage() async {
-    List<Map<String, dynamic>>? json = await JsonStore().getListLike('post-%');
-    _posts = (json ?? [])
-        .map((messageJson) => StoragePost.fromJson(messageJson))
-        .toList();
-    setState(() {});
+    final db = Localstore.instance;
+    final result = await db.collection('bookmarks').get();
+    if (result != null) {
+      setState(() {
+        _posts = result.entries
+            .map((entry) => StoragePost.fromJson(entry.value))
+            .toList();
+      });
+    }
   }
 
   String _datePub(DateTime date) {
@@ -55,9 +58,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
           MaterialPageRoute(builder: (context) => BookmarkDetail(item: item)),
         )
         .then((value) {
-          setState(() {
-            _loadFromStorage();
-          });
+          _loadFromStorage();
         });
   }
 

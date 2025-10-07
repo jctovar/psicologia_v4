@@ -81,24 +81,6 @@ class _TeacherDetailState extends State<TeacherDetail> {
     }
   }
 
-  Container _lineText(String myText) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(20, 6, 10, 6),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Text(
-              myText,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2,
-              softWrap: false,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Text _title(String title) {
     return Text(
       title.toUpperCase(),

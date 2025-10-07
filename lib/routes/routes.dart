@@ -1,11 +1,11 @@
-import 'package:suayed/screens/home_page.dart';
-import 'package:suayed/screens/teachers_page.dart';
-import 'package:suayed/screens/areas_page.dart';
-import 'package:suayed/screens/bookmarks_page.dart';
-import 'package:suayed/screens/about_page.dart';
+import 'package:suayed/screens/home_screen.dart';
+import 'package:suayed/screens/teachers_screen.dart';
+import 'package:suayed/screens/areas_screen.dart';
+import 'package:suayed/screens/bookmarks_screen.dart';
+import 'package:suayed/screens/about_screen.dart';
 
 class Routes {
-  static const String home = HomePage.routeName;
+  static const String home = HomeScreen.routeName;
   static const String teachers = TeachersPage.routeName;
   static const String areas = AreasPage.routeName;
   static const String bookmarks = BookmarksPage.routeName;

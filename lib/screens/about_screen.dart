@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../widgets/drawer.dart';
-import 'credits_page.dart';
+import 'credits_screen.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});

@@ -1,39 +1,24 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:suayed/utils/app_constants.dart';
 
 var options = BaseOptions(
   baseUrl: Constants.uriHttp,
-  connectTimeout: 5000,
-  receiveTimeout: 3000,
+  connectTimeout: const Duration(milliseconds: 5000),
+  receiveTimeout: const Duration(milliseconds: 3000),
   receiveDataWhenStatusError: true,
 );
 
-Dio dio = Dio(options);
+// Cache options
+final cacheOptions = CacheOptions(
+  store: MemCacheStore(),
+  policy: CachePolicy.request,
+  maxStale: const Duration(days: 7),
+  priority: CachePriority.normal,
+  cipher: null,
+  keyBuilder: CacheOptions.defaultCacheKeyBuilder,
+  allowPostMethod: false,
+);
 
-class CustomInterceptor extends Interceptor {
-  @override
-  void onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
-    if (kDebugMode) {
-      print("onRequest");
-    }
-    return super.onRequest(options, handler);
-  }
-
-  @override
-  Future? onResponse(Response response, ResponseInterceptorHandler handler) {
-    if (kDebugMode) {
-      print("onResponse");
-    }
-    return null;
-  }
-
-  @override
-  Future onError(DioError err, ErrorInterceptorHandler handler) async {
-    if (kDebugMode) {
-      print("onError: ${err.response!.statusCode}");
-    }
-    return handler.next(err); // <--- THE TIP IS HERE
-  }
-}
+Dio dio = Dio(options)
+  ..interceptors.add(DioCacheInterceptor(options: cacheOptions));

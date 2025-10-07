@@ -11,16 +11,16 @@ import 'package:suayed/services/suayed_service.dart';
 import 'package:share_plus/share_plus.dart';
 import 'home_detail.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.title});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key, required this.title});
   static const String routeName = 'home';
   final String title;
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
   List<PostModel> _posts = List.empty();
   Null get jsonStore => null;
@@ -151,7 +151,6 @@ class _HomePageState extends State<HomePage> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Elemento guardado en marcadores...')),
     );
-    //setState(() {});
   }
 
   @override

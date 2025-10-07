@@ -2,11 +2,11 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:suayed/utils/app_constants.dart';
-import 'package:suayed/screens/about_page.dart';
-import 'package:suayed/screens/areas_page.dart';
-import 'package:suayed/screens/bookmarks_page.dart';
-import 'package:suayed/screens/home_page.dart';
-import 'package:suayed/screens/teachers_page.dart';
+import 'package:suayed/screens/about_screen.dart';
+import 'package:suayed/screens/areas_screen.dart';
+import 'package:suayed/screens/bookmarks_screen.dart';
+import 'package:suayed/screens/home_screen.dart';
+import 'package:suayed/screens/teachers_screen.dart';
 import 'package:suayed/routes/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -102,9 +102,9 @@ class _MyAppState extends State<MyApp> {
         ).copyWith(secondary: Colors.pinkAccent),
         fontFamily: 'Roboto',
       ),
-      home: HomePage(title: Constants.appName),
+      home: HomeScreen(title: Constants.appName),
       routes: {
-        Routes.home: (context) => HomePage(title: Constants.appName),
+        Routes.home: (context) => HomeScreen(title: Constants.appName),
         Routes.teachers: (context) => const TeachersPage(title: 'Profesores'),
         Routes.areas: (context) =>
             const AreasPage(title: 'Coordinación SUAyED'),

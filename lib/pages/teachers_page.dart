@@ -9,7 +9,7 @@ import 'package:suayed/services/local_service.dart';
 
 class TeachersPage extends StatefulWidget {
   static const String routeName = 'teachers';
-  const TeachersPage({Key? key, this.title}) : super(key: key);
+  const TeachersPage({super.key, required this.title});
   final String? title;
 
   @override
@@ -49,10 +49,7 @@ class _TeachersPageState extends State<TeachersPage> {
           style: const TextStyle(color: Colors.white),
           controller: _filter,
           decoration: const InputDecoration(
-            prefixIcon: Icon(
-              LineIcons.search,
-              color: Colors.white,
-            ),
+            prefixIcon: Icon(LineIcons.search, color: Colors.white),
             enabledBorder: InputBorder.none,
             hintText: 'Buscar por nombre...',
             hintStyle: TextStyle(color: Colors.white),
@@ -80,10 +77,7 @@ class _TeachersPageState extends State<TeachersPage> {
       appBar: AppBar(
         title: _appBarTitle,
         actions: <Widget>[
-          IconButton(
-            icon: _searchIcon,
-            onPressed: _searchPressed,
-          )
+          IconButton(icon: _searchIcon, onPressed: _searchPressed),
         ],
       ),
       drawer: const AppDrawer(),
@@ -94,41 +88,52 @@ class _TeachersPageState extends State<TeachersPage> {
   Widget _buildList() {
     if (_searchText.isNotEmpty) {
       _filteredItems = _items
-          .where((u) =>
-              (u.firstname.toLowerCase().contains(_searchText.toLowerCase()) ||
-                  u.lastname.toLowerCase().contains(_searchText.toLowerCase())))
+          .where(
+            (u) =>
+                (u.firstname.toLowerCase().contains(
+                  _searchText.toLowerCase(),
+                ) ||
+                u.lastname.toLowerCase().contains(_searchText.toLowerCase())),
+          )
           .toList();
     }
     return RefreshIndicator(
-        onRefresh: _refreshData,
-        child: ListView.separated(
-            itemCount: _filteredItems.length,
-            itemBuilder: (context, index) {
-              final item = _filteredItems[index];
-              return ListTile(
-                  leading: Avatar(
-                      picturePath: item.picture,
-                      emailUser: item.email,
-                      sizeAvatar: 48),
-                  title: Text(
-                      '${item.grade} ${item.firstname} ${item.lastname}',
-                      overflow: TextOverflow.ellipsis),
-                  subtitle: Text(item.email, overflow: TextOverflow.ellipsis),
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
+      onRefresh: _refreshData,
+      child: ListView.separated(
+        itemCount: _filteredItems.length,
+        itemBuilder: (context, index) {
+          final item = _filteredItems[index];
+          return ListTile(
+            leading: Avatar(
+              picturePath: item.picture,
+              emailUser: item.email,
+              sizeAvatar: 48,
+            ),
+            title: Text(
+              '${item.grade} ${item.firstname} ${item.lastname}',
+              overflow: TextOverflow.ellipsis,
+            ),
+            subtitle: Text(item.email, overflow: TextOverflow.ellipsis),
+            onTap: () {
+              Navigator.of(context)
+                  .push(
+                    MaterialPageRoute(
                       builder: (BuildContext context) {
                         return TeacherDetail(item: item);
                       },
-                    )).then((value) {
-                      setState(() {});
-                    });
+                    ),
+                  )
+                  .then((value) {
+                    setState(() {});
                   });
             },
-            separatorBuilder: (BuildContext context, int index) {
-              return const Divider(
-                color: Colors.black12,
-              );
-            }));
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return const Divider(color: Colors.black12);
+        },
+      ),
+    );
   }
 
   Future _refreshData() async {

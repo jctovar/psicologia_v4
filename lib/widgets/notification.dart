@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NotificationPush extends StatefulWidget {
-  const NotificationPush({Key? key, required this.message}) : super(key: key);
+  const NotificationPush({super.key, required this.message});
   final String message;
 
   @override

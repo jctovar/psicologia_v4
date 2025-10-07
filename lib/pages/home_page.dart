@@ -12,7 +12,7 @@ import 'package:share_plus/share_plus.dart';
 import 'home_detail.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.title}) : super(key: key);
+  const HomePage({super.key, required this.title});
   static const String routeName = 'home';
   final String title;
 

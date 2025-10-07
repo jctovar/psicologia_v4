@@ -9,7 +9,7 @@ import 'area_detail.dart';
 
 class AreasPage extends StatefulWidget {
   static const String routeName = 'areas';
-  const AreasPage({Key? key, required this.title}) : super(key: key);
+  const AreasPage({super.key, required this.title});
   final String title;
 
   @override
@@ -27,33 +27,41 @@ class _AreasPageState extends State<AreasPage> {
 
   Widget _buildList() {
     return ListView.separated(
-        itemCount: _items.length,
-        itemBuilder: (context, index) {
-          final item = _items[index];
-          return ListTile(
-              leading: Avatar(picturePath: '', emailUser: item.personalEmail, sizeAvatar: 48),
-              title: Text(item.agent,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis),
-              subtitle: Text(item.departmentName,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis),
-              isThreeLine: true,
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {
-                  return AreaDetail(item: item);
-                },
-                )).then((value) {
+      itemCount: _items.length,
+      itemBuilder: (context, index) {
+        final item = _items[index];
+        return ListTile(
+          leading: Avatar(
+            picturePath: '',
+            emailUser: item.personalEmail,
+            sizeAvatar: 48,
+          ),
+          title: Text(item.agent, maxLines: 1, overflow: TextOverflow.ellipsis),
+          subtitle: Text(
+            item.departmentName,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          isThreeLine: true,
+          onTap: () {
+            Navigator.of(context)
+                .push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return AreaDetail(item: item);
+                    },
+                  ),
+                )
+                .then((value) {
                   setState(() {});
                 });
-              }
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) {
-          return const Divider(
-            color: Colors.black12,
-          );
-        });
+          },
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) {
+        return const Divider(color: Colors.black12);
+      },
+    );
   }
 
   void _loadData() {
@@ -68,9 +76,7 @@ class _AreasPageState extends State<AreasPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constants.backgroundColor,
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(title: Text(widget.title)),
       drawer: const AppDrawer(),
       body: _buildList(),
     );

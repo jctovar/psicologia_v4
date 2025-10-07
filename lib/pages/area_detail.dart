@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:suayed/widgets/avatar.dart';
 
 class AreaDetail extends StatefulWidget {
-  const AreaDetail({Key? key, required this.item}): super(key: key);
+  const AreaDetail({super.key, required this.item});
   final AreaModel item;
 
   @override
@@ -20,48 +20,49 @@ class _AreaDetailState extends State<AreaDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Constants.backgroundColor,
-        appBar: AppBar(
-          title: Text(widget.item.departmentName),
+      backgroundColor: Constants.backgroundColor,
+      appBar: AppBar(title: Text(widget.item.departmentName)),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            const SizedBox(height: 20),
+            Avatar(
+              picturePath: '',
+              emailUser: widget.item.personalEmail,
+              sizeAvatar: 128,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 16, 16, 16),
+              child: _title(widget.item.agent),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(widget.item.title),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: _subtitle(widget.item.departmentEmail),
+            ),
+            const Divider(),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: _htmlWidget(widget.item.detail),
+            ),
+            const Divider(),
+            const SizedBox(height: 10),
+            _footer('UNAM'),
+            const SizedBox(height: 20),
+          ],
         ),
-        body: SingleChildScrollView(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  const SizedBox(height: 20),
-                  Avatar(picturePath: '', emailUser: widget.item.personalEmail, sizeAvatar: 128),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 16, 16, 16),
-                    child: _title(widget.item.agent),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(widget.item.title),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: _subtitle(widget.item.departmentEmail),
-                  ),
-                  const Divider(),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: _htmlWidget(widget.item.detail),
-                  ),
-                  const Divider(),
-                  const SizedBox(height: 10),
-                  _footer('UNAM'),
-                  const SizedBox(height: 20),
-                ]
-            )
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.mail, color: Colors.white,),
-          onPressed: () => setState(() {
-            _launched = _makeMailTo('mailto:${widget.item.departmentEmail}');
-          }
-          ),
-        )
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.mail, color: Colors.white),
+        onPressed: () => setState(() {
+          _launched = _makeMailTo('mailto:${widget.item.departmentEmail}');
+        }),
+      ),
     );
   }
 
@@ -80,11 +81,12 @@ class _AreaDetailState extends State<AreaDetail> {
         children: <Widget>[
           Expanded(
             child: Text(
-              myText, overflow: TextOverflow.ellipsis,
+              myText,
+              overflow: TextOverflow.ellipsis,
               maxLines: 2,
               softWrap: false,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -93,9 +95,7 @@ class _AreaDetailState extends State<AreaDetail> {
   Text _title(String title) {
     return Text(
       title.toUpperCase(),
-      style: GoogleFonts.lora(
-        textStyle: Constants.mainStyleTitle,
-      ),
+      style: GoogleFonts.lora(textStyle: Constants.mainStyleTitle),
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
     );
@@ -105,7 +105,11 @@ class _AreaDetailState extends State<AreaDetail> {
     return Text(
       subTitle,
       style: GoogleFonts.lora(
-        textStyle: const TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic, fontWeight: FontWeight.w300),
+        textStyle: const TextStyle(
+          fontSize: 14.0,
+          fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.w300,
+        ),
       ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
@@ -116,7 +120,12 @@ class _AreaDetailState extends State<AreaDetail> {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
-        textStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w800, color: Colors.pinkAccent, letterSpacing: -.3),
+        textStyle: const TextStyle(
+          fontSize: 18.0,
+          fontWeight: FontWeight.w800,
+          color: Colors.pinkAccent,
+          letterSpacing: -.3,
+        ),
       ),
       maxLines: 4,
       overflow: TextOverflow.ellipsis,
@@ -124,18 +133,25 @@ class _AreaDetailState extends State<AreaDetail> {
   }
 
   HtmlWidget _htmlWidget(String html) {
-    return HtmlWidget(html,
-        customStylesBuilder: (element) {
-          if (element.classes.contains('foo')) {
-            return {'color': 'red'};
-          }
-          return null;
-        },
-        onErrorBuilder: (context, element, error) => Text('$element error: $error'),
-        onLoadingBuilder: (context, element, loadingProgress) => const CircularProgressIndicator(),
-        textStyle: GoogleFonts.robotoSlab(
-          textStyle: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w300, color: Colors.black87),
-        )
+    return HtmlWidget(
+      html,
+      customStylesBuilder: (element) {
+        if (element.classes.contains('foo')) {
+          return {'color': 'red'};
+        }
+        return null;
+      },
+      onErrorBuilder: (context, element, error) =>
+          Text('$element error: $error'),
+      onLoadingBuilder: (context, element, loadingProgress) =>
+          const CircularProgressIndicator(),
+      textStyle: GoogleFonts.robotoSlab(
+        textStyle: const TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.w300,
+          color: Colors.black87,
+        ),
+      ),
     );
   }
 }

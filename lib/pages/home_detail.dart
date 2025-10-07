@@ -12,7 +12,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:json_store/json_store.dart';
 
 class HomeDetail extends StatefulWidget {
-  const HomeDetail({Key? key, required this.item}) : super(key: key);
+  const HomeDetail({super.key, required this.item});
   final PostModel item;
 
   @override
@@ -41,9 +41,7 @@ class _HomeDetailState extends State<HomeDetail> {
   Text _title(String title) {
     return Text(
       title.toUpperCase(),
-      style: GoogleFonts.lora(
-        textStyle: Constants.mainStyleTitle,
-      ),
+      style: GoogleFonts.lora(textStyle: Constants.mainStyleTitle),
       maxLines: 4,
       overflow: TextOverflow.ellipsis,
     );
@@ -63,10 +61,11 @@ class _HomeDetailState extends State<HomeDetail> {
       title.toUpperCase(),
       style: GoogleFonts.lora(
         textStyle: const TextStyle(
-            fontSize: 18.0,
-            fontWeight: FontWeight.w800,
-            color: Colors.pinkAccent,
-            letterSpacing: -.3),
+          fontSize: 18.0,
+          fontWeight: FontWeight.w800,
+          color: Colors.pinkAccent,
+          letterSpacing: -.3,
+        ),
       ),
       maxLines: 4,
       overflow: TextOverflow.ellipsis,
@@ -74,101 +73,86 @@ class _HomeDetailState extends State<HomeDetail> {
   }
 
   HtmlWidget _htmlWidget(String html) {
-    return HtmlWidget(html,
-        customStylesBuilder: (element) {
-          if (element.classes.contains('foo')) {
-            return {'color': 'red'};
-          }
+    return HtmlWidget(
+      html,
+      customStylesBuilder: (element) {
+        if (element.classes.contains('foo')) {
+          return {'color': 'red'};
+        }
 
-          return null;
-        },
-        onTapUrl: (url) {
-          _openFeed(url);
-          return true;
-        },
-        onErrorBuilder: (context, element, error) =>
-            Text('$element error: $error'),
-        onLoadingBuilder: (context, element, loadingProgress) =>
-            const CircularProgressIndicator(),
-        textStyle: GoogleFonts.robotoSlab(
-          textStyle: const TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.w300,
-              color: Colors.black87),
-        ));
+        return null;
+      },
+      onTapUrl: (url) {
+        _openFeed(url);
+        return true;
+      },
+      onErrorBuilder: (context, element, error) =>
+          Text('$element error: $error'),
+      onLoadingBuilder: (context, element, loadingProgress) =>
+          const CircularProgressIndicator(),
+      textStyle: GoogleFonts.robotoSlab(
+        textStyle: const TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.w300,
+          color: Colors.black87,
+        ),
+      ),
+    );
   }
 
   PopupMenuButton _popupMenuButton() {
     return PopupMenuButton(
-        onSelected: (value) {
-          switch (value) {
-            case 0:
-              _openFeed(widget.item.link);
-              break;
-            case 1:
-              _savePost(widget.item);
-              break;
-            case 2:
-              _shareFeed(widget.item.link, widget.item.title);
-              break;
-          }
-        },
-        itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 0,
-                child: Row(
-                  children: const [
-                    Icon(
-                      LineIcons.alternateExternalLink,
-                      color: Colors.pink,
-                    ),
-                    SizedBox(
-                      width: 7,
-                    ),
-                    Text('Ir al sitio')
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                value: 1,
-                child: Row(
-                  children: const [
-                    Icon(
-                      LineIcons.bookmark,
-                      color: Colors.pink,
-                    ),
-                    SizedBox(
-                      width: 7,
-                    ),
-                    Text('Guardar')
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                value: 2,
-                child: Row(
-                  children: const [
-                    Icon(
-                      LineIcons.share,
-                      color: Colors.pink,
-                    ),
-                    SizedBox(
-                      width: 7,
-                    ),
-                    Text('Compartir')
-                  ],
-                ),
-              )
-            ]);
+      onSelected: (value) {
+        switch (value) {
+          case 0:
+            _openFeed(widget.item.link);
+            break;
+          case 1:
+            _savePost(widget.item);
+            break;
+          case 2:
+            _shareFeed(widget.item.link, widget.item.title);
+            break;
+        }
+      },
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          value: 0,
+          child: Row(
+            children: const [
+              Icon(LineIcons.alternateExternalLink, color: Colors.pink),
+              SizedBox(width: 7),
+              Text('Ir al sitio'),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 1,
+          child: Row(
+            children: const [
+              Icon(LineIcons.bookmark, color: Colors.pink),
+              SizedBox(width: 7),
+              Text('Guardar'),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 2,
+          child: Row(
+            children: const [
+              Icon(LineIcons.share, color: Colors.pink),
+              SizedBox(width: 7),
+              Text('Compartir'),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   Future<void> _openFeed(String url) async {
     if (await canLaunch(url)) {
-      await launch(
-        url,
-        forceSafariVC: true,
-        forceWebView: false,
-      );
+      await launch(url, forceSafariVC: true, forceWebView: false);
       return;
     }
   }
@@ -180,42 +164,47 @@ class _HomeDetailState extends State<HomeDetail> {
   Future<void> _savePost(PostModel item) async {
     await JsonStore().setItem('post-${item.id}', item.toJson());
     ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Elemento guardado en marcadores...')));
+      const SnackBar(content: Text('Elemento guardado en marcadores...')),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Constants.backgroundColor,
-        appBar: AppBar(
-          title: Text(widget.item.title),
-          actions: [
-            _popupMenuButton(),
-          ],
-        ),
-        body: SingleChildScrollView(
-            child: Column(children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 18, 8, 18),
-            child: _title(widget.item.title),
-          ),
-          _image(widget.item.image),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SizedBox(
+      backgroundColor: Constants.backgroundColor,
+      appBar: AppBar(
+        title: Text(widget.item.title),
+        actions: [_popupMenuButton()],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 18, 8, 18),
+              child: _title(widget.item.title),
+            ),
+            _image(widget.item.image),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SizedBox(
                 width: double.infinity,
                 child: _subtitle(
-                    DateFormat.yMMMMd('es_MX').format(widget.item.date))),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: _htmlWidget(widget.item.content),
-          ),
-          const SizedBox(height: 10),
-          const Divider(),
-          const SizedBox(height: 10),
-          _footer('UNAM'),
-          const SizedBox(height: 20),
-        ])));
+                  DateFormat.yMMMMd('es_MX').format(widget.item.date),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: _htmlWidget(widget.item.content),
+            ),
+            const SizedBox(height: 10),
+            const Divider(),
+            const SizedBox(height: 10),
+            _footer('UNAM'),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
   }
 }

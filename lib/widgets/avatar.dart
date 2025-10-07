@@ -3,12 +3,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gravatar/flutter_gravatar.dart';
 
 class Avatar extends StatefulWidget {
-  const Avatar(
-      {Key? key,
-      required this.picturePath,
-      required this.emailUser,
-      required this.sizeAvatar})
-      : super(key: key);
+  const Avatar({
+    super.key,
+    required this.picturePath,
+    required this.emailUser,
+    required this.sizeAvatar,
+  });
+
   final String picturePath;
   final double sizeAvatar;
   final String emailUser;
@@ -41,13 +42,17 @@ class _AvatarState extends State<Avatar> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: widget.sizeAvatar,
-        width: widget.sizeAvatar,
-        child: _picture(context, widget.picturePath, widget.emailUser));
+      height: widget.sizeAvatar,
+      width: widget.sizeAvatar,
+      child: _picture(context, widget.picturePath, widget.emailUser),
+    );
   }
 
   CircleAvatar _picture(
-      BuildContext context, String picturePath, String emailUser) {
+    BuildContext context,
+    String picturePath,
+    String emailUser,
+  ) {
     return CircleAvatar(
       backgroundColor: const Color(0xffFDCF09),
       radius: widget.sizeAvatar,

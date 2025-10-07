@@ -4,7 +4,7 @@ import 'package:suayed/routes/routes.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class AppDrawer extends StatefulWidget {
-  const AppDrawer({Key? key}) : super(key: key);
+  const AppDrawer({super.key});
 
   @override
   State createState() => _AppDrawerState();
@@ -40,35 +40,38 @@ class _AppDrawerState extends State<AppDrawer> {
         children: <Widget>[
           _createHeader(),
           _createDrawerItem(
-              icon: LineIcons.home,
-              text: 'Inicio',
-              onTap: () =>
-                  Navigator.pushReplacementNamed(context, Routes.home)),
+            icon: LineIcons.home,
+            text: 'Inicio',
+            onTap: () => Navigator.pushReplacementNamed(context, Routes.home),
+          ),
           _createDrawerItem(
-              icon: LineIcons.graduationCap,
-              text: 'Profesores',
-              onTap: () =>
-                  Navigator.pushReplacementNamed(context, Routes.teachers)),
+            icon: LineIcons.graduationCap,
+            text: 'Profesores',
+            onTap: () =>
+                Navigator.pushReplacementNamed(context, Routes.teachers),
+          ),
           _createDrawerItem(
-              icon: LineIcons.users,
-              text: 'Coordinación',
-              onTap: () =>
-                  Navigator.pushReplacementNamed(context, Routes.areas)),
+            icon: LineIcons.users,
+            text: 'Coordinación',
+            onTap: () => Navigator.pushReplacementNamed(context, Routes.areas),
+          ),
           const Divider(),
           _createDrawerItem(
-              icon: LineIcons.bookmark,
-              text: 'Marcadores',
-              onTap: () =>
-                  Navigator.pushReplacementNamed(context, Routes.bookmarks)),
+            icon: LineIcons.bookmark,
+            text: 'Marcadores',
+            onTap: () =>
+                Navigator.pushReplacementNamed(context, Routes.bookmarks),
+          ),
           const Divider(),
           _createDrawerItem(
-              icon: LineIcons.info,
-              text: 'Acerca de',
-              onTap: () =>
-                  Navigator.pushReplacementNamed(context, Routes.about)),
+            icon: LineIcons.info,
+            text: 'Acerca de',
+            onTap: () => Navigator.pushReplacementNamed(context, Routes.about),
+          ),
           ListTile(
             title: Text(
-                'Version: ${_packageInfo.version} / Build: ${_packageInfo.buildNumber}'),
+              'Version: ${_packageInfo.version} / Build: ${_packageInfo.buildNumber}',
+            ),
           ),
         ],
       ),
@@ -77,36 +80,39 @@ class _AppDrawerState extends State<AppDrawer> {
 
   Widget _createHeader() {
     return const DrawerHeader(
-        margin: EdgeInsets.zero,
-        padding: EdgeInsets.zero,
-        decoration: BoxDecoration(
-          color: Colors.pinkAccent,
-          image: DecorationImage(
-            image: AssetImage('assets/bg.jpg'),
-            fit: BoxFit.cover,
-          ),
+      margin: EdgeInsets.zero,
+      padding: EdgeInsets.zero,
+      decoration: BoxDecoration(
+        color: Colors.pinkAccent,
+        image: DecorationImage(
+          image: AssetImage('assets/bg.jpg'),
+          fit: BoxFit.cover,
         ),
-        child: Center(
-          child: Image(image: AssetImage('assets/splash.png')),
-        ));
+      ),
+      child: Center(child: Image(image: AssetImage('assets/splash.png'))),
+    );
   }
 
-  Widget _createDrawerItem(
-      {required IconData icon,
-      required String text,
-      required GestureTapCallback onTap}) {
+  Widget _createDrawerItem({
+    required IconData icon,
+    required String text,
+    required GestureTapCallback onTap,
+  }) {
     return ListTile(
       title: Row(
         children: <Widget>[
           Icon(icon, color: Colors.pink.shade800),
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
-            child: Text(text,
-                style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.pink.shade800)),
-          )
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w400,
+                color: Colors.pink.shade800,
+              ),
+            ),
+          ),
         ],
       ),
       onTap: onTap,

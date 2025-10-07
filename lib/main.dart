@@ -10,7 +10,6 @@ import 'package:suayed/pages/teachers_page.dart';
 import 'package:suayed/routes/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -27,13 +26,13 @@ Future<void> main() async {
   await FirebaseMessaging.instance.subscribeToTopic('posts');
   await FirebaseMessaging.instance.subscribeToTopic('alerts');
 
-  NotificationSettings settings =
-      await FirebaseMessaging.instance.requestPermission(
-    alert: true,
-    badge: true,
-    provisional: false,
-    sound: true,
-  );
+  NotificationSettings settings = await FirebaseMessaging.instance
+      .requestPermission(
+        alert: true,
+        badge: true,
+        provisional: false,
+        sound: true,
+      );
 
   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
     if (kDebugMode) {
@@ -50,7 +49,7 @@ Future<void> main() async {
 
 ////////////////////////////////////////////////////////////////////////////////
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State createState() => _MyAppState();
@@ -58,8 +57,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-  static FirebaseAnalyticsObserver observer =
-      FirebaseAnalyticsObserver(analytics: analytics);
+  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(
+    analytics: analytics,
+  );
 
   @override
   void initState() {
@@ -97,8 +97,9 @@ class _MyAppState extends State<MyApp> {
       title: Constants.appName,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.pink)
-            .copyWith(secondary: Colors.pinkAccent),
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.pink,
+        ).copyWith(secondary: Colors.pinkAccent),
         fontFamily: 'Roboto',
       ),
       home: HomePage(title: Constants.appName),
@@ -110,6 +111,7 @@ class _MyAppState extends State<MyApp> {
         Routes.bookmarks: (context) => const BookmarksPage(title: 'Marcadores'),
         Routes.about: (context) => const AboutPage(),
       },
+      navigatorObservers: [_MyAppState.observer],
     );
   }
 }

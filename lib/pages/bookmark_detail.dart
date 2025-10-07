@@ -12,7 +12,7 @@ import 'package:suayed/models/storage_post_model.dart';
 import 'package:json_store/json_store.dart';
 
 class BookmarkDetail extends StatefulWidget {
-  const BookmarkDetail({Key? key, required this.item}) : super(key: key);
+  const BookmarkDetail({super.key, required this.item});
   final StoragePost item;
 
   @override

@@ -10,7 +10,7 @@ import 'package:suayed/models/storage_post_model.dart';
 
 class BookmarksPage extends StatefulWidget {
   static const String routeName = 'bookmarks';
-  const BookmarksPage({Key? key, required this.title}) : super(key: key);
+  const BookmarksPage({super.key, required this.title});
   final String title;
 
   @override
@@ -30,7 +30,9 @@ class _BookmarksPageState extends State<BookmarksPage> {
 
   Future<void> _loadFromStorage() async {
     List<Map<String, dynamic>>? json = await JsonStore().getListLike('post-%');
-    _posts = (json ?? []).map((messageJson) => StoragePost.fromJson(messageJson)).toList();
+    _posts = (json ?? [])
+        .map((messageJson) => StoragePost.fromJson(messageJson))
+        .toList();
     setState(() {});
   }
 
@@ -48,24 +50,27 @@ class _BookmarksPageState extends State<BookmarksPage> {
   }
 
   void _openFeed(StoragePost item) {
-    Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => BookmarkDetail(
-              item: item
-          ),
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute(builder: (context) => BookmarkDetail(item: item)),
         )
-    ).then((value) {
-      setState(() {
-        _loadFromStorage();
-      });
-    });
+        .then((value) {
+          setState(() {
+            _loadFromStorage();
+          });
+        });
   }
 
   Text _title(String title) {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
-        textStyle: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w800, color: Colors.blue, letterSpacing: -.3),
+        textStyle: const TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.w800,
+          color: Colors.blue,
+          letterSpacing: -.3,
+        ),
       ),
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
@@ -76,17 +81,17 @@ class _BookmarksPageState extends State<BookmarksPage> {
     return Text(
       subTitle,
       textAlign: TextAlign.left,
-      style: const TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic, fontWeight: FontWeight.w400),
+      style: const TextStyle(
+        fontSize: 14.0,
+        fontStyle: FontStyle.italic,
+        fontWeight: FontWeight.w400,
+      ),
       maxLines: 1,
     );
   }
 
   dynamic _body() {
-    return _posts.isEmpty
-        ? Center(
-          child: _nothing(),
-    )
-    : _listPosts();
+    return _posts.isEmpty ? Center(child: _nothing()) : _listPosts();
   }
 
   Image _nothing() {
@@ -95,39 +100,33 @@ class _BookmarksPageState extends State<BookmarksPage> {
 
   ListView _listPosts() {
     return ListView.separated(
-        itemCount: _posts.length,
-        itemBuilder: (context, index) {
-          final item = _posts[index];
-          return ListTile(
-              contentPadding: const EdgeInsets.all(8.0),
-              leading: _thumbnail(item.image),
-              title: _title(item.title),
-              subtitle: _subtitle(_datePub(item.date)),
-              isThreeLine: true,
-              onTap: () {
-                _openFeed(item);
-              }
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) {
-          return const Divider(
-            color: Colors.black12,
-          );
-        }
+      itemCount: _posts.length,
+      itemBuilder: (context, index) {
+        final item = _posts[index];
+        return ListTile(
+          contentPadding: const EdgeInsets.all(8.0),
+          leading: _thumbnail(item.image),
+          title: _title(item.title),
+          subtitle: _subtitle(_datePub(item.date)),
+          isThreeLine: true,
+          onTap: () {
+            _openFeed(item);
+          },
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) {
+        return const Divider(color: Colors.black12);
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Constants.backgroundColor,
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(widget.title),
-        ),
-        drawer: const AppDrawer(),
-        body: _body()
+      backgroundColor: Constants.backgroundColor,
+      appBar: AppBar(centerTitle: true, title: Text(widget.title)),
+      drawer: const AppDrawer(),
+      body: _body(),
     );
   }
 }
-

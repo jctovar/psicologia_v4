@@ -4,10 +4,10 @@
       "id": "4",
       "department_name": "Coordinación de Educación a Distancia",
       "title": "Coordinadora de Educación a Distancia",
-      "agent": "DRA. ANABEL DE LA ROSA GÓMEZ",
+      "agent": "MTRA. ALICIA IVET FLORES ELVIRA",
       "department_email": "coordinacion@iztacala.unam.mx",
-      "personal_email": "anabel.delarosa@iztacala.unam.mx",
-      "detail": "<ul><li>Representar a la licenciatura de Psicología en línea ante la CUAIEED</li><li>Velar por la aplicacion del plan de estudios</li><li>Medir los resultados obtenidos para el egreso y continuidad del alumnado</li></ul>"
+      "personal_email": "coed@unam.mx",
+      "detail": "<ul><li>Representar a la licenciatura de Psicología en línea ante la CUAED</li><li>Velar por la aplicacion del plan de estudios</li><li>Medir los resultados obtenidos para el egreso y continuidad del alumnado</li></ul>"
     },
     {
       "id": "3",
@@ -23,7 +23,7 @@
       "department_name": "Departamento de Plataformas Educativas",
       "title": "Jefe del Departamento de Plataformas Educativas",
       "agent": "ING. JUAN CARLOS TOVAR GÓMEZ",
-      "department_email": "asistencia.tecnica@iztacala.unam.mx",
+      "department_email": "plataformas.educativas@iztacala.unam.mx",
       "personal_email": "jctovar@iztacala.unam.mx",
       "detail": "<ul><li>Mantener disponible y actualizadas las plataformas de aulas virtuales y su sistema operativo, monitoreo constante de la plataforma y su rendimiento</li></ul>"
     },
@@ -40,9 +40,9 @@
       "id": "6",
       "department_name": "Seccion de Proyectos Educativos",
       "title": "Jefa de Sección Académica de Vinculación y Proyectos Educativos",
-      "agent": "MTRA. ALEJANDRA PAMELA SALDAÑA BADILLO",
+      "agent": "MTRA. ALBA SENNETH CHAVIRA SANCHEZ",
       "department_email": "proyectos.educativos@iztacala.unam.mx",
-      "personal_email": "pamela.saldana@iztacala.unam.mx",
+      "personal_email": "alba.chavira@iztacala.unam.mx",
       "detail": "<ul><li>Cursos de actualización en TIC para profesores y estudiantes</li><li>Creación de recursos educativos digitales</li><li>Coordinación y Producción del Boletín SUAyED Psicología</li><li>Responsable de los curso de inducción y el programa de tutorías</li></ul>"
     },
     {

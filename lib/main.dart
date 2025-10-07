@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:suayed/theme.dart';
 import 'package:suayed/utils/app_constants.dart';
 import 'package:suayed/screens/about_screen.dart';
 import 'package:suayed/screens/areas_screen.dart';
@@ -96,12 +97,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: Constants.appName,
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.pink,
-        ).copyWith(secondary: Colors.pinkAccent),
-        fontFamily: 'Roboto',
-      ),
+      theme: suayedTheme,
       home: HomeScreen(title: Constants.appName),
       routes: {
         Routes.home: (context) => HomeScreen(title: Constants.appName),

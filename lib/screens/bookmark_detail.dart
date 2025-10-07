@@ -4,8 +4,8 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:localstore/localstore.dart';
 import 'package:suayed/utils/app_constants.dart';
+import 'package:suayed/widgets/thumbnail_image.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
@@ -20,21 +20,10 @@ class BookmarkDetail extends StatefulWidget {
 }
 
 class _BookmarkDetailState extends State<BookmarkDetail> {
-  static const String placeholderImg = 'assets/no_image.jpg';
-
   @override
   void initState() {
     super.initState();
     initializeDateFormatting();
-  }
-
-  CachedNetworkImage _image(String imageUrl) {
-    return CachedNetworkImage(
-      placeholder: (context, url) => Image.asset(placeholderImg),
-      imageUrl: imageUrl,
-      alignment: Alignment.center,
-      fit: BoxFit.fill,
-    );
   }
 
   Text _title(String title) {
@@ -93,7 +82,7 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
         return null;
       },
       onTapUrl: (url) {
-        _openFeed(url);
+        _launchUrl(url);
         return true;
       },
       onErrorBuilder: (context, element, error) =>
@@ -115,7 +104,7 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
       onSelected: (value) {
         switch (value) {
           case 0:
-            _openFeed(widget.item.link);
+            _launchUrl(widget.item.link);
             break;
           case 1:
             _deleteBookmark(widget.item.id);
@@ -160,10 +149,9 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
     );
   }
 
-  Future<void> _openFeed(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url, forceSafariVC: true, forceWebView: false);
-      return;
+  Future<void> _launchUrl(String url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $url');
     }
   }
 
@@ -197,7 +185,7 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
               padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
               child: _title(widget.item.title),
             ),
-            _image(widget.item.image),
+            ThumbnailImage(imageUrl: widget.item.image),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: SizedBox(

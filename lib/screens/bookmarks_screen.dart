@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:localstore/localstore.dart';
 import 'package:suayed/utils/app_constants.dart';
+import 'package:suayed/widgets/thumbnail_image.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:suayed/widgets/drawer.dart';
 import 'bookmark_detail.dart';
@@ -18,7 +18,6 @@ class BookmarksPage extends StatefulWidget {
 }
 
 class _BookmarksPageState extends State<BookmarksPage> {
-  static const String placeholderImg = 'assets/no_image.jpg';
   List<StoragePost> _posts = [];
 
   @override
@@ -41,15 +40,6 @@ class _BookmarksPageState extends State<BookmarksPage> {
 
   String _datePub(DateTime date) {
     return timeago.format(date, locale: 'es');
-  }
-
-  CachedNetworkImage _thumbnail(String imageUrl) {
-    return CachedNetworkImage(
-      placeholder: (context, url) => Image.asset(placeholderImg),
-      imageUrl: imageUrl,
-      alignment: Alignment.center,
-      fit: BoxFit.fill,
-    );
   }
 
   void _openFeed(StoragePost item) {
@@ -106,7 +96,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
         final item = _posts[index];
         return ListTile(
           contentPadding: const EdgeInsets.all(8.0),
-          leading: _thumbnail(item.image),
+          leading: ThumbnailImage(imageUrl: item.image),
           title: _title(item.title),
           subtitle: _subtitle(_datePub(item.date)),
           isThreeLine: true,

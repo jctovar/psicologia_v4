@@ -72,7 +72,7 @@ class _PostDetailState extends State<PostDetail> {
         return null;
       },
       onTapUrl: (url) {
-        _openFeed(url);
+        _launchUrl(url);
         return true;
       },
       onErrorBuilder: (context, element, error) =>
@@ -94,7 +94,7 @@ class _PostDetailState extends State<PostDetail> {
       onSelected: (value) {
         switch (value) {
           case 0:
-            _openFeed(widget.item.link);
+            _launchUrl(widget.item.link);
             break;
           case 1:
             _savePost(widget.item);
@@ -139,10 +139,9 @@ class _PostDetailState extends State<PostDetail> {
     );
   }
 
-  Future<void> _openFeed(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url, forceSafariVC: true, forceWebView: false);
-      return;
+  Future<void> _launchUrl(String url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $url');
     }
   }
 

@@ -65,6 +65,11 @@ class _AppDrawerState extends State<AppDrawer> {
           const Divider(),
           _createDrawerItem(
             icon: LineIcons.info,
+            text: 'Aviso de Privacidad',
+            onTap: () => Navigator.pushReplacementNamed(context, Routes.privacy),
+          ),
+          _createDrawerItem(
+            icon: LineIcons.info,
             text: 'Acerca de',
             onTap: () => Navigator.pushReplacementNamed(context, Routes.about),
           ),

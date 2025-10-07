@@ -3,17 +3,21 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gravatar/flutter_gravatar.dart';
 
 class Avatar extends StatefulWidget {
-  const Avatar({Key? key, required this.picturePath, required this.emailUser, required this.sizeAvatar}) : super(key: key);
+  const Avatar(
+      {Key? key,
+      required this.picturePath,
+      required this.emailUser,
+      required this.sizeAvatar})
+      : super(key: key);
   final String picturePath;
   final double sizeAvatar;
   final String emailUser;
 
   @override
-  _AvatarState createState() => _AvatarState();
+  State createState() => _AvatarState();
 }
 
 class _AvatarState extends State<Avatar> {
-
   @override
   void initState() {
     super.initState();
@@ -26,11 +30,10 @@ class _AvatarState extends State<Avatar> {
       final gravatar = Gravatar(emailUser);
       // get Gravatar imageUrl
       url = gravatar.imageUrl();
-
     } else {
-      url = 'https://galadriel.ired.unam.mx/sup/assets/uploads/pictures/$picturePath';
+      url =
+          'https://galadriel.ired.unam.mx/sup/assets/uploads/pictures/$picturePath';
     }
-
 
     return url;
   }
@@ -40,26 +43,24 @@ class _AvatarState extends State<Avatar> {
     return SizedBox(
         height: widget.sizeAvatar,
         width: widget.sizeAvatar,
-        child: _picture(context, widget.picturePath, widget.emailUser)
-    );
+        child: _picture(context, widget.picturePath, widget.emailUser));
   }
 
-  CircleAvatar _picture(context, String picturePath, String emailUser) {
+  CircleAvatar _picture(
+      BuildContext context, String picturePath, String emailUser) {
     return CircleAvatar(
       backgroundColor: const Color(0xffFDCF09),
       radius: widget.sizeAvatar,
       child: CachedNetworkImage(
         imageUrl: _loadImage(picturePath, emailUser),
-        imageBuilder: (context, imageProvider) =>
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                    image: imageProvider, fit: BoxFit.fitWidth),
-              ),
-            ),
+        imageBuilder: (context, imageProvider) => Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(image: imageProvider, fit: BoxFit.fitWidth),
+          ),
+        ),
         errorWidget: (context, url, error) =>
-        const Icon(Icons.person, color: Colors.blue, size: 42.0),
+            const Icon(Icons.person, color: Colors.blue, size: 42.0),
       ),
     );
   }

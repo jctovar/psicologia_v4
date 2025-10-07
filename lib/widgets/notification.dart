@@ -5,11 +5,10 @@ class NotificationPush extends StatefulWidget {
   final String message;
 
   @override
-  _NotificationPushState createState() => _NotificationPushState();
+  State createState() => _NotificationPushState();
 }
+
 class _NotificationPushState extends State<NotificationPush> {
-
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(

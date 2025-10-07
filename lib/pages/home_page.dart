@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  CachedNetworkImage _thumbnail(imageUrl) {
+  CachedNetworkImage _thumbnail(String imageUrl) {
     return CachedNetworkImage(
       placeholder: (context, url) => Image.asset(Constants.placeholderImg),
       imageUrl: imageUrl,

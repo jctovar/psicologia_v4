@@ -27,7 +27,8 @@ Future<void> main() async {
   await FirebaseMessaging.instance.subscribeToTopic('posts');
   await FirebaseMessaging.instance.subscribeToTopic('alerts');
 
-  NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+  NotificationSettings settings =
+      await FirebaseMessaging.instance.requestPermission(
     alert: true,
     badge: true,
     provisional: false,
@@ -38,7 +39,6 @@ Future<void> main() async {
     if (kDebugMode) {
       print('User granted permission');
     }
-
   } else {
     if (kDebugMode) {
       print('User declined or has not accepted permission');
@@ -53,12 +53,13 @@ class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  static FirebaseAnalytics analytics = FirebaseAnalytics();
-  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
 
   @override
   void initState() {
@@ -104,7 +105,8 @@ class _MyAppState extends State<MyApp> {
       routes: {
         Routes.home: (context) => HomePage(title: Constants.appName),
         Routes.teachers: (context) => const TeachersPage(title: 'Profesores'),
-        Routes.areas: (context) => const AreasPage(title: 'Coordinación SUAyED'),
+        Routes.areas: (context) =>
+            const AreasPage(title: 'Coordinación SUAyED'),
         Routes.bookmarks: (context) => const BookmarksPage(title: 'Marcadores'),
         Routes.about: (context) => const AboutPage(),
       },

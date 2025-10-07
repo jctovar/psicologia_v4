@@ -5,7 +5,7 @@ import 'package:suayed/utils/app_constants.dart';
 class CreditsPage extends StatelessWidget {
   const CreditsPage({Key? key}) : super(key: key);
 
-  Text _title(title) {
+  Text _title(String title) {
     return Text(
       title,
       textAlign: TextAlign.left,
@@ -17,7 +17,7 @@ class CreditsPage extends StatelessWidget {
     );
   }
 
-  Text _subtitle(subTitle) {
+  Text _subtitle(String subTitle) {
     return Text(
       subTitle,
       style: GoogleFonts.lora(

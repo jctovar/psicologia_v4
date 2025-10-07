@@ -16,7 +16,7 @@ class BookmarkDetail extends StatefulWidget {
   final StoragePost item;
 
   @override
-  _BookmarkDetailState createState() => _BookmarkDetailState();
+  State createState() => _BookmarkDetailState();
 }
 
 class _BookmarkDetailState extends State<BookmarkDetail> {
@@ -29,7 +29,7 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
     initializeDateFormatting();
   }
 
-  CachedNetworkImage _image(imageUrl) {
+  CachedNetworkImage _image(String imageUrl) {
     return CachedNetworkImage(
       placeholder: (context, url) => Image.asset(placeholderImg),
       imageUrl: imageUrl,
@@ -42,7 +42,8 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
-        textStyle: const TextStyle(fontSize: 24.0,
+        textStyle: const TextStyle(
+            fontSize: 24.0,
             fontWeight: FontWeight.w800,
             color: Colors.blue,
             letterSpacing: -.3),
@@ -56,7 +57,8 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
     return Text(
       subTitle,
       textAlign: TextAlign.left,
-      style: const TextStyle(fontSize: 14.0,
+      style: const TextStyle(
+          fontSize: 14.0,
           fontStyle: FontStyle.italic,
           fontWeight: FontWeight.w400),
       maxLines: 1,
@@ -67,7 +69,8 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
-        textStyle: const TextStyle(fontSize: 18.0,
+        textStyle: const TextStyle(
+            fontSize: 18.0,
             fontWeight: FontWeight.w800,
             color: Colors.pinkAccent,
             letterSpacing: -.3),
@@ -92,14 +95,14 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
         },
         onErrorBuilder: (context, element, error) =>
             Text('$element error: $error'),
-        onLoadingBuilder: (context, element,
-            loadingProgress) => const CircularProgressIndicator(),
+        onLoadingBuilder: (context, element, loadingProgress) =>
+            const CircularProgressIndicator(),
         textStyle: GoogleFonts.robotoSlab(
-          textStyle: const TextStyle(fontSize: 16.0,
+          textStyle: const TextStyle(
+              fontSize: 16.0,
               fontWeight: FontWeight.w300,
               color: Colors.black87),
-        )
-    );
+        ));
   }
 
   PopupMenuButton _popupMenuButton() {
@@ -117,54 +120,53 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
               break;
           }
         },
-        itemBuilder: (context) =>
-        [
-          PopupMenuItem(
-            value: 0,
-            child: Row(
-              children: const [
-                Icon(
-                  LineIcons.alternateExternalLink,
-                  color: Colors.pink,
+        itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 0,
+                child: Row(
+                  children: const [
+                    Icon(
+                      LineIcons.alternateExternalLink,
+                      color: Colors.pink,
+                    ),
+                    SizedBox(
+                      width: 7,
+                    ),
+                    Text('Ir al sitio')
+                  ],
                 ),
-                SizedBox(
-                  width: 7,
+              ),
+              PopupMenuItem(
+                value: 1,
+                child: Row(
+                  children: const [
+                    Icon(
+                      LineIcons.trash,
+                      color: Colors.pink,
+                    ),
+                    SizedBox(
+                      width: 7,
+                    ),
+                    Text('Borrar')
+                  ],
                 ),
-                Text('Ir al sitio')
-              ],
-            ),
-          ),
-          PopupMenuItem(
-            value: 1,
-            child: Row(
-              children: const [
-                Icon(
-                  LineIcons.trash,
-                  color: Colors.pink,
+              ),
+              PopupMenuItem(
+                value: 2,
+                child: Row(
+                  children: const [
+                    Icon(
+                      LineIcons.share,
+                      color: Colors.pink,
+                    ),
+                    SizedBox(
+                      width: 7,
+                    ),
+                    Text('Compartir')
+                  ],
                 ),
-                SizedBox(
-                  width: 7,
-                ),
-                Text('Borrar')
-              ],
-            ),
-          ),
-          PopupMenuItem(
-            value: 2,
-            child: Row(
-              children: const [
-                Icon(
-                  LineIcons.share,
-                  color: Colors.pink,
-                ),
-                SizedBox(
-                  width: 7,
-                ),
-                Text('Compartir')
-              ],
-            ),
-          )
-        ]);
+              )
+            ]);
   }
 
   Future<void> _openFeed(String url) async {
@@ -184,7 +186,8 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
 
   Future<void> _deleteBookmark(int id) async {
     await JsonStore().deleteItem('post-$id');
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Elemento eliminado de marcadores...')));
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Elemento eliminado de marcadores...')));
     //await _loadFromStorage();
     Navigator.pop(context);
   }
@@ -200,32 +203,28 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
           ],
         ),
         body: SingleChildScrollView(
-            child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
-                    child: _title(widget.item.title),
-                  ),
-                  _image(widget.item.image),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SizedBox(
-                        width: double.infinity,
-                        child: _subtitle(DateFormat.yMMMMd('es_MX').format(widget.item.date))
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: _htmlWidget(widget.item.content),
-                  ),
-                  const SizedBox(height: 10),
-                  const Divider(),
-                  const SizedBox(height: 10),
-                  _footer('UNAM'),
-                  const SizedBox(height: 20),
-                ]
-            )
-        )
-    );
+            child: Column(children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
+            child: _title(widget.item.title),
+          ),
+          _image(widget.item.image),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SizedBox(
+                width: double.infinity,
+                child: _subtitle(
+                    DateFormat.yMMMMd('es_MX').format(widget.item.date))),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: _htmlWidget(widget.item.content),
+          ),
+          const SizedBox(height: 10),
+          const Divider(),
+          const SizedBox(height: 10),
+          _footer('UNAM'),
+          const SizedBox(height: 20),
+        ])));
   }
 }

@@ -11,7 +11,7 @@ class AreaDetail extends StatefulWidget {
   final AreaModel item;
 
   @override
-  _AreaDetailState createState() => _AreaDetailState();
+  State createState() => _AreaDetailState();
 }
 
 class _AreaDetailState extends State<AreaDetail> {

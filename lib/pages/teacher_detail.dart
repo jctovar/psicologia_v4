@@ -7,12 +7,11 @@ import 'package:suayed/widgets/avatar.dart';
 import 'package:suayed/models/teacher_model.dart';
 
 class TeacherDetail extends StatefulWidget {
-  const TeacherDetail({Key? key, required this.item}): super(key: key);
+  const TeacherDetail({Key? key, required this.item}) : super(key: key);
   final TeacherModel item;
 
-
   @override
-  _TeacherDetailState createState() => _TeacherDetailState();
+  State createState() => _TeacherDetailState();
 }
 
 class _TeacherDetailState extends State<TeacherDetail> {
@@ -21,50 +20,54 @@ class _TeacherDetailState extends State<TeacherDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constants.backgroundColor,
-      appBar: AppBar(
-        title: Text('${widget.item.grade} ${widget.item.firstname} ${widget.item.lastname}'),
-      ),
-      body: SingleChildScrollView(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                const SizedBox(height: 20),
-                Avatar(picturePath: widget.item.picture, emailUser: widget.item.email, sizeAvatar: 128),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 16, 16, 16),
-                  child: _title('${widget.item.grade} ${widget.item.firstname} ${widget.item.lastname}'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: _subtitle(widget.item.email),
-                ),
-                const Divider(),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: _subtitle(widget.item.fields),
-                ),
-                const Divider(),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: _htmlWidget(widget.item.cv),
-                ),
-                const Divider(),
-                const SizedBox(height: 10),
-                _footer('UNAM'),
-                const SizedBox(height: 20),
-              ]
-          )
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.mail, color: Colors.white,),
-        onPressed: () => setState(() {
-            _launched = _makeMailTo('mailto:${widget.item.email}');
-          }
+        backgroundColor: Constants.backgroundColor,
+        appBar: AppBar(
+          title: Text(
+              '${widget.item.grade} ${widget.item.firstname} ${widget.item.lastname}'),
         ),
-      )
-    );
+        body: SingleChildScrollView(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+              const SizedBox(height: 20),
+              Avatar(
+                  picturePath: widget.item.picture,
+                  emailUser: widget.item.email,
+                  sizeAvatar: 128),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 16, 16, 16),
+                child: _title(
+                    '${widget.item.grade} ${widget.item.firstname} ${widget.item.lastname}'),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: _subtitle(widget.item.email),
+              ),
+              const Divider(),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: _subtitle(widget.item.fields),
+              ),
+              const Divider(),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: _htmlWidget(widget.item.cv),
+              ),
+              const Divider(),
+              const SizedBox(height: 10),
+              _footer('UNAM'),
+              const SizedBox(height: 20),
+            ])),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(
+            Icons.mail,
+            color: Colors.white,
+          ),
+          onPressed: () => setState(() {
+            _launched = _makeMailTo('mailto:${widget.item.email}');
+          }),
+        ));
   }
 
   Future<void> _makeMailTo(String url) async {
@@ -82,7 +85,8 @@ class _TeacherDetailState extends State<TeacherDetail> {
         children: <Widget>[
           Expanded(
             child: Text(
-              myText, overflow: TextOverflow.ellipsis,
+              myText,
+              overflow: TextOverflow.ellipsis,
               maxLines: 2,
               softWrap: false,
             ),
@@ -92,7 +96,7 @@ class _TeacherDetailState extends State<TeacherDetail> {
     );
   }
 
-  Text _title(title) {
+  Text _title(String title) {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
@@ -103,22 +107,29 @@ class _TeacherDetailState extends State<TeacherDetail> {
     );
   }
 
-  Text _subtitle(subTitle) {
+  Text _subtitle(String subTitle) {
     return Text(
       subTitle,
       style: GoogleFonts.lora(
-          textStyle: const TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic, fontWeight: FontWeight.w300),
+        textStyle: const TextStyle(
+            fontSize: 14.0,
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.w300),
       ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );
   }
 
-  Text _footer(title) {
+  Text _footer(String title) {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
-        textStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w800, color: Colors.pinkAccent, letterSpacing: -.3),
+        textStyle: const TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.w800,
+            color: Colors.pinkAccent,
+            letterSpacing: -.3),
       ),
       maxLines: 4,
       overflow: TextOverflow.ellipsis,
@@ -134,12 +145,15 @@ class _TeacherDetailState extends State<TeacherDetail> {
 
           return null;
         },
-        onErrorBuilder: (context, element, error) => Text('$element error: $error'),
-        onLoadingBuilder: (context, element, loadingProgress) => const CircularProgressIndicator(),
+        onErrorBuilder: (context, element, error) =>
+            Text('$element error: $error'),
+        onLoadingBuilder: (context, element, loadingProgress) =>
+            const CircularProgressIndicator(),
         textStyle: GoogleFonts.robotoSlab(
-          textStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300, color: Colors.black87),
-        )
-    );
+          textStyle: const TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.w300,
+              color: Colors.black87),
+        ));
   }
-
 }

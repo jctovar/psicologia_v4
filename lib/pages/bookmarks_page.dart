@@ -38,7 +38,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
     return timeago.format(date, locale: 'es');
   }
 
-  CachedNetworkImage _thumbnail(imageUrl) {
+  CachedNetworkImage _thumbnail(String imageUrl) {
     return CachedNetworkImage(
       placeholder: (context, url) => Image.asset(placeholderImg),
       imageUrl: imageUrl,
@@ -61,7 +61,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
     });
   }
 
-  Text _title(title) {
+  Text _title(String title) {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
@@ -72,7 +72,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
     );
   }
 
-  Text _subtitle(subTitle) {
+  Text _subtitle(String subTitle) {
     return Text(
       subTitle,
       textAlign: TextAlign.left,

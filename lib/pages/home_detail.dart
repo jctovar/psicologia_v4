@@ -16,7 +16,7 @@ class HomeDetail extends StatefulWidget {
   final PostModel item;
 
   @override
-  _HomeDetailState createState() => _HomeDetailState();
+  State createState() => _HomeDetailState();
 }
 
 class _HomeDetailState extends State<HomeDetail> {
@@ -38,7 +38,7 @@ class _HomeDetailState extends State<HomeDetail> {
     );
   }
 
-  Text _title(title) {
+  Text _title(String title) {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
@@ -49,7 +49,7 @@ class _HomeDetailState extends State<HomeDetail> {
     );
   }
 
-  Text _subtitle(subTitle) {
+  Text _subtitle(String subTitle) {
     return Text(
       subTitle,
       textAlign: TextAlign.left,
@@ -58,11 +58,15 @@ class _HomeDetailState extends State<HomeDetail> {
     );
   }
 
-  Text _footer(title) {
+  Text _footer(String title) {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
-        textStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w800, color: Colors.pinkAccent, letterSpacing: -.3),
+        textStyle: const TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.w800,
+            color: Colors.pinkAccent,
+            letterSpacing: -.3),
       ),
       maxLines: 4,
       overflow: TextOverflow.ellipsis,
@@ -78,16 +82,20 @@ class _HomeDetailState extends State<HomeDetail> {
 
           return null;
         },
-        onTapUrl:(url) {
+        onTapUrl: (url) {
           _openFeed(url);
           return true;
         },
-        onErrorBuilder: (context, element, error) => Text('$element error: $error'),
-        onLoadingBuilder: (context, element, loadingProgress) => const CircularProgressIndicator(),
+        onErrorBuilder: (context, element, error) =>
+            Text('$element error: $error'),
+        onLoadingBuilder: (context, element, loadingProgress) =>
+            const CircularProgressIndicator(),
         textStyle: GoogleFonts.robotoSlab(
-          textStyle: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w300, color: Colors.black87),
-        )
-    );
+          textStyle: const TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w300,
+              color: Colors.black87),
+        ));
   }
 
   PopupMenuButton _popupMenuButton() {
@@ -106,52 +114,52 @@ class _HomeDetailState extends State<HomeDetail> {
           }
         },
         itemBuilder: (context) => [
-          PopupMenuItem(
-            value: 0,
-            child: Row(
-              children: const [
-                Icon(
-                  LineIcons.alternateExternalLink,
-                  color: Colors.pink,
+              PopupMenuItem(
+                value: 0,
+                child: Row(
+                  children: const [
+                    Icon(
+                      LineIcons.alternateExternalLink,
+                      color: Colors.pink,
+                    ),
+                    SizedBox(
+                      width: 7,
+                    ),
+                    Text('Ir al sitio')
+                  ],
                 ),
-                SizedBox(
-                  width: 7,
+              ),
+              PopupMenuItem(
+                value: 1,
+                child: Row(
+                  children: const [
+                    Icon(
+                      LineIcons.bookmark,
+                      color: Colors.pink,
+                    ),
+                    SizedBox(
+                      width: 7,
+                    ),
+                    Text('Guardar')
+                  ],
                 ),
-                Text('Ir al sitio')
-              ],
-            ),
-          ),
-          PopupMenuItem(
-            value: 1,
-            child: Row(
-              children: const [
-                Icon(
-                  LineIcons.bookmark,
-                  color: Colors.pink,
+              ),
+              PopupMenuItem(
+                value: 2,
+                child: Row(
+                  children: const [
+                    Icon(
+                      LineIcons.share,
+                      color: Colors.pink,
+                    ),
+                    SizedBox(
+                      width: 7,
+                    ),
+                    Text('Compartir')
+                  ],
                 ),
-                SizedBox(
-                  width: 7,
-                ),
-                Text('Guardar')
-              ],
-            ),
-          ),
-          PopupMenuItem(
-            value: 2,
-            child: Row(
-              children: const [
-                Icon(
-                  LineIcons.share,
-                  color: Colors.pink,
-                ),
-                SizedBox(
-                  width: 7,
-                ),
-                Text('Compartir')
-              ],
-            ),
-          )
-        ]);
+              )
+            ]);
   }
 
   Future<void> _openFeed(String url) async {
@@ -170,11 +178,9 @@ class _HomeDetailState extends State<HomeDetail> {
   }
 
   Future<void> _savePost(PostModel item) async {
-    await JsonStore().setItem(
-      'post-${item.id}',
-      item.toJson()
-    );
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Elemento guardado en marcadores...')));
+    await JsonStore().setItem('post-${item.id}', item.toJson());
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Elemento guardado en marcadores...')));
   }
 
   @override
@@ -188,32 +194,28 @@ class _HomeDetailState extends State<HomeDetail> {
           ],
         ),
         body: SingleChildScrollView(
-            child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 18, 8, 18),
-                    child: _title(widget.item.title),
-                  ),
-                  _image(widget.item.image),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SizedBox(
-                        width: double.infinity,
-                        child: _subtitle(DateFormat.yMMMMd('es_MX').format(widget.item.date))
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: _htmlWidget(widget.item.content),
-                  ),
-                  const SizedBox(height: 10),
-                  const Divider(),
-                  const SizedBox(height: 10),
-                  _footer('UNAM'),
-                  const SizedBox(height: 20),
-                ]
-            )
-        )
-    );
+            child: Column(children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 18, 8, 18),
+            child: _title(widget.item.title),
+          ),
+          _image(widget.item.image),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SizedBox(
+                width: double.infinity,
+                child: _subtitle(
+                    DateFormat.yMMMMd('es_MX').format(widget.item.date))),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: _htmlWidget(widget.item.content),
+          ),
+          const SizedBox(height: 10),
+          const Divider(),
+          const SizedBox(height: 10),
+          _footer('UNAM'),
+          const SizedBox(height: 20),
+        ])));
   }
 }

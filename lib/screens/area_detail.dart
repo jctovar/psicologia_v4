@@ -15,8 +15,6 @@ class AreaDetail extends StatefulWidget {
 }
 
 class _AreaDetailState extends State<AreaDetail> {
-  Future<void>? _launched;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,17 +58,16 @@ class _AreaDetailState extends State<AreaDetail> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.mail, color: Colors.white),
         onPressed: () => setState(() {
-          _launched = _makeMailTo('mailto:${widget.item.departmentEmail}');
+          _makeMailTo(widget.item.departmentEmail);
         }),
       ),
     );
   }
 
-  Future<void> _makeMailTo(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
+  Future<void> _makeMailTo(String email) async {
+    final Uri emailLaunchUri = Uri(scheme: 'mailto', path: email);
+    if (!await launchUrl(emailLaunchUri)) {
+      throw Exception('Could not launch $emailLaunchUri');
     }
   }
 

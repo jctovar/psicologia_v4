@@ -142,7 +142,12 @@ class _HomeScreenState extends State<HomeScreen> {
     final db = Localstore.instance;
     final id = item.id.toString();
     await db.collection('bookmarks').doc(id).set(item.toJson());
-    showSnackBar(context, 'Elemento guardado en marcadores...');
+
+    if (mounted) {
+      showSnackBar(context, 'Elemento guardado en marcadores...');
+    }
+
+    setState(() {});
   }
 
   @override

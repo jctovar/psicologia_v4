@@ -155,7 +155,11 @@ class _PostDetailState extends State<PostDetail> {
     final db = Localstore.instance;
     final id = item.id.toString();
     await db.collection('bookmarks').doc(id).set(item.toJson());
-    showSnackBar(context, 'Elemento guardado en marcadores...');
+
+    if (mounted) {
+      showSnackBar(context, 'Elemento guardado en marcadores...');
+    }
+    
     setState(() {});
   }
 

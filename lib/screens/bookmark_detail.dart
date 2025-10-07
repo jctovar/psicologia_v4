@@ -4,6 +4,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:localstore/localstore.dart';
 import 'package:suayed/utils/app_constants.dart';
+import 'package:suayed/widgets/show_snack_bar.dart';
 import 'package:suayed/widgets/thumbnail_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
@@ -164,10 +165,14 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
   Future<void> _deleteBookmark(int id) async {
     final db = Localstore.instance;
     await db.collection('bookmarks').doc(id.toString()).delete();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Elemento eliminado de marcadores...')),
-    );
-    Navigator.pop(context);
+
+    if (mounted) {
+      showSnackBar(context, 'Elemento guardado en marcadores...');
+    }
+
+    if (mounted) {
+      Navigator.pop(context);
+    }
   }
 
   @override

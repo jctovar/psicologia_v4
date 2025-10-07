@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:suayed/widgets/drawer.dart';
 
 class PrivacyNotice extends StatefulWidget {
   const PrivacyNotice({super.key});
@@ -22,6 +23,7 @@ class _PrivacyNoticeState extends State<PrivacyNotice> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Aviso de privacidad")),
+      drawer: const AppDrawer(),
       body: SingleChildScrollView(
         child: FutureBuilder(
           future: rootBundle.loadString('assets/privacity.html'),

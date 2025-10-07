@@ -4,6 +4,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:suayed/models/post_model.dart';
 import 'package:suayed/utils/app_constants.dart';
+import 'package:suayed/widgets/show_snack_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
@@ -163,9 +164,8 @@ class _HomeDetailState extends State<HomeDetail> {
 
   Future<void> _savePost(PostModel item) async {
     await JsonStore().setItem('post-${item.id}', item.toJson());
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Elemento guardado en marcadores...')),
-    );
+    showSnackBar(context, 'Elemento guardado en marcadores...');
+    setState(() {});
   }
 
   @override

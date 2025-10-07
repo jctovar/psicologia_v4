@@ -1,8 +1,8 @@
-import 'package:suayed/pages/home_page.dart';
-import 'package:suayed/pages/teachers_page.dart';
-import 'package:suayed/pages/areas_page.dart';
-import 'package:suayed/pages/bookmarks_page.dart';
-import 'package:suayed/pages/about_page.dart';
+import 'package:suayed/screens/home_page.dart';
+import 'package:suayed/screens/teachers_page.dart';
+import 'package:suayed/screens/areas_page.dart';
+import 'package:suayed/screens/bookmarks_page.dart';
+import 'package:suayed/screens/about_page.dart';
 
 class Routes {
   static const String home = HomePage.routeName;

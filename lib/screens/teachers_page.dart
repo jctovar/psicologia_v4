@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:suayed/pages/teacher_detail.dart';
+import 'package:suayed/screens/teacher_detail.dart';
 import 'package:suayed/utils/app_constants.dart';
 import 'package:suayed/widgets/avatar.dart';
 import 'package:suayed/widgets/drawer.dart';

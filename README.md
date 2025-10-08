@@ -60,16 +60,19 @@ Para generar los iconos de la aplicación y la pantalla de bienvenida (splash sc
 
 *   **Generar Iconos:**
     ```bash
-    flutter pub run flutter_launcher_icons
+    dart run flutter_launcher_icons:generate -f flutter_launcher_icons.yaml 
     ```
 
 *   **Generar Splash Screen:**
     ```bash
-    flutter pub run flutter_native_splash:create
+    dart run flutter_native_splash:create
     ```
 
 
 # psicologia4
 
-https://suayed.iztacala.unam.mx/?rest_route=/wp/v2/posts&per_page=15
-Main color: "#d81b60"
+### Api
+* https://suayed.iztacala.unam.mx/?rest_route=/wp/v2/posts&per_page=15
+
+### main color
+* Main color: "#d81b60"

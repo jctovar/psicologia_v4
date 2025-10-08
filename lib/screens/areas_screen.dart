@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:suayed/utils/app_constants.dart';
 import 'package:suayed/widgets/avatar.dart';
-import 'package:suayed/widgets/drawer.dart';
+import 'package:suayed/widgets/app_drawer.dart';
 import 'package:suayed/models/area_model.dart';
 import 'package:suayed/services/local_service.dart';
 
@@ -31,10 +30,13 @@ class _AreasPageState extends State<AreasPage> {
       itemBuilder: (context, index) {
         final item = _items[index];
         return ListTile(
-          leading: Avatar(
-            picturePath: '',
-            emailUser: item.personalEmail,
-            sizeAvatar: 48,
+          leading: Hero(
+            tag: item.personalEmail,
+            child: Avatar(
+              picturePath: '',
+              emailUser: item.personalEmail,
+              sizeAvatar: 48,
+            ),
           ),
           title: Text(item.agent, maxLines: 1, overflow: TextOverflow.ellipsis),
           subtitle: Text(
@@ -75,7 +77,6 @@ class _AreasPageState extends State<AreasPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constants.backgroundColor,
       appBar: AppBar(title: Text(widget.title)),
       drawer: const AppDrawer(),
       body: _buildList(),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:suayed/widgets/drawer.dart';
+import 'package:suayed/widgets/app_drawer.dart';
 
 class PrivacyNotice extends StatefulWidget {
   const PrivacyNotice({super.key});
@@ -32,7 +33,28 @@ class _PrivacyNoticeState extends State<PrivacyNotice> {
               String? html = snapshot.data;
               return Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: HtmlWidget(html!),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: SizedBox(
+                        height: 120,
+                        width: 120,
+                        child: SvgPicture.asset(
+                          'assets/logo_iztacala_compacto.svg',
+                          colorFilter: const ColorFilter.mode(
+                            Colors.pink,
+                            BlendMode.srcIn,
+                          ),
+                          semanticsLabel: 'Iztacala Logo',
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    HtmlWidget(html!),
+                  ],
+                ),
               );
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:localstore/localstore.dart';
-import 'package:suayed/utils/app_constants.dart';
 import 'package:suayed/widgets/thumbnail_image.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:suayed/widgets/drawer.dart';
+import 'package:suayed/widgets/app_drawer.dart';
 import 'bookmark_detail.dart';
 import 'package:suayed/models/storage_post_model.dart';
 
@@ -55,14 +53,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
   Text _title(String title) {
     return Text(
       title.toUpperCase(),
-      style: GoogleFonts.lora(
-        textStyle: const TextStyle(
-          fontSize: 16.0,
-          fontWeight: FontWeight.w800,
-          color: Colors.blue,
-          letterSpacing: -.3,
-        ),
-      ),
+      style: Theme.of(context).textTheme.titleMedium,
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
     );
@@ -72,11 +63,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
     return Text(
       subTitle,
       textAlign: TextAlign.left,
-      style: const TextStyle(
-        fontSize: 14.0,
-        fontStyle: FontStyle.italic,
-        fontWeight: FontWeight.w400,
-      ),
+      style: Theme.of(context).textTheme.titleSmall,
       maxLines: 1,
     );
   }
@@ -114,7 +101,6 @@ class _BookmarksPageState extends State<BookmarksPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constants.backgroundColor,
       appBar: AppBar(centerTitle: true, title: Text(widget.title)),
       drawer: const AppDrawer(),
       body: _body(),

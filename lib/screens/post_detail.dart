@@ -4,7 +4,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:localstore/localstore.dart';
 import 'package:suayed/models/post_model.dart';
-import 'package:suayed/utils/app_constants.dart';
 import 'package:suayed/widgets/show_snack_bar.dart';
 import 'package:suayed/widgets/thumbnail_image.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,7 +29,7 @@ class _PostDetailState extends State<PostDetail> {
   Text _title(String title) {
     return Text(
       title.toUpperCase(),
-      style: GoogleFonts.lora(textStyle: Constants.mainStyleTitle),
+      style: Theme.of(context).textTheme.titleLarge,
       maxLines: 4,
       overflow: TextOverflow.ellipsis,
     );
@@ -39,8 +38,8 @@ class _PostDetailState extends State<PostDetail> {
   Text _subtitle(String subTitle) {
     return Text(
       subTitle,
+      style: Theme.of(context).textTheme.titleSmall,
       textAlign: TextAlign.left,
-      style: Constants.mainStyleSubtitle,
       maxLines: 1,
     );
   }
@@ -159,14 +158,13 @@ class _PostDetailState extends State<PostDetail> {
     if (mounted) {
       showSnackBar(context, 'Elemento guardado en marcadores...');
     }
-    
+
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constants.backgroundColor,
       appBar: AppBar(
         title: Text(widget.item.title),
         actions: [_popupMenuButton()],

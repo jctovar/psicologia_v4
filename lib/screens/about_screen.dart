@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../widgets/drawer.dart';
+import 'package:suayed/widgets/app_drawer.dart';
 import 'credits_screen.dart';
+import 'package:flutter_svg/svg.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -9,7 +10,6 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.pinkAccent,
       appBar: AppBar(title: const Text("Acerca de la aplicación")),
       drawer: const AppDrawer(),
       body: Center(
@@ -20,25 +20,32 @@ class AboutPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              const Image(image: AssetImage('assets/about.png')),
-              const SizedBox(height: 15),
-              const Text(
+              SizedBox(
+                height: 100,
+                width: 400,
+                child: SvgPicture.asset(
+                  'assets/logo_coordinacion.svg',
+                  colorFilter: const ColorFilter.mode(
+                    Colors.pink,
+                    BlendMode.srcIn,
+                  ),
+                  semanticsLabel: 'Iztamind Logo',
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
                 'Aplicación desarrollada por la Facultad de Estudios Superiores Iztacala. '
                 'Hecho en México, Universidad Nacional Autónoma de México (UNAM), '
                 'todos los derechos reservados 2021.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, color: Colors.white),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
-              const SizedBox(height: 10),
-              const Text(
+              const SizedBox(height: 20),
+              Text(
                 'apps@iztacala.unam.mx',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontStyle: FontStyle.italic,
-                  color: Colors.white,
-                ),
+                style: Theme.of(context).textTheme.titleSmall,
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 20),
               SizedBox(
                 height: 50,
                 width: 250,
@@ -53,10 +60,7 @@ class AboutPage extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text(
-                    'Creditos',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
+                  child: const Text('Creditos'),
                 ),
               ),
             ],

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:suayed/screens/teacher_detail.dart';
-import 'package:suayed/utils/app_constants.dart';
 import 'package:suayed/widgets/avatar.dart';
-import 'package:suayed/widgets/drawer.dart';
+import 'package:suayed/widgets/app_drawer.dart';
 import 'package:suayed/models/teacher_model.dart';
 import 'package:suayed/services/local_service.dart';
 
@@ -73,7 +72,6 @@ class _TeachersPageState extends State<TeachersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constants.backgroundColor,
       appBar: AppBar(
         title: _appBarTitle,
         actions: <Widget>[
@@ -104,10 +102,13 @@ class _TeachersPageState extends State<TeachersPage> {
         itemBuilder: (context, index) {
           final item = _filteredItems[index];
           return ListTile(
-            leading: Avatar(
-              picturePath: item.picture,
-              emailUser: item.email,
-              sizeAvatar: 48,
+            leading: Hero(
+              tag: item.email,
+              child: Avatar(
+                picturePath: item.picture,
+                emailUser: item.email,
+                sizeAvatar: 48,
+              ),
             ),
             title: Text(
               '${item.grade} ${item.firstname} ${item.lastname}',

@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:suayed/utils/app_constants.dart';
 
 // This must be a top-level function
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -29,13 +30,13 @@ class FirebaseService {
   }
 
   static Future<void> _requestPermissions() async {
-    NotificationSettings settings = await FirebaseMessaging.instance
-        .requestPermission(
-          alert: true,
-          badge: true,
-          provisional: false,
-          sound: true,
-        );
+    NotificationSettings settings =
+        await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      badge: true,
+      provisional: false,
+      sound: true,
+    );
 
     if (kDebugMode) {
       if (settings.authorizationStatus == AuthorizationStatus.authorized) {
@@ -50,6 +51,11 @@ class FirebaseService {
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       if (kDebugMode) {
         print("Foreground message received: ${event.notification?.body}");
+      }
+      if (event.notification?.body != null) {
+        final SnackBar snackBar =
+            SnackBar(content: Text(event.notification!.body!));
+        Constants.scaffoldMessengerKey.currentState?.showSnackBar(snackBar);
       }
     });
   }

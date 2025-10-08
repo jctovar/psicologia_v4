@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:suayed/utils/app_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,7 +17,6 @@ class _TeacherDetailState extends State<TeacherDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constants.backgroundColor,
       appBar: AppBar(
         title: Text(
           '${widget.item.grade} ${widget.item.firstname} ${widget.item.lastname}',
@@ -30,10 +28,13 @@ class _TeacherDetailState extends State<TeacherDetail> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             const SizedBox(height: 20),
-            Avatar(
-              picturePath: widget.item.picture,
-              emailUser: widget.item.email,
-              sizeAvatar: 128,
+            Hero(
+              tag: widget.item.email,
+              child: Avatar(
+                picturePath: widget.item.picture,
+                emailUser: widget.item.email,
+                sizeAvatar: 128,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 16, 16, 16),
@@ -81,7 +82,7 @@ class _TeacherDetailState extends State<TeacherDetail> {
   Text _title(String title) {
     return Text(
       title.toUpperCase(),
-      style: GoogleFonts.lora(textStyle: Constants.mainStyleTitle),
+      style: Theme.of(context).textTheme.titleMedium,
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
     );
@@ -90,13 +91,7 @@ class _TeacherDetailState extends State<TeacherDetail> {
   Text _subtitle(String subTitle) {
     return Text(
       subTitle,
-      style: GoogleFonts.lora(
-        textStyle: const TextStyle(
-          fontSize: 14.0,
-          fontStyle: FontStyle.italic,
-          fontWeight: FontWeight.w300,
-        ),
-      ),
+      style: Theme.of(context).textTheme.titleSmall,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );

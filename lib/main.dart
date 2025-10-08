@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      scaffoldMessengerKey: Constants.scaffoldMessengerKey,
       title: Constants.appName,
       debugShowCheckedModeBanner: false,
       theme: suayedTheme, // This is defined in theme.dart

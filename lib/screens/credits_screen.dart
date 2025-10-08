@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:suayed/utils/app_constants.dart';
 
 class CreditsPage extends StatelessWidget {
   const CreditsPage({super.key});
@@ -41,7 +41,6 @@ class CreditsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constants.backgroundColor,
       appBar: AppBar(title: const Text("Creditos")),
       body: Center(
         child: SizedBox(
@@ -50,11 +49,21 @@ class CreditsPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Image(
-                image: AssetImage('assets/credits.png'),
-                height: 128,
-                width: 128,
+              Center(
+                child: SizedBox(
+                  height: 120,
+                  width: 120,
+                  child: SvgPicture.asset(
+                    'assets/logo_iztacala_compacto.svg',
+                    colorFilter: const ColorFilter.mode(
+                      Colors.pink,
+                      BlendMode.srcIn,
+                    ),
+                    semanticsLabel: 'Iztacala Logo',
+                  ),
+                ),
               ),
+              const SizedBox(height: 20),
               _title('Lider de proyecto'),
               _subtitle('Ing. Juan Carlos Tovar Gómez'),
               const SizedBox(height: 10),

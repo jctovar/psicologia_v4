@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:localstore/localstore.dart';
 import 'package:suayed/models/post_model.dart';
 import 'package:suayed/services/suayed_service.dart';
-import 'package:suayed/utils/app_constants.dart';
-import 'package:suayed/widgets/drawer.dart';
+import 'package:suayed/widgets/app_drawer.dart';
 import 'package:suayed/widgets/show_snack_bar.dart';
 import 'package:suayed/widgets/thumbnail_image.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -56,8 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Text _title(String title) {
     return Text(
       title.toUpperCase(),
-      style: GoogleFonts.lora(textStyle: Constants.mainStyleTitle),
       maxLines: 3,
+      style: Theme.of(context).textTheme.titleLarge,
       overflow: TextOverflow.ellipsis,
     );
   }
@@ -65,8 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Text _subtitle(String subTitle) {
     return Text(
       subTitle,
-      style: Constants.mainStyleSubtitle,
       maxLines: 1,
+      style: Theme.of(context).textTheme.titleSmall,
       overflow: TextOverflow.ellipsis,
     );
   }
@@ -153,7 +151,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constants.backgroundColor,
       appBar: AppBar(
         centerTitle: true,
         title: Text(

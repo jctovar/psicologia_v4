@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:suayed/routes/routes.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:flutter_svg/svg.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({super.key});
@@ -66,7 +67,8 @@ class _AppDrawerState extends State<AppDrawer> {
           _createDrawerItem(
             icon: LineIcons.star,
             text: 'Aviso de Privacidad',
-            onTap: () => Navigator.pushReplacementNamed(context, Routes.privacy),
+            onTap: () =>
+                Navigator.pushReplacementNamed(context, Routes.privacy),
           ),
           _createDrawerItem(
             icon: LineIcons.info,
@@ -76,6 +78,7 @@ class _AppDrawerState extends State<AppDrawer> {
           ListTile(
             title: Text(
               'Version: ${_packageInfo.version} / Build: ${_packageInfo.buildNumber}',
+              style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
         ],
@@ -84,7 +87,7 @@ class _AppDrawerState extends State<AppDrawer> {
   }
 
   Widget _createHeader() {
-    return const DrawerHeader(
+    return DrawerHeader(
       margin: EdgeInsets.zero,
       padding: EdgeInsets.zero,
       decoration: BoxDecoration(
@@ -94,7 +97,17 @@ class _AppDrawerState extends State<AppDrawer> {
           fit: BoxFit.cover,
         ),
       ),
-      child: Center(child: Image(image: AssetImage('assets/splash.png'))),
+      child: Center(
+        child: SizedBox(
+          height: 120,
+          width: 120,
+          child: SvgPicture.asset(
+            'assets/logo_iztacala_compacto.svg',
+            colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+            semanticsLabel: 'Iztacala Logo',
+          ),
+        ),
+      ),
     );
   }
 

@@ -7,6 +7,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:849145401529:android:6e7800c33df3abc7cd4b68",
+        "android_client_info": {
+          "package_name": "com.example.suayed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "849145401529-nehr9vjchc61ojlrmtb0jcc818e32541.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYF6YFWkQCPEgZb1AN6N7PNqci9oG_nws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "849145401529-nehr9vjchc61ojlrmtb0jcc818e32541.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "849145401529-2lqqdqgrfhhqaovealukagi8ilhl8c2u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "mx.unam.iztacala.suayed"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:849145401529:android:2111296ac0439811cd4b68",
         "android_client_info": {
           "package_name": "mx.unam.iztacala.suayed"

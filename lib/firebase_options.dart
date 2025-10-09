@@ -55,7 +55,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDYF6YFWkQCPEgZb1AN6N7PNqci9oG_nws',
-    appId: '1:849145401529:android:2111296ac0439811cd4b68',
+    appId: '1:849145401529:android:6e7800c33df3abc7cd4b68',
     messagingSenderId: '849145401529',
     projectId: 'app-de-psicologia-suayed',
     storageBucket: 'app-de-psicologia-suayed.firebasestorage.app',
@@ -63,21 +63,20 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAagHjcDiccA1x-3s7QdHy7QYSZsUKga_o',
-    appId: '1:849145401529:ios:e49e4c76f298b61ccd4b68',
+    appId: '1:849145401529:ios:463c82eec8f51b9bcd4b68',
     messagingSenderId: '849145401529',
     projectId: 'app-de-psicologia-suayed',
     storageBucket: 'app-de-psicologia-suayed.firebasestorage.app',
-    iosClientId: '849145401529-2lqqdqgrfhhqaovealukagi8ilhl8c2u.apps.googleusercontent.com',
-    iosBundleId: 'mx.unam.iztacala.suayed',
+    iosBundleId: 'com.example.suayed',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyAagHjcDiccA1x-3s7QdHy7QYSZsUKga_o',
-    appId: '1:849145401529:ios:e49e4c76f298b61ccd4b68',
+    appId: '1:849145401529:ios:463c82eec8f51b9bcd4b68',
     messagingSenderId: '849145401529',
     projectId: 'app-de-psicologia-suayed',
     storageBucket: 'app-de-psicologia-suayed.firebasestorage.app',
-    iosClientId: '849145401529-2lqqdqgrfhhqaovealukagi8ilhl8c2u.apps.googleusercontent.com',
-    iosBundleId: 'mx.unam.iztacala.suayed',
+    iosBundleId: 'com.example.suayed',
   );
+
 }

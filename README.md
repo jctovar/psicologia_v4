@@ -65,7 +65,7 @@ Para generar los iconos de la aplicación y la pantalla de bienvenida (splash sc
 
 *   **Generar Splash Screen:**
     ```bash
-    dart run flutter_native_splash:create
+    dart run flutter_native_splash:create --path=flutter_native_splash.yaml
     ```
 
 

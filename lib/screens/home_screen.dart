@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:localstore/localstore.dart';
+import 'package:provider/provider.dart';
 import 'package:suayed/models/post_model.dart';
-import 'package:suayed/services/suayed_service.dart';
+import 'package:suayed/providers/bookmark_provider.dart';
+import 'package:suayed/providers/home_provider.dart';
 import 'package:suayed/widgets/app_drawer.dart';
 import 'package:suayed/widgets/show_snack_bar.dart';
 import 'package:suayed/widgets/thumbnail_image.dart';
@@ -10,143 +11,10 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:share_plus/share_plus.dart';
 import 'post_detail.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key, required this.title});
   static const String routeName = 'home';
   final String title;
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final _refreshKey = GlobalKey<RefreshIndicatorState>();
-  List<PostModel> _posts = List.empty();
-
-  Future _loadData(bool refreshData) async {
-    SuayedServices.getPosts(refreshData).then((result) {
-      if (result.toString().isEmpty) {
-        return;
-      }
-      _updateFeed(result);
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _refreshKey;
-    _loadData(false);
-  }
-
-  void _openFeed(PostModel item) {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (context) => PostDetail(item: item)));
-  }
-
-  void _updateFeed(List<PostModel> result) {
-    setState(() {
-      _posts = result;
-    });
-  }
-
-  Text _title(String title) {
-    return Text(
-      title.toUpperCase(),
-      maxLines: 3,
-      style: Theme.of(context).textTheme.titleLarge,
-      overflow: TextOverflow.ellipsis,
-    );
-  }
-
-  Text _subtitle(String subTitle) {
-    return Text(
-      subTitle,
-      maxLines: 1,
-      style: Theme.of(context).textTheme.titleSmall,
-      overflow: TextOverflow.ellipsis,
-    );
-  }
-
-  ListView _listPosts() {
-    return ListView.builder(
-      itemCount: _posts.length,
-      itemBuilder: (BuildContext context, int index) {
-        final item = _posts[index];
-        return Card(
-          child: InkWell(
-            splashColor: Colors.pink.withAlpha(60),
-            onTap: () => _openFeed(item),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: ThumbnailImage(imageUrl: item.image),
-                  ),
-                ),
-                ListTile(
-                  title: _title(item.title),
-                  subtitle: _subtitle(_datePub(item.date)),
-                ),
-                _buttonBar(item),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  OverflowBar _buttonBar(PostModel item) {
-    return OverflowBar(
-      children: <Widget>[
-        IconButton(
-          onPressed: () {
-            SharePlus.instance.share(
-              ShareParams(subject: item.link, uri: Uri.tryParse(item.link)),
-            );
-          },
-          icon: const Icon(LineIcons.share, color: Colors.black54),
-          iconSize: 24.0,
-        ),
-        IconButton(
-          onPressed: () => _savePost(item),
-          icon: const Icon(LineIcons.bookmark, color: Colors.black54),
-          iconSize: 24.0,
-        ),
-      ],
-    );
-  }
-
-  String _datePub(DateTime date) {
-    return timeago.format(date, locale: 'es');
-  }
-
-  Widget _body() {
-    return _posts.isEmpty
-        ? const Center(child: CircularProgressIndicator())
-        : RefreshIndicator(
-            key: _refreshKey,
-            child: _listPosts(),
-            onRefresh: () => _loadData(true),
-          );
-  }
-
-  Future<void> _savePost(PostModel item) async {
-    final db = Localstore.instance;
-    final id = item.id.toString();
-    await db.collection('bookmarks').doc(id).set(item.toJson());
-
-    if (mounted) {
-      showSnackBar(context, 'Elemento guardado en marcadores...');
-    }
-
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,12 +22,122 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          widget.title,
+          title,
           style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.w800),
         ),
       ),
       drawer: const AppDrawer(),
-      body: _body(),
+      body: Consumer<HomeProvider>(
+        builder: (context, homeProvider, child) {
+          if (homeProvider.isLoading && homeProvider.posts.isEmpty) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (homeProvider.errorMessage != null) {
+            return Center(
+              child: Text(homeProvider.errorMessage!),
+            );
+          }
+
+          return RefreshIndicator(
+            onRefresh: () => homeProvider.fetchPosts(refresh: true),
+            child: ListView.builder(
+              itemCount: homeProvider.posts.length,
+              itemBuilder: (BuildContext context, int index) {
+                final item = homeProvider.posts[index];
+                return PostCard(item: item);
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class PostCard extends StatelessWidget {
+  const PostCard({super.key, required this.item});
+
+  final PostModel item;
+
+  String _datePub(DateTime date) {
+    return timeago.format(date, locale: 'es');
+  }
+
+  void _openFeed(BuildContext context, PostModel item) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => PostDetail(item: item)));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: InkWell(
+        splashColor: Colors.pink.withAlpha(60),
+        onTap: () => _openFeed(context, item),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: ThumbnailImage(imageUrl: item.image),
+              ),
+            ),
+            ListTile(
+              title: Text(item.title.toUpperCase(), maxLines: 3, style: Theme.of(context).textTheme.titleLarge, overflow: TextOverflow.ellipsis),
+              subtitle: Text(_datePub(item.date), maxLines: 1, style: Theme.of(context).textTheme.titleSmall, overflow: TextOverflow.ellipsis),
+            ),
+            PostActions(item: item),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class PostActions extends StatelessWidget {
+  const PostActions({super.key, required this.item});
+
+  final PostModel item;
+
+  Future<void> _savePost(BuildContext context, PostModel item) async {
+    try {
+      await Provider.of<BookmarkProvider>(context, listen: false).addBookmark(item);
+      if (context.mounted) {
+        showSnackBar(context, 'Elemento guardado en marcadores...');
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showSnackBar(context, 'Error al guardar el marcador.');
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return OverflowBar(
+      children: <Widget>[
+        IconButton(
+          onPressed: () {
+            try {
+              SharePlus.instance.share(
+                ShareParams(subject: item.link, uri: Uri.tryParse(item.link)),
+              );
+            } catch (e) {
+              showSnackBar(context, 'Error al compartir.');
+            }
+          },
+          icon: const Icon(LineIcons.share, color: Colors.black54),
+          iconSize: 24.0,
+        ),
+        IconButton(
+          onPressed: () => _savePost(context, item),
+          icon: const Icon(LineIcons.bookmark, color: Colors.black54),
+          iconSize: 24.0,
+        ),
+      ],
     );
   }
 }

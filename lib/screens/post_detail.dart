@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:localstore/localstore.dart';
+import 'package:provider/provider.dart';
+import 'package:suayed/providers/bookmark_provider.dart';
 import 'package:suayed/models/post_model.dart';
 import 'package:suayed/widgets/show_snack_bar.dart';
 import 'package:suayed/widgets/thumbnail_image.dart';
@@ -139,27 +140,42 @@ class _PostDetailState extends State<PostDetail> {
   }
 
   Future<void> _launchUrl(String url) async {
-    if (!await launchUrl(Uri.parse(url))) {
-      throw Exception('Could not launch $url');
+    try {
+      if (!await launchUrl(Uri.parse(url))) {
+        if (mounted) {
+          showSnackBar(context, 'No se pudo abrir el enlace.');
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        showSnackBar(context, 'Error al intentar abrir el enlace.');
+      }
     }
   }
 
   Future<void> _shareFeed(String url, String title) async {
-    SharePlus.instance.share(
-      ShareParams(subject: title, uri: Uri.tryParse(url)),
-    );
+    try {
+      await SharePlus.instance.share(
+        ShareParams(subject: title, uri: Uri.tryParse(url)),
+      );
+    } catch (e) {
+      if (mounted) {
+        showSnackBar(context, 'Error al compartir.');
+      }
+    }
   }
 
   Future<void> _savePost(PostModel item) async {
-    final db = Localstore.instance;
-    final id = item.id.toString();
-    await db.collection('bookmarks').doc(id).set(item.toJson());
-
-    if (mounted) {
-      showSnackBar(context, 'Elemento guardado en marcadores...');
+    try {
+      await Provider.of<BookmarkProvider>(context, listen: false).addBookmark(item);
+      if (mounted) {
+        showSnackBar(context, 'Elemento guardado en marcadores...');
+      }
+    } catch (e) {
+      if (mounted) {
+        showSnackBar(context, 'Error al guardar el marcador.');
+      }
     }
-
-    setState(() {});
   }
 
   @override

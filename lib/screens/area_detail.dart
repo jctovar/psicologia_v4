@@ -5,6 +5,8 @@ import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart
 import 'package:google_fonts/google_fonts.dart';
 import 'package:suayed/widgets/avatar.dart';
 
+import 'package:suayed/widgets/show_snack_bar.dart';
+
 class AreaDetail extends StatefulWidget {
   const AreaDetail({super.key, required this.item});
   final AreaModel item;
@@ -58,17 +60,23 @@ class _AreaDetailState extends State<AreaDetail> {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.mail, color: Colors.white),
-        onPressed: () => setState(() {
-          _makeMailTo(widget.item.departmentEmail);
-        }),
+        onPressed: () => _makeMailTo(widget.item.departmentEmail),
       ),
     );
   }
 
   Future<void> _makeMailTo(String email) async {
-    final Uri emailLaunchUri = Uri(scheme: 'mailto', path: email);
-    if (!await launchUrl(emailLaunchUri)) {
-      throw Exception('Could not launch $emailLaunchUri');
+    try {
+      final Uri emailLaunchUri = Uri(scheme: 'mailto', path: email);
+      if (!await launchUrl(emailLaunchUri)) {
+        if (mounted) {
+          showSnackBar(context, 'No se pudo abrir el cliente de correo.');
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        showSnackBar(context, 'Error al intentar abrir el correo.');
+      }
     }
   }
 

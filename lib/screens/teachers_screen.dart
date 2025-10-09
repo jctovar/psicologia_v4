@@ -25,17 +25,31 @@ class _TeachersPageState extends State<TeachersPage> {
 
   _TeachersPageState() {
     _filter.addListener(() {
-      if (_filter.text.isEmpty) {
-        setState(() {
-          _searchText = "";
-          _filteredItems = _items;
-        });
-      } else {
-        setState(() {
-          _searchText = _filter.text;
-        });
-      }
+      _filterTeachers();
     });
+  }
+
+  void _filterTeachers() {
+    final filterText = _filter.text;
+    if (filterText.isEmpty) {
+      setState(() {
+        _searchText = "";
+        _filteredItems = _items;
+      });
+    } else {
+      setState(() {
+        _searchText = filterText;
+        _filteredItems = _items
+            .where(
+              (u) =>
+                  (u.firstname.toLowerCase().contains(
+                    _searchText.toLowerCase(),
+                  ) ||
+                  u.lastname.toLowerCase().contains(_searchText.toLowerCase())),
+            )
+            .toList();
+      });
+    }
   }
 
   void _searchPressed() {
@@ -84,17 +98,6 @@ class _TeachersPageState extends State<TeachersPage> {
   }
 
   Widget _buildList() {
-    if (_searchText.isNotEmpty) {
-      _filteredItems = _items
-          .where(
-            (u) =>
-                (u.firstname.toLowerCase().contains(
-                  _searchText.toLowerCase(),
-                ) ||
-                u.lastname.toLowerCase().contains(_searchText.toLowerCase())),
-          )
-          .toList();
-    }
     return RefreshIndicator(
       onRefresh: _refreshData,
       child: ListView.separated(

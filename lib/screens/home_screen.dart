@@ -34,9 +34,7 @@ class HomeScreen extends StatelessWidget {
           }
 
           if (homeProvider.errorMessage != null) {
-            return Center(
-              child: Text(homeProvider.errorMessage!),
-            );
+            return Center(child: Text(homeProvider.errorMessage!));
           }
 
           return RefreshIndicator(
@@ -65,8 +63,9 @@ class PostCard extends StatelessWidget {
   }
 
   void _openFeed(BuildContext context, PostModel item) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => PostDetail(item: item)));
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) => PostDetail(item: item)));
   }
 
   @override
@@ -86,8 +85,18 @@ class PostCard extends StatelessWidget {
               ),
             ),
             ListTile(
-              title: Text(item.title.toUpperCase(), maxLines: 3, style: Theme.of(context).textTheme.titleLarge, overflow: TextOverflow.ellipsis),
-              subtitle: Text(_datePub(item.date), maxLines: 1, style: Theme.of(context).textTheme.titleSmall, overflow: TextOverflow.ellipsis),
+              title: Text(
+                item.title.toUpperCase(),
+                maxLines: 3,
+                style: Theme.of(context).textTheme.titleLarge,
+                overflow: TextOverflow.ellipsis,
+              ),
+              subtitle: Text(
+                _datePub(item.date),
+                maxLines: 1,
+                style: Theme.of(context).textTheme.titleSmall,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
             PostActions(item: item),
           ],
@@ -104,7 +113,10 @@ class PostActions extends StatelessWidget {
 
   Future<void> _savePost(BuildContext context, PostModel item) async {
     try {
-      await Provider.of<BookmarkProvider>(context, listen: false).addBookmark(item);
+      await Provider.of<BookmarkProvider>(
+        context,
+        listen: false,
+      ).addBookmark(item);
       if (context.mounted) {
         showSnackBar(context, 'Elemento guardado en marcadores...');
       }
@@ -117,27 +129,31 @@ class PostActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OverflowBar(
-      children: <Widget>[
-        IconButton(
-          onPressed: () {
-            try {
-              SharePlus.instance.share(
-                ShareParams(subject: item.link, uri: Uri.tryParse(item.link)),
-              );
-            } catch (e) {
-              showSnackBar(context, 'Error al compartir.');
-            }
-          },
-          icon: const Icon(LineIcons.share, color: Colors.black54),
-          iconSize: 24.0,
-        ),
-        IconButton(
-          onPressed: () => _savePost(context, item),
-          icon: const Icon(LineIcons.bookmark, color: Colors.black54),
-          iconSize: 24.0,
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 14, 14),
+      child: OverflowBar(
+        alignment: MainAxisAlignment.end,
+        children: <Widget>[
+          IconButton.outlined(
+            onPressed: () {
+              try {
+                SharePlus.instance.share(
+                  ShareParams(subject: item.link, uri: Uri.tryParse(item.link)),
+                );
+              } catch (e) {
+                showSnackBar(context, 'Error al compartir.');
+              }
+            },
+            icon: const Icon(LineIcons.alternateShare, color: Colors.black87),
+            iconSize: 18.0,
+          ),
+          IconButton.outlined(
+            onPressed: () => _savePost(context, item),
+            icon: const Icon(LineIcons.bookmark, color: Colors.black87),
+            iconSize: 18.0,
+          ),
+        ],
+      ),
     );
   }
 }

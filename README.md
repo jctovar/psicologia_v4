@@ -76,3 +76,17 @@ Para generar los iconos de la aplicación y la pantalla de bienvenida (splash sc
 
 ### main color
 * Main color: "#d81b60"
+
+
+
+
+
+
+# TODO
+
+* Enlaces a sitio de importancia para los alumno
+* Pantalla de notificaciones
+* Tema obscuro
+* Soporte mutiidiomas
+* Pantalla de videos
+* Asistente virtual

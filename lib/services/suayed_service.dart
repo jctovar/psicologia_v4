@@ -21,7 +21,7 @@ class SuayedServices {
         options: requestOptions,
       );
 
-      debugPrint('Response data: ${response.data}');
+      // debugPrint('Response data: ${response.data}');
 
       return (response.data as List).map((x) => PostModel.fromJson(x)).toList();
     } on DioException catch (e) {

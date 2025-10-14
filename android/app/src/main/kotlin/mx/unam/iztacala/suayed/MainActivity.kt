@@ -1,4 +1,4 @@
-package com.example.suayed
+package mx.unam.iztacala.suayed
 
 import io.flutter.embedding.android.FlutterActivity
 

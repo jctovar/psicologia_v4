@@ -129,7 +129,7 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
           value: 2,
           child: Row(
             children: const [
-              Icon(LineIcons.share, color: Colors.pink),
+              Icon(LineIcons.alternateShare, color: Colors.pink),
               SizedBox(width: 7),
               Text('Compartir'),
             ],
@@ -167,7 +167,10 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
 
   Future<void> _deleteBookmark(int id) async {
     try {
-      await Provider.of<BookmarkProvider>(context, listen: false).deleteBookmark(id);
+      await Provider.of<BookmarkProvider>(
+        context,
+        listen: false,
+      ).deleteBookmark(id);
 
       if (mounted) {
         showSnackBar(context, 'Elemento borrado de marcadores...');

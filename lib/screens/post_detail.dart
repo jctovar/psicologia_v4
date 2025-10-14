@@ -129,7 +129,7 @@ class _PostDetailState extends State<PostDetail> {
           value: 2,
           child: Row(
             children: const [
-              Icon(LineIcons.share, color: Colors.pink),
+              Icon(LineIcons.alternateShare, color: Colors.pink),
               SizedBox(width: 7),
               Text('Compartir'),
             ],
@@ -167,7 +167,10 @@ class _PostDetailState extends State<PostDetail> {
 
   Future<void> _savePost(PostModel item) async {
     try {
-      await Provider.of<BookmarkProvider>(context, listen: false).addBookmark(item);
+      await Provider.of<BookmarkProvider>(
+        context,
+        listen: false,
+      ).addBookmark(item);
       if (mounted) {
         showSnackBar(context, 'Elemento guardado en marcadores...');
       }

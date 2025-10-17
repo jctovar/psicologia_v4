@@ -3,8 +3,8 @@ import 'package:suayed/widgets/app_drawer.dart';
 import 'credits_screen.dart';
 import 'package:flutter_svg/svg.dart';
 
-class AboutPage extends StatelessWidget {
-  const AboutPage({super.key});
+class AboutScreen extends StatelessWidget {
+  const AboutScreen({super.key});
   static const String routeName = 'about';
 
   @override

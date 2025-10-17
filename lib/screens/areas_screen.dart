@@ -3,7 +3,6 @@ import 'package:suayed/widgets/avatar.dart';
 import 'package:suayed/widgets/app_drawer.dart';
 import 'package:suayed/models/area_model.dart';
 import 'package:suayed/services/local_service.dart';
-
 import 'area_detail.dart';
 
 class AreasPage extends StatefulWidget {

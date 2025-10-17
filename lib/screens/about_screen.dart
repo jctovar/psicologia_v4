@@ -4,8 +4,9 @@ import 'credits_screen.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AboutScreen extends StatelessWidget {
-  const AboutScreen({super.key});
+  const AboutScreen({super.key, required this.title});
   static const String routeName = 'about';
+  final String title;
 
   @override
   Widget build(BuildContext context) {

@@ -13,7 +13,7 @@ class Routes {
   static const String areas = AreasPage.routeName;
   static const String bookmarks = BookmarksPage.routeName;
   static const String privacy = PrivacyNotice.routeName;
-  static const String about = AboutPage.routeName;
+  static const String about = AboutScreen.routeName;
 
   static Map<String, WidgetBuilder> getRoutes(BuildContext context) {
     return {
@@ -22,7 +22,7 @@ class Routes {
       Routes.areas: (context) => const AreasPage(title: 'Coordinación SUAyED'),
       Routes.bookmarks: (context) => const BookmarksPage(title: 'Marcadores'),
       Routes.privacy: (context) => const PrivacyNotice(),
-      Routes.about: (context) => const AboutPage(),
+      Routes.about: (context) => const AboutScreen(title: 'Acerca de la aplicación'),
     };
   }
 }

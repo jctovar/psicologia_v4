@@ -7,10 +7,15 @@ import 'package:suayed/services/firebase_service.dart';
 import 'package:suayed/theme.dart';
 import 'package:suayed/utils/analytics.dart';
 import 'package:suayed/utils/app_constants.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:suayed/utils/messaging_push.dart';
 
 Future<void> main() async {
   // Ensure widgets are initialized and initialize Firebase services
   await FirebaseService.initialize();
+
+  // Initialize Push Notification Service
+  await PushNotificationService(FirebaseMessaging.instance).initialise();
 
   runApp(const AppState());
 }

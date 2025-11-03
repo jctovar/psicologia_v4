@@ -211,7 +211,7 @@ class _BookmarkDetailState extends State<BookmarkDetail> {
               padding: const EdgeInsets.all(16.0),
               child: _htmlWidget(widget.item.content),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 40),
             const Divider(),
             const SizedBox(height: 10),
             _footer('UNAM'),

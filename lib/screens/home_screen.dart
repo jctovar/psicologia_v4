@@ -39,11 +39,32 @@ class HomeScreen extends StatelessWidget {
 
           return RefreshIndicator(
             onRefresh: () => homeProvider.fetchPosts(refresh: true),
-            child: ListView.builder(
-              itemCount: homeProvider.posts.length,
-              itemBuilder: (BuildContext context, int index) {
-                final item = homeProvider.posts[index];
-                return PostCard(item: item);
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return OrientationBuilder(
+                  builder: (context, orientation) {
+                    final isTablet = constraints.maxWidth > 600;
+                    final isLandscape = orientation == Orientation.landscape;
+
+                    int crossAxisCount;
+                    if (isTablet) {
+                      crossAxisCount = isLandscape ? 3 : 2;
+                    } else {
+                      crossAxisCount = isLandscape ? 2 : 1;
+                    }
+
+                    return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                      ),
+                      itemCount: homeProvider.posts.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final item = homeProvider.posts[index];
+                        return PostCard(item: item);
+                      },
+                    );
+                  },
+                );
               },
             ),
           );
@@ -78,24 +99,31 @@ class PostCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(0.0),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
                 child: ThumbnailImage(imageUrl: item.image),
               ),
             ),
-            ListTile(
-              title: Text(
-                item.title.toUpperCase(),
-                maxLines: 3,
-                style: Theme.of(context).textTheme.titleLarge,
-                overflow: TextOverflow.ellipsis,
-              ),
-              subtitle: Text(
-                _datePub(item.date),
-                maxLines: 1,
-                style: Theme.of(context).textTheme.titleSmall,
-                overflow: TextOverflow.ellipsis,
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.title.toUpperCase(),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 8.0),
+                  Text(
+                    _datePub(item.date),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
               ),
             ),
             PostActions(item: item),

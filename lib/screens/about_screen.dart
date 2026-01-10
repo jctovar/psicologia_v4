@@ -26,8 +26,8 @@ class AboutScreen extends StatelessWidget {
                 width: 400,
                 child: SvgPicture.asset(
                   'assets/logo_coordinacion.svg',
-                  colorFilter: const ColorFilter.mode(
-                    Colors.pink,
+                  colorFilter: ColorFilter.mode(
+                    Theme.of(context).colorScheme.primary,
                     BlendMode.srcIn,
                   ),
                   semanticsLabel: 'Iztamind Logo',

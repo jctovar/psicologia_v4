@@ -27,6 +27,14 @@ Future<void> main() async {
     // Inicializar servicio HTTP con cache persistente
     await initHttpService();
 
+    // Precargar fuentes de la aplicación para mejor rendimiento
+    try {
+      await AppFonts.preloadFonts();
+      AppLogger.i('✅ Fonts preloaded successfully');
+    } catch (e) {
+      AppLogger.w('⚠️ Font preloading failed, will load on demand: $e');
+    }
+
     // Asegurar que los widgets están inicializados e inicializar servicios de Firebase
     await FirebaseService.initialize();
 

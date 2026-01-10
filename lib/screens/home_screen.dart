@@ -146,6 +146,10 @@ class _HomeScreenState extends State<HomeScreen> {
           // Grid principal con pull-to-refresh
           return RefreshIndicator(
             onRefresh: () => homeProvider.fetchPosts(refresh: true),
+            color: Theme.of(context).colorScheme.primary,
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            displacement: 60,
+            strokeWidth: 3,
             child: GridView.builder(
               controller: _scrollController,
               padding: EdgeInsets.symmetric(
@@ -162,10 +166,29 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (BuildContext context, int index) {
                 // Indicador de carga al final de la lista
                 if (index >= homeProvider.posts.length) {
-                  return const Center(
+                  return Center(
                     child: Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: CircularProgressIndicator(),
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 32,
+                            height: 32,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 3,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Cargando más...',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.7),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }

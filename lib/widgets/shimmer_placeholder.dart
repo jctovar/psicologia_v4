@@ -19,14 +19,16 @@ class ShimmerPlaceholder extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Shimmer.fromColors(
-      baseColor: isDark ? Colors.grey[800]! : Colors.grey[300]!,
-      highlightColor: isDark ? Colors.grey[700]! : Colors.grey[100]!,
+      baseColor: isDark ? const Color(0xFF2C2C2C) : const Color(0xFFE0E0E0),
+      highlightColor: isDark ? const Color(0xFF3A3A3A) : const Color(0xFFF5F5F5),
+      period: const Duration(milliseconds: 1500),
+      direction: ShimmerDirection.ltr,
       child: Container(
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: isDark ? Colors.grey[800] : Colors.white,
-          borderRadius: borderRadius ?? BorderRadius.circular(8),
+          color: isDark ? const Color(0xFF2C2C2C) : Colors.white,
+          borderRadius: borderRadius ?? BorderRadius.circular(12),
         ),
       ),
     );
@@ -59,7 +61,7 @@ class PostCardShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2,
+      elevation: 3,
       clipBehavior: Clip.antiAlias,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -78,58 +80,81 @@ class PostCardShimmer extends StatelessWidget {
             flex: 2,
             child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: isWideScreen ? 16.0 : 12.0,
-                vertical: isWideScreen ? 10.0 : 8.0,
+                horizontal: isWideScreen ? 16.0 : 14.0,
+                vertical: isWideScreen ? 12.0 : 10.0,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Title shimmer
+                  // Title shimmer - múltiples líneas para simular título
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ShimmerPlaceholder(
                           width: double.infinity,
-                          height: 16,
-                          borderRadius: BorderRadius.circular(4),
+                          height: 15,
+                          borderRadius: BorderRadius.circular(6),
                         ),
                         const SizedBox(height: 8),
                         ShimmerPlaceholder(
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          height: 16,
-                          borderRadius: BorderRadius.circular(4),
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          height: 15,
+                          borderRadius: BorderRadius.circular(6),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  // Date shimmer
-                  ShimmerPlaceholder(
-                    width: 80,
-                    height: 12,
-                    borderRadius: BorderRadius.circular(4),
+                  const SizedBox(height: 8),
+                  // Date shimmer con icono
+                  Row(
+                    children: [
+                      ShimmerPlaceholder(
+                        width: 14,
+                        height: 14,
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                      const SizedBox(width: 4),
+                      ShimmerPlaceholder(
+                        width: 90,
+                        height: 13,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
           ),
-          // Action buttons shimmer (matches PostActions)
-          Padding(
-            padding: EdgeInsets.fromLTRB(0, 0, isWideScreen ? 16.0 : 14.0, isWideScreen ? 16.0 : 14.0),
+          // Action buttons shimmer (matches PostActions con divider)
+          Container(
+            padding: EdgeInsets.fromLTRB(
+              isWideScreen ? 16.0 : 12.0,
+              8,
+              isWideScreen ? 16.0 : 12.0,
+              isWideScreen ? 16.0 : 12.0,
+            ),
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: Theme.of(context).dividerColor.withValues(alpha: 0.3),
+                  width: 0.5,
+                ),
+              ),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ShimmerPlaceholder(
-                  width: 36,
-                  height: 36,
-                  borderRadius: BorderRadius.circular(18),
+                  width: 40,
+                  height: 40,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                SizedBox(width: isWideScreen ? 8.0 : 4.0),
+                const SizedBox(width: 8),
                 ShimmerPlaceholder(
-                  width: 36,
-                  height: 36,
-                  borderRadius: BorderRadius.circular(18),
+                  width: 40,
+                  height: 40,
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ],
             ),

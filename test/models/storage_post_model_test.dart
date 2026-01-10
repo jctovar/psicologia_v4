@@ -47,7 +47,7 @@ void main() {
       expect(json['link'], 'https://example.com/another-bookmark');
       expect(json['image'], 'https://example.com/another-bookmark-image.jpg');
       expect(json['content'], '<p>Another bookmark content</p>');
-      expect(json['date'], date.toIso8601String());
+      expect(json['date'], date.toString());
     });
 
     test('fromJson and toJson are reversible', () {

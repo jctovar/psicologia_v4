@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:suayed/providers/bookmark_provider.dart';
 import 'package:suayed/widgets/thumbnail_image.dart';
+import 'package:suayed/widgets/empty_state.dart';
+import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:suayed/widgets/app_drawer.dart';
-import 'bookmark_detail.dart';
+import 'post_detail.dart';
 import 'package:suayed/models/storage_post_model.dart';
+import 'home_screen.dart';
 
-class BookmarksPage extends StatelessWidget {
+class BookmarksScreen extends StatelessWidget {
   static const String routeName = 'bookmarks';
-  const BookmarksPage({super.key, required this.title});
+  const BookmarksScreen({super.key, required this.title});
   final String title;
 
   @override
@@ -20,8 +22,14 @@ class BookmarksPage extends StatelessWidget {
       body: Consumer<BookmarkProvider>(
         builder: (context, bookmarkProvider, child) {
           if (bookmarkProvider.bookmarks.isEmpty) {
-            return const Center(
-              child: Image(image: AssetImage('assets/unam_clasico.png')),
+            return EmptyState(
+              icon: Icons.bookmark_border,
+              title: 'Sin marcadores',
+              message: 'Aún no has guardado ninguna noticia.\nExplora el contenido y marca tus favoritas para leerlas más tarde.',
+              actionLabel: 'Explorar noticias',
+              onActionPressed: () {
+                Navigator.pushNamed(context, HomeScreen.routeName);
+              },
             );
           }
           return BookmarkList(posts: bookmarkProvider.bookmarks);
@@ -41,9 +49,14 @@ class BookmarkList extends StatelessWidget {
   }
 
   void _openFeed(BuildContext context, StoragePost item) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => BookmarkDetail(item: item)),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(
+      builder: (context) => PostDetail(
+        storagePost: item,
+        heroTag: 'bookmark-image',
+      ),
+    ));
   }
 
   @override
@@ -52,29 +65,89 @@ class BookmarkList extends StatelessWidget {
       itemCount: posts.length,
       itemBuilder: (context, index) {
         final item = posts[index];
-        return ListTile(
-          contentPadding: const EdgeInsets.all(8.0),
-          leading: ThumbnailImage(imageUrl: item.image),
-          title: Text(
-            item.title.toUpperCase(),
-            style: Theme.of(context).textTheme.titleMedium,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
+        return Semantics(
+          label: 'Marcador: ${item.title}. Publicado ${_datePub(item.date)}',
+          hint: 'Toca para ver detalles. Desliza hacia la izquierda para eliminar',
+          button: true,
+          child: Dismissible(
+            key: Key(item.id.toString()),
+            background: Container(
+              color: Colors.red,
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.only(right: 16.0),
+              child: const Icon(Icons.delete, color: Colors.white),
+            ),
+            direction: DismissDirection.endToStart,
+            confirmDismiss: (direction) async {
+              return await showDialog<bool>(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Eliminar marcador'),
+                  content: const Text(
+                    '¿Deseas eliminar este marcador? Esta acción no se puede deshacer.',
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      child: const Text('Cancelar'),
+                    ),
+                    FilledButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      child: const Text('Eliminar'),
+                    ),
+                  ],
+                ),
+              );
+            },
+            onDismissed: (direction) {
+              Provider.of<BookmarkProvider>(context, listen: false)
+                  .deleteBookmark(item.id);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Marcador eliminado'),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            },
+            child: ListTile(
+              contentPadding: const EdgeInsets.all(8.0),
+              leading: Semantics(
+                label: 'Imagen de ${item.title}',
+                image: true,
+                child: SizedBox(
+                  width: 80,
+                  height: 80,
+                  child: Hero(
+                    tag: 'bookmark-image-${item.id}',
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: ThumbnailImage(imageUrl: item.image),
+                    ),
+                  ),
+                ),
+              ),
+              title: Text(
+                item.title.toUpperCase(),
+                style: Theme.of(context).textTheme.titleMedium,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
+              subtitle: Text(
+                _datePub(item.date),
+                textAlign: TextAlign.left,
+                style: Theme.of(context).textTheme.titleSmall,
+                maxLines: 1,
+              ),
+              isThreeLine: true,
+              onTap: () {
+                _openFeed(context, item);
+              },
+            ),
           ),
-          subtitle: Text(
-            _datePub(item.date),
-            textAlign: TextAlign.left,
-            style: Theme.of(context).textTheme.titleSmall,
-            maxLines: 1,
-          ),
-          isThreeLine: true,
-          onTap: () {
-            _openFeed(context, item);
-          },
         );
       },
       separatorBuilder: (BuildContext context, int index) {
-        return const Divider(color: Colors.black12);
+        return Divider(color: Theme.of(context).dividerColor);
       },
     );
   }

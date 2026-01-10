@@ -1,25 +1,47 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:suayed/screens/home_screen.dart';
+import 'package:suayed/services/http_service.dart';
 import 'package:provider/provider.dart';
 import 'package:suayed/providers/bookmark_provider.dart';
 import 'package:suayed/providers/home_provider.dart';
+import 'package:suayed/providers/notification_provider.dart';
+import 'package:suayed/providers/theme_provider.dart';
 import 'package:suayed/routes/routes.dart';
+import 'package:suayed/services/crashlytics_service.dart';
 import 'package:suayed/services/firebase_service.dart';
+import 'package:suayed/services/logger_service.dart';
 import 'package:suayed/theme.dart';
-import 'package:suayed/utils/analytics.dart';
 import 'package:suayed/utils/app_constants.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:suayed/utils/messaging_push.dart';
 
 Future<void> main() async {
-  // Ensure widgets are initialized and initialize Firebase services
-  await FirebaseService.initialize();
+  // Captura errores asíncronos que ocurren fuera del runApp
+  await runZonedGuarded(() async {
+    AppLogger.i('🚀 Starting SUAyED App');
 
-  // Initialize Push Notification Service
-  await PushNotificationService(FirebaseMessaging.instance).initialise();
+    // Inicializar Hive para cache persistente
+    await Hive.initFlutter();
+    AppLogger.i('✅ Hive initialized');
 
-  runApp(const AppState());
+    // Inicializar servicio HTTP con cache persistente
+    await initHttpService();
+
+    // Asegurar que los widgets están inicializados e inicializar servicios de Firebase
+    await FirebaseService.initialize();
+
+    // Inicializar Crashlytics
+    await CrashlyticsService.initialize();
+
+    AppLogger.i('✅ App initialization complete');
+    runApp(const AppState());
+  }, (error, stack) {
+    // Captura errores asíncronos no manejados
+    AppLogger.f('Unhandled async error: $error', error, stack);
+  });
 }
 
+////////////////////////////////////////////////////////////////////////////////
 class AppState extends StatelessWidget {
   const AppState({super.key});
 
@@ -27,8 +49,10 @@ class AppState extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => HomeProvider()..fetchPosts()),
         ChangeNotifierProvider(create: (_) => BookmarkProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ],
       child: const MyApp(),
     );
@@ -38,16 +62,22 @@ class AppState extends StatelessWidget {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // Este widget es la raíz de tu aplicación.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      scaffoldMessengerKey: Constants.scaffoldMessengerKey,
-      title: Constants.appName,
-      debugShowCheckedModeBanner: false,
-      theme: suayedTheme, // This is defined in theme.dart
-      initialRoute: Routes.home,
-      routes: Routes.getRoutes(context),
-      navigatorObservers: [Analytics.observer],
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          scaffoldMessengerKey: Constants.scaffoldMessengerKey,
+          theme: iztacalaTheme,
+          darkTheme: iztacalaDarkTheme,
+          themeMode: themeProvider.themeMode,
+          initialRoute: Routes.home,
+          home: const HomeScreen(title: 'Iztacala'),
+          routes: Routes.getRoutes(context),
+        );
+      },
     );
   }
 }

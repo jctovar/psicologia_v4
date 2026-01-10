@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:suayed/utils/html_styles.dart';
 import 'package:suayed/widgets/app_drawer.dart';
 
 class PrivacyNotice extends StatefulWidget {
@@ -43,8 +44,8 @@ class _PrivacyNoticeState extends State<PrivacyNotice> {
                         width: 120,
                         child: SvgPicture.asset(
                           'assets/logo_iztacala_compacto.svg',
-                          colorFilter: const ColorFilter.mode(
-                            Colors.pink,
+                          colorFilter: ColorFilter.mode(
+                            Theme.of(context).colorScheme.primary,
                             BlendMode.srcIn,
                           ),
                           semanticsLabel: 'Iztacala Logo',
@@ -52,7 +53,12 @@ class _PrivacyNoticeState extends State<PrivacyNotice> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    HtmlWidget(html!),
+                    HtmlWidget(
+                      html!,
+                      customStylesBuilder: (element) =>
+                          buildHtmlStyles(context, element),
+                      textStyle: Theme.of(context).textTheme.bodyMedium,
+                    ),
                   ],
                 ),
               );

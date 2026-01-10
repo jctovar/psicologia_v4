@@ -7,6 +7,7 @@ import 'package:suayed/providers/bookmark_provider.dart';
 import 'package:suayed/models/post_model.dart';
 import 'package:suayed/models/storage_post_model.dart';
 import 'package:suayed/utils/url_launcher_utils.dart';
+import 'package:suayed/utils/html_styles.dart';
 import 'package:suayed/widgets/show_snack_bar.dart';
 import 'package:suayed/widgets/thumbnail_image.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
@@ -242,21 +243,12 @@ class _PostDetailState extends State<PostDetail> {
                     Text('Error al cargar contenido: $error'),
                 onLoadingBuilder: (context, element, loadingProgress) =>
                     const Center(child: CircularProgressIndicator()),
-                textStyle: GoogleFonts.robotoSlab(
-                  textStyle: TextStyle(
-                    fontSize: isWideScreen ? 17.0 : 16.0,
-                    fontWeight: FontWeight.w300,
-                    height: 1.6,
-                    color: theme.textTheme.bodyLarge?.color,
-                  ),
+                textStyle: theme.textTheme.bodyLarge?.copyWith(
+                  fontSize: isWideScreen ? 17.0 : 16.0,
+                  height: 1.6,
                 ),
-                customStylesBuilder: (element) {
-                  if (element.classes.contains('wp-block-image')) {
-                    return {'border-radius': '12px'};
-                  }
-
-                  return null;
-                },
+                customStylesBuilder: (element) =>
+                    buildHtmlStyles(context, element),
               ),
             ),
 

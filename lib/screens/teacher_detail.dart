@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:suayed/utils/html_styles.dart';
 import 'package:suayed/widgets/avatar.dart';
 import 'package:suayed/models/teacher_model.dart';
 
@@ -101,10 +102,10 @@ class _TeacherDetailState extends State<TeacherDetail> {
     return Text(
       title.toUpperCase(),
       style: GoogleFonts.lora(
-        textStyle: const TextStyle(
+        textStyle: TextStyle(
           fontSize: 18.0,
           fontWeight: FontWeight.w800,
-          color: Colors.pinkAccent,
+          color: Theme.of(context).colorScheme.primary,
           letterSpacing: -.3,
         ),
       ),
@@ -114,25 +115,16 @@ class _TeacherDetailState extends State<TeacherDetail> {
   }
 
   HtmlWidget _htmlWidget(String html) {
+    final theme = Theme.of(context);
     return HtmlWidget(
       html,
-      customStylesBuilder: (element) {
-        if (element.classes.contains('foo')) {
-          return {'color': 'red'};
-        }
-
-        return null;
-      },
+      customStylesBuilder: (element) => buildHtmlStyles(context, element),
       onErrorBuilder: (context, element, error) =>
           Text('$element error: $error'),
       onLoadingBuilder: (context, element, loadingProgress) =>
           const CircularProgressIndicator(),
-      textStyle: GoogleFonts.robotoSlab(
-        textStyle: const TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.w300,
-          color: Colors.black87,
-        ),
+      textStyle: theme.textTheme.bodyLarge?.copyWith(
+        fontSize: 18.0,
       ),
     );
   }

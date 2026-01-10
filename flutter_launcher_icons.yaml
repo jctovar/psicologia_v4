@@ -14,7 +14,7 @@ flutter_launcher_icons:
   # adaptive_icon_monochrome: "assets/icon/monochrome.png"
 
   ios: true
-  # image_path_ios: "assets/icon/icon.png"
+  image_path_ios: "assets/icon/apple.png"
   remove_alpha_ios: true
   # image_path_ios_dark_transparent: "assets/icon/icon_dark.png"
   # image_path_ios_tinted_grayscale: "assets/icon/icon_tinted.png"
@@ -33,5 +33,5 @@ flutter_launcher_icons:
     icon_size: 48 # min:48, max:256, default: 48
 
   macos:
-    generate: true
+    generate: false
     image_path: "assets/icon/apple.png"

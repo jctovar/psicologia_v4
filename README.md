@@ -498,6 +498,7 @@ Para reportar problemas o sugerencias, por favor abre un Issue en el repositorio
 Funcionalidades planeadas para futuras versiones:
 
 - [ ] Enlaces a sitios de importancia para los alumnos
+- [ ] Calendario escolar
 - [ ] Pantalla de notificaciones mejorada
 - [ ] Tema oscuro (completado)
 - [ ] Soporte multiidiomas

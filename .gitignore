@@ -58,7 +58,7 @@ android/key.properties
 
 # Firebase configuration files (opcional - ver nota abajo)
 # Descomentar si decides NO incluir estas claves en el repositorio público
-# android/app/google-services.json
-# ios/Runner/GoogleService-Info.plist
-# macos/Runner/GoogleService-Info.plist
-# lib/firebase_options.dart 
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+macos/Runner/GoogleService-Info.plist
+lib/firebase_options.dart 

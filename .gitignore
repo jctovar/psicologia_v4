@@ -48,4 +48,17 @@ app.*.map.json
 
 # Keystore files
 *.jks
-*.keystore 
+*.keystore
+android/key.properties
+
+# Environment variables
+**/*.env
+**/*.env.local
+**/*.env.*.local
+
+# Firebase configuration files (opcional - ver nota abajo)
+# Descomentar si decides NO incluir estas claves en el repositorio público
+# android/app/google-services.json
+# ios/Runner/GoogleService-Info.plist
+# macos/Runner/GoogleService-Info.plist
+# lib/firebase_options.dart 

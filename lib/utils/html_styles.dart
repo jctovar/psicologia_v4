@@ -22,7 +22,8 @@ Map<String, String>? buildHtmlStyles(
 ) {
   final theme = Theme.of(context);
   final isDark = theme.brightness == Brightness.dark;
-  final primaryColor = theme.colorScheme.primary.toARGB32()
+  final primaryColor = theme.colorScheme.primary
+      .toARGB32()
       .toRadixString(16)
       .substring(2)
       .padLeft(6, '0');
@@ -53,8 +54,7 @@ Map<String, String>? buildHtmlStyles(
   }
 
   // Code blocks
-  if (element.classes.contains('wp-block-code') ||
-      element.localName == 'pre') {
+  if (element.classes.contains('wp-block-code') || element.localName == 'pre') {
     return {
       'background-color': isDark ? '#1e1e1e' : '#f5f5f5',
       'padding': '12px',
@@ -138,33 +138,22 @@ Map<String, String>? buildHtmlStyles(
 
   // Links
   if (element.localName == 'a') {
-    return {
-      'color': '#$primaryColor',
-      'text-decoration': 'underline',
-    };
+    return {'color': '#$primaryColor', 'text-decoration': 'underline'};
   }
 
   // Unordered & ordered lists
   if (element.localName == 'ul' || element.localName == 'ol') {
-    return {
-      'margin': '12px 0',
-      'padding-left': '24px',
-    };
+    return {'margin': '12px 0', 'padding-left': '24px'};
   }
 
   // List items
   if (element.localName == 'li') {
-    return {
-      'margin': '6px 0',
-    };
+    return {'margin': '6px 0', 'font-weight': '600'};
   }
 
   // Paragraph
   if (element.localName == 'p') {
-    return {
-      'margin': '12px 0',
-      'line-height': '1.6',
-    };
+    return {'margin': '12px 0', 'line-height': '1.6', 'font-weight': '500'};
   }
 
   return null;

@@ -40,8 +40,8 @@ dependencies:
   intl: ^0.20.2
   cached_network_image: ^3.1.0
   dio: ^5.9.0
-  dio_cache_interceptor: ^3.5.1
-  dio_cache_interceptor_hive_store: ^4.0.0
+  dio_cache_interceptor: ^4.0.5
+  http_cache_hive_store: ^5.0.1
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   path_provider: ^2.1.5

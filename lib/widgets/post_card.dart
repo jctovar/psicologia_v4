@@ -24,7 +24,8 @@ class PostCard extends StatefulWidget {
   State<PostCard> createState() => _PostCardState();
 }
 
-class _PostCardState extends State<PostCard> with SingleTickerProviderStateMixin {
+class _PostCardState extends State<PostCard>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
   bool _isHovered = false;
@@ -54,14 +55,12 @@ class _PostCardState extends State<PostCard> with SingleTickerProviderStateMixin
 
   /// Navega a la pantalla de detalle del post
   void _openFeed(BuildContext context, PostModel item) {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(
-      builder: (context) => PostDetail(
-        postModel: item,
-        heroTag: 'post-image',
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) =>
+            PostDetail(postModel: item, heroTag: 'post-image'),
       ),
-    ));
+    );
   }
 
   @override
@@ -70,7 +69,8 @@ class _PostCardState extends State<PostCard> with SingleTickerProviderStateMixin
     final isWideScreen = screenWidth > 600;
 
     return Semantics(
-      label: 'Noticia: ${widget.item.title}. Publicada ${_datePub(widget.item.date)}',
+      label:
+          'Noticia: ${widget.item.title}. Publicada ${_datePub(widget.item.date)}',
       hint: 'Toca para leer la noticia completa',
       button: true,
       child: MouseRegion(
@@ -87,8 +87,12 @@ class _PostCardState extends State<PostCard> with SingleTickerProviderStateMixin
               // Recorta el contenido para que la imagen llegue hasta los bordes
               clipBehavior: Clip.antiAlias,
               child: InkWell(
-                splashColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
-                highlightColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.08),
+                splashColor: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.15),
+                highlightColor: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.08),
                 onTap: () => _openFeed(context, widget.item),
                 onTapDown: (_) => _animationController.forward(),
                 onTapUp: (_) => _animationController.reverse(),
@@ -96,97 +100,99 @@ class _PostCardState extends State<PostCard> with SingleTickerProviderStateMixin
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-              // Imagen destacada - ocupa 60% de la altura (flex: 3)
-              Expanded(
-                flex: 3,
-                child: Semantics(
-                  label: 'Imagen de portada de ${widget.item.title}',
-                  image: true,
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Hero(
-                        tag: 'post-image-${widget.item.id}',
-                        child: ThumbnailImage(
-                          imageUrl: widget.item.image,
-                          memCacheWidth: 800,
+                    // Imagen destacada - ocupa 60% de la altura (flex: 3)
+                    Expanded(
+                      flex: 3,
+                      child: Semantics(
+                        label: 'Imagen de portada de ${widget.item.title}',
+                        image: true,
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            Hero(
+                              tag: 'post-image-${widget.item.id}',
+                              child: ThumbnailImage(
+                                imageUrl: widget.item.image,
+                                memCacheWidth: 800,
+                              ),
+                            ),
+                            // Gradiente sutil en la parte inferior de la imagen
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Colors.transparent,
+                                      Colors.black.withValues(alpha: 0.1),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      // Gradiente sutil en la parte inferior de la imagen
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                          height: 40,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.transparent,
-                                Colors.black.withValues(alpha: 0.1),
+                    ),
+                    // Área de contenido - ocupa 40% de la altura (flex: 2)
+                    Expanded(
+                      flex: 2,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isWideScreen ? 16.0 : 14.0,
+                          vertical: isWideScreen ? 12.0 : 10.0,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Título del post
+                            Expanded(
+                              child: Text(
+                                widget.item.title.toUpperCase(),
+                                maxLines: isWideScreen ? 2 : 3,
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(
+                                      fontSize: isWideScreen ? 14.5 : 15.0,
+                                      fontWeight: FontWeight.w700,
+                                      height: 1.3,
+                                      letterSpacing: 0.3,
+                                    ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            // Fecha de publicación con icono
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time,
+                                  size: 14,
+                                  color: Theme.of(
+                                    context,
+                                  ).textTheme.bodySmall?.color,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  _datePub(widget.item.date),
+                                  maxLines: 1,
+                                  style: Theme.of(context).textTheme.bodySmall
+                                      ?.copyWith(fontWeight: FontWeight.w700),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ],
                             ),
-                          ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            // Área de contenido - ocupa 40% de la altura (flex: 2)
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: isWideScreen ? 16.0 : 14.0,
-                  vertical: isWideScreen ? 12.0 : 10.0,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Título del post
-                    Expanded(
-                      child: Text(
-                        widget.item.title.toUpperCase(),
-                        maxLines: isWideScreen ? 2 : 3,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontSize: isWideScreen ? 14.5 : 15.0,
-                              fontWeight: FontWeight.w700,
-                              height: 1.3,
-                              letterSpacing: 0.3,
-                            ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
                     ),
-                    const SizedBox(height: 6),
-                    // Fecha de publicación con icono
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.access_time,
-                          size: 14,
-                          color: Theme.of(context).textTheme.bodySmall?.color,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          _datePub(widget.item.date),
-                          maxLines: 1,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontWeight: FontWeight.w500,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
+                    // Botones de acción (compartir, guardar)
+                    PostActions(item: widget.item),
                   ],
-                ),
-              ),
-            ),
-            // Botones de acción (compartir, guardar)
-            PostActions(item: widget.item),
-          ],
                 ),
               ),
             ),
@@ -253,7 +259,10 @@ class PostActions extends StatelessWidget {
                 HapticFeedback.mediumImpact();
                 try {
                   SharePlus.instance.share(
-                    ShareParams(subject: item.link, uri: Uri.tryParse(item.link)),
+                    ShareParams(
+                      subject: item.link,
+                      uri: Uri.tryParse(item.link),
+                    ),
                   );
                 } catch (e) {
                   showSnackBar(context, 'Error al compartir.');

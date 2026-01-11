@@ -14,6 +14,7 @@ import 'package:suayed/services/firebase_service.dart';
 import 'package:suayed/services/logger_service.dart';
 import 'package:suayed/theme.dart';
 import 'package:suayed/utils/app_constants.dart';
+import 'package:suayed/utils/analytics.dart';
 
 Future<void> main() async {
   // Captura errores asíncronos que ocurren fuera del runApp
@@ -86,6 +87,9 @@ class MyApp extends StatelessWidget {
           initialRoute: Routes.home,
           home: const HomeScreen(title: 'Iztacala'),
           routes: Routes.getRoutes(context),
+          navigatorObservers: [
+            Analytics.observer,
+          ],
         );
       },
     );

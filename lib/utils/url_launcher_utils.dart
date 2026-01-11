@@ -103,7 +103,7 @@ class UrlLauncherUtils {
   }) async {
     if (!context.mounted) return;
 
-    final url = 'mailto:$email';
+    final url = email;
 
     if (!UrlValidator.isValidEmail(url)) {
       showSnackBar(context, errorMessage);

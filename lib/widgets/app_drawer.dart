@@ -79,7 +79,7 @@ class _AppDrawerState extends State<AppDrawer> {
 
           // Sección de marcadores y notificaciones
           _createDrawerItem(
-            icon: Icons.bookmark_outline_outlined,
+            icon: LineIcons.bookmark,
             text: 'Marcadores',
             onTap: () =>
                 Navigator.pushReplacementNamed(context, Routes.bookmarks),
@@ -106,7 +106,7 @@ class _AppDrawerState extends State<AppDrawer> {
 
           // Sección de información y ajustes
           _createDrawerItem(
-            icon: Icons.help_outline,
+            icon: LineIcons.infoCircle,
             text: 'Acerca de',
             onTap: () => Navigator.pushReplacementNamed(context, Routes.about),
           ),
@@ -141,23 +141,23 @@ class _AppDrawerState extends State<AppDrawer> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Container(
-      height: 200,
+      height: 240,
       decoration: BoxDecoration(
         // Gradiente con colores de la institución, adaptado a modo oscuro
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: isDark
-            ? [
-                // En modo oscuro: reduce opacidad para evitar demasiado brillo
-                const Color(0xFFd81b60).withValues(alpha: 0.8),
-                const Color(0xFF7B1FA2).withValues(alpha: 0.9),
-              ]
-            : [
-                // En modo claro: colores sin modificar
-                const Color(0xFFd81b60),
-                const Color(0xFF7B1FA2),
-              ],
+              ? [
+                  // En modo oscuro: reduce opacidad para evitar demasiado brillo
+                  const Color(0xFFd81b60).withValues(alpha: 0.8),
+                  const Color(0xFF7B1FA2).withValues(alpha: 0.9),
+                ]
+              : [
+                  // En modo claro: colores sin modificar
+                  const Color(0xFFd81b60),
+                  const Color(0xFF7B1FA2),
+                ],
         ),
         // Imagen de fondo con baja opacidad para textura
         image: const DecorationImage(
@@ -173,6 +173,7 @@ class _AppDrawerState extends State<AppDrawer> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SizedBox(height: 16),
                 // Contenedor circular con logo
                 Container(
                   padding: const EdgeInsets.all(16),
@@ -202,7 +203,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 8),
 
                 // Título principal: nombre de la carrera
                 Text(
@@ -290,7 +291,9 @@ class _AppDrawerState extends State<AppDrawer> {
               // Color diferente si el item está activo
               color: isActive
                   ? theme.colorScheme.primary.withValues(alpha: 0.1)
-                  : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                  : theme.colorScheme.surfaceContainerHighest.withValues(
+                      alpha: 0.5,
+                    ),
             ),
             child: Icon(
               icon,
@@ -304,7 +307,7 @@ class _AppDrawerState extends State<AppDrawer> {
           title: Text(
             text,
             style: theme.textTheme.bodyLarge?.copyWith(
-              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+              fontWeight: isActive ? FontWeight.w700 : FontWeight.w600,
               color: isActive
                   ? theme.colorScheme.primary
                   : theme.textTheme.bodyLarge?.color,
@@ -408,7 +411,9 @@ class _AppDrawerState extends State<AppDrawer> {
                   borderRadius: BorderRadius.circular(8),
                   color: isActive
                       ? theme.colorScheme.primary.withValues(alpha: 0.1)
-                      : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                      : theme.colorScheme.surfaceContainerHighest.withValues(
+                          alpha: 0.5,
+                        ),
                 ),
                 child: Icon(
                   icon,
@@ -427,7 +432,10 @@ class _AppDrawerState extends State<AppDrawer> {
                   child: Semantics(
                     label: '$badge notificaciones no leídas',
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         // Color rojo para indicar notificaciones no leídas
                         color: theme.colorScheme.error,
@@ -435,7 +443,9 @@ class _AppDrawerState extends State<AppDrawer> {
                         // Sombra para destacar el badge
                         boxShadow: [
                           BoxShadow(
-                            color: theme.colorScheme.error.withValues(alpha: 0.4),
+                            color: theme.colorScheme.error.withValues(
+                              alpha: 0.4,
+                            ),
                             blurRadius: 4,
                             spreadRadius: 1,
                           ),
@@ -464,7 +474,7 @@ class _AppDrawerState extends State<AppDrawer> {
           title: Text(
             text,
             style: theme.textTheme.bodyLarge?.copyWith(
-              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+              fontWeight: isActive ? FontWeight.w700 : FontWeight.w600,
               color: isActive
                   ? theme.colorScheme.primary
                   : theme.textTheme.bodyLarge?.color,
@@ -515,16 +525,16 @@ class _AppDrawerState extends State<AppDrawer> {
               : 'Toca para activar tema oscuro',
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
             child: SwitchListTile(
               // Icono a la izquierda (sol/luna)
               secondary: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                  color: theme.colorScheme.surfaceContainerHighest.withValues(
+                    alpha: 0.5,
+                  ),
                 ),
                 child: Icon(
                   isDark ? Icons.dark_mode : Icons.light_mode,
@@ -537,7 +547,7 @@ class _AppDrawerState extends State<AppDrawer> {
               title: Text(
                 'Tema oscuro',
                 style: theme.textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0.2,
                 ),
               ),

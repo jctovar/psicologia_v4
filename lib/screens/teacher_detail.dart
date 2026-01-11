@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:suayed/widgets/show_snack_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -67,16 +68,24 @@ class _TeacherDetailState extends State<TeacherDetail> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.mail, color: Colors.white),
         onPressed: () => setState(() {
-          _makeMailTo('mailto:${widget.item.email}');
+          _makeMailTo(widget.item.email);
         }),
       ),
     );
   }
 
   Future<void> _makeMailTo(String email) async {
-    final Uri emailLaunchUri = Uri(scheme: 'mailto', path: email);
-    if (!await launchUrl(emailLaunchUri)) {
-      throw Exception('Could not launch $emailLaunchUri');
+    try {
+      final Uri emailLaunchUri = Uri(scheme: 'mailto', path: email);
+      if (!await launchUrl(emailLaunchUri)) {
+        if (mounted) {
+          showSnackBar(context, 'No se pudo abrir el cliente de correo.');
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        showSnackBar(context, 'Error al intentar abrir el correo.');
+      }
     }
   }
 
@@ -116,16 +125,20 @@ class _TeacherDetailState extends State<TeacherDetail> {
 
   HtmlWidget _htmlWidget(String html) {
     final theme = Theme.of(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isWideScreen = screenWidth > 600;
+
     return HtmlWidget(
       html,
-      customStylesBuilder: (element) => buildHtmlStyles(context, element),
       onErrorBuilder: (context, element, error) =>
-          Text('$element error: $error'),
+          Text('Error al cargar contenido: $error'),
       onLoadingBuilder: (context, element, loadingProgress) =>
-          const CircularProgressIndicator(),
+          const Center(child: CircularProgressIndicator()),
       textStyle: theme.textTheme.bodyLarge?.copyWith(
-        fontSize: 18.0,
+        fontSize: isWideScreen ? 17.0 : 16.0,
+        height: 1.6,
       ),
+      customStylesBuilder: (element) => buildHtmlStyles(context, element),
     );
   }
 }

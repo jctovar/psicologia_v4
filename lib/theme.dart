@@ -83,19 +83,27 @@ const Color _seedColor = Color(0xFFd81b60);
 
 // Colores secundarios armoniosos para complementar el rosa principal
 const Color _secondaryColor = Color(0xFF7B1FA2); // Púrpura profundo
-const Color _tertiaryColor = Color(0xFF00897B);   // Verde azulado (teal)
+const Color _tertiaryColor = Color(0xFF00897B); // Verde azulado (teal)
 
 // WCAG AA compliant colors for better accessibility
 // Light theme colors (on #FDF8F8 background)
-const Color _lightBodyText = Color(0xFF212121);      // Contrast ratio: 15.8:1 (AAA)
-const Color _lightBodySecondary = Color(0xFF424242); // Contrast ratio: 11.9:1 (AAA)
-const Color _lightBodyTertiary = Color(0xFF616161);  // Contrast ratio: 7.3:1 (AAA) - safe with alpha 0.85+
+const Color _lightBodyText = Color(0xFF212121); // Contrast ratio: 15.8:1 (AAA)
+const Color _lightBodySecondary = Color(
+  0xFF424242,
+); // Contrast ratio: 11.9:1 (AAA)
+const Color _lightBodyTertiary = Color(
+  0xFF616161,
+); // Contrast ratio: 7.3:1 (AAA) - safe with alpha 0.85+
 
 // Dark theme colors (on #121212 background)
-const Color _darkTitleText = Color(0xFFF48FB1);      // Rosa claro para títulos en tema oscuro
-const Color _darkBodyText = Color(0xFFE8E8E8);       // Contrast ratio: 13.7:1 (AAA)
-const Color _darkBodySecondary = Color(0xFFBDBDBD);  // Contrast ratio: 9.4:1 (AAA)
-const Color _darkBodyTertiary = Color(0xFFA0A0A0);   // Contrast ratio: 6.8:1 (AA)
+const Color _darkTitleText = Color(
+  0xFFF48FB1,
+); // Rosa claro para títulos en tema oscuro
+const Color _darkBodyText = Color(0xFFE8E8E8); // Contrast ratio: 13.7:1 (AAA)
+const Color _darkBodySecondary = Color(
+  0xFFBDBDBD,
+); // Contrast ratio: 9.4:1 (AAA)
+const Color _darkBodyTertiary = Color(0xFFA0A0A0); // Contrast ratio: 6.8:1 (AA)
 
 /// Tema claro de la aplicación con cumplimiento WCAG AA
 ThemeData get iztacalaTheme => _buildTheme(Brightness.light);
@@ -133,7 +141,9 @@ ThemeData _buildTheme(Brightness brightness) {
       // Colores adicionales para mejor coherencia visual
       error: isDark ? const Color(0xFFCF6679) : const Color(0xFFB00020),
       surface: isDark ? const Color(0xFF1E1E1E) : Colors.white,
-      surfaceContainerHighest: isDark ? const Color(0xFF2C2C2C) : const Color(0xFFF5F5F5),
+      surfaceContainerHighest: isDark
+          ? const Color(0xFF2C2C2C)
+          : const Color(0xFFF5F5F5),
     ),
 
     // TextTheme completo y optimizado con jerarquía tipográfica clara
@@ -223,21 +233,21 @@ ThemeData _buildTheme(Brightness brightness) {
       // ═══════════════════════════════════════════════════════════════
       bodyLarge: AppFonts.montserrat(
         fontSize: 16,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w500,
         letterSpacing: 0.5,
         height: 1.5, // 24px line height - óptimo para párrafos
         color: isDark ? _darkBodyText : _lightBodyText,
       ),
       bodyMedium: AppFonts.montserrat(
         fontSize: 14,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w500,
         letterSpacing: 0.25,
         height: 1.43, // 20px line height
         color: isDark ? _darkBodySecondary : _lightBodySecondary,
       ),
       bodySmall: AppFonts.montserrat(
         fontSize: 12,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w500,
         letterSpacing: 0.4,
         height: 1.33, // 16px line height
         color: isDark ? _darkBodyTertiary : _lightBodyTertiary,
@@ -288,7 +298,9 @@ ThemeData _buildTheme(Brightness brightness) {
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
         backgroundColor: _seedColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
         textStyle: AppFonts.montserrat(
           fontSize: 14,
@@ -302,7 +314,9 @@ ThemeData _buildTheme(Brightness brightness) {
 
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
         textStyle: AppFonts.montserrat(
           fontSize: 14,
@@ -314,7 +328,9 @@ ThemeData _buildTheme(Brightness brightness) {
 
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
         textStyle: AppFonts.montserrat(
           fontSize: 14,
@@ -364,7 +380,9 @@ ThemeData _buildTheme(Brightness brightness) {
     ),
 
     chipTheme: ChipThemeData(
-      backgroundColor: isDark ? const Color(0xFF2C2C2C) : const Color(0xFFF5F5F5),
+      backgroundColor: isDark
+          ? const Color(0xFF2C2C2C)
+          : const Color(0xFFF5F5F5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       labelStyle: AppFonts.montserrat(
         fontSize: 13,

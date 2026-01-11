@@ -358,6 +358,7 @@ AppLogger.f('Error fatal', exception, stackTrace);  // Fatal
 | `provider` | Gestion de estado |
 | `dio` | Cliente HTTP |
 | `dio_cache_interceptor` | Cache de peticiones HTTP |
+| `http_cache_hive_store` | Almacenamiento de cache HTTP con Hive |
 | `hive_flutter` | Base de datos local para cache |
 | `localstore` | Persistencia de marcadores |
 | `firebase_messaging` | Notificaciones push |

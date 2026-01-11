@@ -9,7 +9,7 @@ Esta es una aplicacion movil Flutter para la carrera de Psicologia del sistema S
 | Atributo | Valor |
 |----------|-------|
 | Nombre del paquete | `suayed` |
-| Version | 0.8.120+20251014 |
+| Version | 0.9.30+20260110 |
 | Flutter SDK | ^3.9.2 |
 | Color principal | #d81b60 |
 | API Base | https://suayed.iztacala.unam.mx/ |
@@ -139,6 +139,58 @@ La aplicacion sigue una separacion limpia entre llamadas API y logica de negocio
 - Timeout de recepcion: 3 segundos
 - Politica de cache: 7 dias max stale con HiveCacheStore
 - Interceptores: DioCacheInterceptor + LoggingInterceptor
+- Store de cache: HiveCacheStore (almacenamiento persistente)
+
+#### Servicio de Analytics Centralizado
+
+El archivo `lib/utils/analytics.dart` proporciona un servicio centralizado para rastrear eventos y navegación con Firebase Analytics.
+
+**Eventos disponibles:**
+
+```dart
+// Rastrear evento personalizado
+await Analytics.logEvent(
+  name: 'nombre_evento',
+  parameters: {'parametro1': 'valor1'},
+);
+
+// Rastrear navegación (automático con observer en routes)
+await Analytics.logScreenView(
+  screenName: 'mi_pantalla',
+  screenClass: 'MiScreen',
+);
+
+// Rastrear búsqueda
+await Analytics.logSearch(searchTerm: 'termino_busqueda');
+
+// Rastrear visualización de contenido
+await Analytics.logViewContent(
+  contentType: 'post',
+  itemId: '12345',
+  parameters: {'titulo': 'Mi Post'},
+);
+
+// Rastrear bookmark
+await Analytics.logBookmarkAdded(postId: '12345');
+
+// Rastrear notificación abierta
+await Analytics.logNotificationOpened(notificationId: 'push123');
+
+// Rastrear compartir
+await Analytics.logShare(
+  contentType: 'post',
+  itemId: '12345',
+);
+
+// Rastrear error
+await Analytics.logAppError(
+  errorType: 'network_error',
+  errorMessage: 'No se pudo conectar al servidor',
+);
+```
+
+**Integración con Navigator:**
+El `Analytics.observer` se registra automáticamente en `main.dart` para rastrear navegación automáticamente.
 
 ### Modelos de Datos
 
@@ -177,31 +229,31 @@ Las rutas estan centralizadas en lib/routes/routes.dart:
 
 ### Sistema Tipográfico
 
-La aplicación usa un sistema tipográfico optimizado con dos fuentes complementarias:
+La aplicación usa un sistema tipográfico optimizado con dos fuentes complementarias precargadas al inicio:
 
 **Fuentes:**
-- **Poppins**: Títulos grandes y destacados (Display, Headline)
-- **Montserrat**: Cuerpo de texto y UI general (Title, Body, Label)
+- **Poppins**: Títulos grandes y destacados (Display, Headline). Moderna y con personalidad académica.
+- **Montserrat**: Cuerpo de texto y UI general (Title, Body, Label). Excelente legibilidad en pantallas digitales.
 
-**Jerarquía Material Design 3:**
+**Jerarquía Material Design 3 con cumplimiento WCAG AAA:**
 
-| Estilo | Tamaño | Fuente | Uso |
-|--------|--------|--------|-----|
-| displayLarge | 57px | Poppins Bold | Pantallas de bienvenida |
-| displayMedium | 45px | Poppins Bold | Títulos hero |
-| displaySmall | 36px | Poppins SemiBold | Títulos grandes |
-| headlineLarge | 32px | Poppins SemiBold | Encabezados de página |
-| headlineMedium | 28px | Poppins SemiBold | Encabezados de sección |
-| headlineSmall | 24px | Poppins SemiBold | Subtítulos principales |
-| titleLarge | 22px | Montserrat Bold | Títulos de diálogos |
-| titleMedium | 16px | Montserrat SemiBold | Títulos de tarjetas (más usado) |
-| titleSmall | 14px | Montserrat SemiBold | Subtítulos |
-| bodyLarge | 16px | Montserrat Regular | Párrafos (recomendado) |
-| bodyMedium | 14px | Montserrat Regular | Texto secundario |
-| bodySmall | 12px | Montserrat Regular | Metadatos, fechas |
-| labelLarge | 14px | Montserrat SemiBold | Botones grandes |
-| labelMedium | 12px | Montserrat SemiBold | Chips, tabs |
-| labelSmall | 11px | Montserrat Medium | Badges |
+| Estilo | Tamaño | Fuente | Altura | Uso |
+|--------|--------|--------|--------|-----|
+| displayLarge | 57px | Poppins Bold | 1.12 | Pantallas de bienvenida |
+| displayMedium | 45px | Poppins Bold | 1.16 | Títulos hero |
+| displaySmall | 36px | Poppins SemiBold | 1.22 | Títulos grandes |
+| headlineLarge | 32px | Poppins SemiBold | 1.25 | Encabezados de página |
+| headlineMedium | 28px | Poppins SemiBold | 1.29 | Encabezados de sección |
+| headlineSmall | 24px | Poppins SemiBold | 1.33 | Subtítulos principales |
+| titleLarge | 22px | Montserrat Bold | 1.27 | Títulos de diálogos |
+| titleMedium | 16px | Montserrat SemiBold | 1.5 | Títulos de tarjetas (más usado) |
+| titleSmall | 14px | Montserrat SemiBold | 1.43 | Subtítulos |
+| bodyLarge | 16px | Montserrat Regular | 1.5 | Párrafos (recomendado) |
+| bodyMedium | 14px | Montserrat Regular | 1.43 | Texto secundario |
+| bodySmall | 12px | Montserrat Regular | 1.33 | Metadatos, fechas |
+| labelLarge | 14px | Montserrat SemiBold | 1.43 | Botones grandes |
+| labelMedium | 12px | Montserrat SemiBold | 1.33 | Chips, tabs |
+| labelSmall | 11px | Montserrat Medium | 1.45 | Badges |
 
 **Uso correcto de tipografía:**
 
@@ -219,13 +271,18 @@ Text(
 Text('Título', style: GoogleFonts.montserrat(fontSize: 16))
 ```
 
-**Características de legibilidad:**
-- Line height optimizado: 1.12-1.5 según el estilo
-- Letter spacing ajustado: -0.25 a 0.5 según tamaño
-- Colores con contraste WCAG AAA
-- Respeta preferencias de accesibilidad del sistema
+**Características de accesibilidad y legibilidad:**
+- Line height optimizado: 1.12-1.5 según el estilo para óptima legibilidad
+- Letter spacing ajustado: -0.25 a 0.5 según tamaño de fuente
+- Colores con contraste WCAG AAA (ratio ≥ 7:1) para todos los textos principales
+- Colores WCAG AA (ratio ≥ 4.5:1) para texto secundario
+- Respeta preferencias de accesibilidad del sistema (large fonts, high contrast)
+- Temas claro y oscuro con colores específicamente calibrados para ambos modos
 
-Ver `lib/theme_typography_guide.md` para documentación completa.
+**Paleta de colores WCAG AA/AAA:**
+- Tema claro: Textos oscuros (#212121, #424242, #616161) sobre fondo claro (#FDF8F8)
+- Tema oscuro: Textos claros (#E8E8E8, #BDBDBD) sobre fondo oscuro (#121212, #1E1E1E)
+- Rosa rosa principal (#d81b60) para títulos con contraste óptimo en ambos temas
 
 ---
 
@@ -353,21 +410,24 @@ AppLogger.f('Error fatal', exception, stackTrace);  // Fatal
 
 ## Dependencias Clave
 
-| Paquete | Uso |
-|---------|-----|
-| `provider` | Gestion de estado |
-| `dio` | Cliente HTTP |
-| `dio_cache_interceptor` | Cache de peticiones HTTP |
-| `http_cache_hive_store` | Almacenamiento de cache HTTP con Hive |
-| `hive_flutter` | Base de datos local para cache |
-| `localstore` | Persistencia de marcadores |
-| `firebase_messaging` | Notificaciones push |
-| `firebase_analytics` | Analiticas |
-| `firebase_crashlytics` | Reporte de errores |
-| `flutter_widget_from_html_core` | Renderizar HTML de WordPress |
-| `cached_network_image` | Cache y display de imagenes |
-| `google_fonts` | Fuente Montserrat |
-| `shimmer` | Efecto de carga |
+| Paquete | Version | Uso |
+|---------|---------|-----|
+| `provider` | ^6.1.2 | Gestion de estado con ChangeNotifier |
+| `dio` | ^5.9.0 | Cliente HTTP con interceptores |
+| `dio_cache_interceptor` | ^4.0.5 | Cache inteligente de peticiones HTTP |
+| `http_cache_hive_store` | ^5.0.1 | Almacenamiento persistente de cache con Hive |
+| `hive_flutter` | ^1.1.0 | Base de datos NoSQL local para cache y datos |
+| `localstore` | ^1.3.1 | Persistencia JSON para marcadores |
+| `firebase_core` | ^4.2.0 | Core de Firebase (requerido por otros servicios) |
+| `firebase_messaging` | ^16.0.3 | Notificaciones push FCM |
+| `firebase_analytics` | ^12.0.3 | Analiticas de eventos y navegación |
+| `firebase_crashlytics` | ^5.0.6 | Reporte y monitoreo de errores |
+| `flutter_widget_from_html_core` | ^0.17.0 | Renderizar HTML/CSS de WordPress API |
+| `cached_network_image` | ^3.1.0 | Cache y display optimizado de imagenes |
+| `google_fonts` | ^7.0.0 | Fuentes Poppins y Montserrat precargadas |
+| `shimmer` | ^3.0.0 | Efecto shimmer para placeholders de carga |
+| `share_plus` | ^12.0.0 | Compartir contenido via sistema nativo |
+| `url_launcher` | ^6.3.2 | Abrir URLs, emails y llamadas |
 
 ---
 
@@ -472,14 +532,46 @@ if (provider.errorMessage != null) {
 
 ## Notas Importantes
 
+### Configuración
+
 - **API base URL**: Definida en Constants.uriHttp (lib/utils/app_constants.dart)
-- **Mensajes de error**: Todos en espanol (es-MX)
-- **Placeholder de imagen**: assets/images/no_image.jpg
-- **Color principal**: #d81b60 (rosa institucional)
-- **Fuentes**: Poppins (títulos) + Montserrat (cuerpo) - precargadas al inicio
-- **Temas**: Soporte claro/oscuro con cumplimiento WCAG AA/AAA
-- **Cache HTTP**: 7 dias con HiveCacheStore
+- **Color principal**: #d81b60 (rosa institucional UNAM FES Iztacala)
+- **Colores secundarios**: Púrpura #7B1FA2, Verde azulado #00897B
+
+### Internacionalización y Mensajes
+
+- **Idioma**: Español (es-MX) para todos los mensajes de usuario y error
+- **Todos los mensajes de error**: Deben estar en español con contexto útil para el usuario
+- **Ejemplo correcto**: "No se pudo conectar al servidor. Revisa tu conexión a internet."
+
+### Tipografía y Accesibilidad
+
+- **Fuentes**: Poppins (títulos) + Montserrat (cuerpo) - precargadas al inicio de la app
+- **Precarga**: AppFonts.preloadFonts() se llama en main.dart para mejor rendimiento offline
+- **Temas**: Soporte claro/oscuro con transiciones suaves (300ms) y cumplimiento WCAG AA/AAA
+- **Animaciones tema**: Las transiciones de tema usan Curves.easeInOut para mejor UX
+
+### Caché y Persistencia
+
+- **Cache HTTP**: Almacenamiento persistente con HiveCacheStore (7 días max-stale)
+- **Interceptadores**: DioCacheInterceptor + LoggingInterceptor en Dio
+- **Persistencia de marcadores**: localstore (JSON) via BookmarkProvider + LocalService
+- **Base de datos Hive**: Usada para cache HTTP y datos locales persistentes
+
+### Rendimiento
+
 - **Limite de posts en memoria**: 200 (para prevenir memory leaks)
+- **Placeholder de imagen**: assets/images/no_image.jpg
+- **Lazy loading**: Implementado en listas con paginación
+- **Precarga de assets**: Fuentes se precargan al iniciar la app
+
+### Analytics y Monitoreo
+
+- **Firebase Analytics**: Integrado via `Analytics` class (lib/utils/analytics.dart)
+- **Navegación automática**: Rastreada via `Analytics.observer` en routes
+- **Eventos personalizados**: Disponibles para bookmarks, búsquedas, compartir, etc.
+- **Crashlytics**: Integrado para monitoreo de errores en producción
+- **Logging**: Centralizado con AppLogger (debug, info, warning, error, fatal)
 
 ---
 
@@ -574,22 +666,48 @@ PostCard ────► onBookmark()
 
 ## Inicializacion de la App
 
-El flujo de inicializacion en `main.dart`:
+El flujo de inicializacion en `main.dart` con manejo de errores asincronos:
 
 ```dart
 main()
   │
-  ├─► runZonedGuarded()        // Captura errores asincronos
+  ├─► runZonedGuarded(() async {
+  │     │
+  │     ├─► Hive.initFlutter()
+  │     │   └─ Inicializa base de datos local para cache persistente
+  │     │
+  │     ├─► initHttpService()
+  │     │   ├─ Crea HiveCacheStore para cache persistente
+  │     │   ├─ Configura CacheOptions (7 días max-stale)
+  │     │   ├─ Inicializa Dio con base URL y timeouts
+  │     │   └─ Añade interceptadores: DioCacheInterceptor + LoggingInterceptor
+  │     │
+  │     ├─► AppFonts.preloadFonts()
+  │     │   ├─ Precarga Poppins con pesos: 400, 500, 600, 700, 800
+  │     │   └─ Precarga Montserrat con pesos: 400, 500, 600, 700, 800
+  │     │
+  │     ├─► FirebaseService.initialize()
+  │     │   ├─ Firebase.initializeApp() con configuración automática
+  │     │   ├─ Firebase Analytics: logEvent, logScreenView, etc.
+  │     │   └─ Firebase Messaging: FCM para notificaciones push
+  │     │
+  │     ├─► CrashlyticsService.initialize()
+  │     │   ├─ Crashlytics.instance.recordFlutterError()
+  │     │   └─ Captura excepciones no manejadas
+  │     │
+  │     └─► runApp(AppState())
+  │         └─ MultiProvider con: ThemeProvider, HomeProvider,
+  │            BookmarkProvider, NotificationProvider
   │
-  ├─► Hive.initFlutter()       // Inicializa Hive para cache
-  │
-  ├─► initHttpService()        // Configura Dio con cache persistente
-  │
-  ├─► AppFonts.preloadFonts()  // Precarga Poppins + Montserrat
-  │
-  ├─► FirebaseService.initialize()  // Firebase Core + Analytics + FCM
-  │
-  ├─► CrashlyticsService.initialize()  // Crashlytics
-  │
-  └─► runApp(AppState())       // Inicia la app con MultiProvider
+  └─► Manejo de errores asincronos con AppLogger.f()
 ```
+
+**Configuración de caché HTTP:**
+- **Política**: Request-based con max-stale de 7 días
+- **Store**: HiveCacheStore (persistente en disco)
+- **Cifrado**: Deshabilitado (permitir datos sin cifrar)
+- **POST**: No cachear (solo GET)
+- **Priority**: Normal
+
+**Captura de errores asincronos:**
+Los errores que ocurren fuera de runApp() son capturados y registrados con `AppLogger.f()` para debugging en Crashlytics.

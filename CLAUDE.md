@@ -4,7 +4,7 @@ Este archivo proporciona orientacion a Claude Code (claude.ai/code) cuando traba
 
 ## Resumen del Proyecto
 
-Esta es una aplicacion movil Flutter para la carrera de Psicologia del sistema SUAyED de la UNAM FES Iztacala. Proporciona noticias, eventos, areas de conocimiento, informacion de profesores, marcadores y notificaciones push a los estudiantes.
+Esta es una aplicacion movil Flutter para la carrera de Psicologia del sistema SUAyED de la UNAM FES Iztacala. Proporciona noticias, eventos, calendario escolar, areas de conocimiento, informacion de profesores, marcadores y notificaciones push a los estudiantes.
 
 | Atributo | Valor |
 |----------|-------|
@@ -127,6 +127,7 @@ La aplicacion sigue una separacion limpia entre llamadas API y logica de negocio
 |----------|---------|-----------------|
 | `HttpProvider` | lib/services/posts_service.dart | Obtener posts con paginacion |
 | `HttpService` | lib/services/http_service.dart | Configuracion de Dio con cache |
+| `CalendarioService` | lib/services/calendario_service.dart | Obtener calendario escolar desde JSON externo |
 | `SuayedServices` | lib/services/suayed_service.dart | Operaciones de API de alto nivel (legacy) |
 | `FirebaseService` | lib/services/firebase_service.dart | Inicializacion de Firebase y analytics |
 | `CrashlyticsService` | lib/services/crashlytics_service.dart | Reporte de errores |
@@ -140,6 +141,9 @@ La aplicacion sigue una separacion limpia entre llamadas API y logica de negocio
 - Politica de cache: 7 dias max stale con HiveCacheStore
 - Interceptores: DioCacheInterceptor + LoggingInterceptor
 - Store de cache: HiveCacheStore (almacenamiento persistente)
+
+**URLs externas adicionales:**
+- Calendario escolar JSON: `https://jctovar.github.io/calendario.json` (CalendarioService)
 
 #### Servicio de Analytics Centralizado
 
@@ -203,6 +207,12 @@ Ubicados en lib/models/:
 | `AreaModel` | area_model.dart | Informacion de areas de conocimiento |
 | `TeacherModel` | teacher_model.dart | Informacion de profesores |
 | `NotificationModel` | notification_model.dart | Notificaciones push |
+| `CalendarioModel` | calendario_model.dart | Modelo raiz del calendario escolar con periodos y dias inhabiles |
+| `ContactoModel` | calendario_model.dart | Informacion de contacto institucional |
+| `PeriodoModel` | calendario_model.dart | Semestre academico con eventos |
+| `EventoModel` | calendario_model.dart | Evento del calendario con fechas y descripcion |
+| `PeriodoFechaModel` | calendario_model.dart | Sub-periodos anidados en eventos |
+| `DiaInhabilModel` | calendario_model.dart | Dias inhabiles y vacaciones |
 
 ### Navegacion
 
@@ -213,6 +223,7 @@ Las rutas estan centralizadas en lib/routes/routes.dart:
 | `/` | HomeScreen | Pantalla principal con noticias |
 | `/teachers` | TeachersPage | Lista de profesores |
 | `/areas` | AreasPage | Areas de conocimiento |
+| `/calendario` | CalendarioScreen | Calendario escolar con eventos y periodos academicos |
 | `/bookmarks` | BookmarksScreen | Marcadores guardados |
 | `/notifications` | NotificationsScreen | Historial de notificaciones |
 | `/privacy` | PrivacyNotice | Aviso de privacidad |
@@ -428,6 +439,7 @@ AppLogger.f('Error fatal', exception, stackTrace);  // Fatal
 | `shimmer` | ^3.0.0 | Efecto shimmer para placeholders de carga |
 | `share_plus` | ^12.0.0 | Compartir contenido via sistema nativo |
 | `url_launcher` | ^6.3.2 | Abrir URLs, emails y llamadas |
+| `intl` | ^0.19.0 | Formateo de fechas y números en español |
 
 ---
 
@@ -513,6 +525,108 @@ catch (e) {
 if (provider.errorMessage != null) {
   return EmptyState(message: provider.errorMessage!);
 }
+```
+
+### Calendario Escolar
+
+El calendario escolar se obtiene desde un JSON externo hospedado en GitHub Pages. La pantalla incluye búsqueda, filtros y funcionalidad offline con cache.
+
+**Servicio CalendarioService:**
+
+```dart
+// Obtener calendario desde URL externa con cache
+CalendarioModel calendario = await CalendarioService.getCalendario();
+
+// Forzar actualización ignorando cache
+CalendarioModel calendario = await CalendarioService.getCalendario(forceRefresh: true);
+```
+
+**URL del JSON:** `https://jctovar.github.io/calendario.json`
+
+**Características:**
+- Cache HTTP persistente (7 días max-stale con HiveCacheStore)
+- Funciona offline mientras cache sea válido
+- Pull-to-refresh para actualización manual
+- Búsqueda por nombre y descripción de eventos
+- Filtrado por tipo: Vacaciones, Exámenes, Inscripción, Calificaciones, Administrativo
+- ExpansionTile agrupado por semestre
+- Diálogo de detalles con información completa del evento
+- Soporte para URLs externas (convocatorias, formularios)
+- Analytics integrado para rastrear vistas y filtros
+
+**Estructura de datos:**
+
+```dart
+CalendarioModel
+  ├─ institucion: String
+  ├─ modalidad: String
+  ├─ nivel: String
+  ├─ contacto: ContactoModel
+  │    ├─ departamento: String
+  │    ├─ telefono: String
+  │    ├─ email: String
+  │    └─ sitioWeb: String
+  ├─ periodos: List<PeriodoModel>
+  │    ├─ nombre: String (ej: "2025-1")
+  │    ├─ tipo: String (ej: "Semestre")
+  │    ├─ fechaInicio: String
+  │    ├─ fechaFin: String
+  │    └─ eventos: List<EventoModel>
+  │         ├─ nombre: String
+  │         ├─ tipo: String (Vacaciones, Examenes, Inscripcion, Calificaciones, Administrativo)
+  │         ├─ fechaInicio: String? (opcional)
+  │         ├─ fechaFin: String? (opcional)
+  │         ├─ descripcion: String? (opcional)
+  │         ├─ url: String? (opcional)
+  │         └─ periodos: List<PeriodoFechaModel>? (opcional, sub-periodos anidados)
+  └─ diasInhabiles: List<DiaInhabilModel>
+       ├─ fecha: String
+       ├─ motivo: String
+       └─ tipo: String
+```
+
+**Iconos por tipo de evento:**
+
+| Tipo | Icono | LineIcons |
+|------|-------|-----------|
+| Vacaciones | LineIcons.umbrellaAlt | umbrella |
+| Exámenes | LineIcons.fileAlt | file |
+| Inscripción | LineIcons.userPlus | user-plus |
+| Calificaciones | LineIcons.tasks | tasks |
+| Administrativo | LineIcons.cog | cog |
+| Default | LineIcons.calendarAlt | calendar |
+
+**Ejemplo de uso en pantalla:**
+
+```dart
+// La pantalla no requiere provider, maneja estado localmente con StatefulWidget
+class CalendarioScreen extends StatefulWidget {
+  static const String routeName = 'calendario';
+
+  @override
+  _CalendarioScreenState createState() => _CalendarioScreenState();
+}
+
+// Formato de fechas en español
+String formatearFecha(String fecha) {
+  DateTime dt = DateTime.parse(fecha);
+  return DateFormat('d \'de\' MMMM \'de\' y', 'es').format(dt);
+}
+```
+
+**Analytics:**
+```dart
+// Rastrear vista de calendario
+Analytics.logScreenView(
+  screenName: 'calendario',
+  screenClass: 'CalendarioScreen',
+);
+
+// Rastrear uso de filtros
+Analytics.logEvent(
+  name: 'calendario_filtro_aplicado',
+  parameters: {'tipo_filtro': 'Examenes'},
+);
 ```
 
 ---
@@ -660,6 +774,44 @@ PostCard ────► onBookmark()
                    │
                    ▼
           UI actualiza icono
+```
+
+### Flujo de Carga del Calendario Escolar
+
+```
+CalendarioScreen.initState()
+       │
+       ▼
+_cargarCalendario()
+       │
+       ▼
+CalendarioService.getCalendario()
+       │
+       ▼
+dio.get(URL_EXTERNA) ─────► DioCacheInterceptor
+       │                           │
+       │                     ┌─────┴─────┐
+       │                     │           │
+       │                Cache Hit   Cache Miss
+       │                     │           │
+       │                     ▼           ▼
+       │                Retorna      HTTP GET
+       │                Cache       (GitHub Pages)
+       │                     │           │
+       │                     │           ▼
+       │                     │      Guarda en
+       │                     │        Hive
+       │                     │           │
+       └─────────────────────┴───────────┘
+                             │
+                             ▼
+                  CalendarioModel.fromJson()
+                             │
+                             ▼
+                  setState() con calendario
+                             │
+                             ▼
+                  UI se reconstruye con ExpansionTiles
 ```
 
 ---

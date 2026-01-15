@@ -38,7 +38,7 @@
 
 ## Descripción General
 
-Esta aplicación está diseñada para mantener informados a los estudiantes de la carrera de Psicología del sistema SUAyED FES Iztacala. Proporciona acceso a noticias, eventos, información de profesores, áreas de conocimiento y permite guardar publicaciones importantes para consultarlas posteriormente.
+Esta aplicación está diseñada para mantener informados a los estudiantes de la carrera de Psicología del sistema SUAyED FES Iztacala. Proporciona acceso a noticias, eventos, calendario escolar con fechas importantes, información de profesores, áreas de conocimiento y permite guardar publicaciones importantes para consultarlas posteriormente.
 
 La aplicación implementa una arquitectura moderna con gestión de estado mediante Provider, sistema de caché inteligente, soporte para temas claro/oscuro con cumplimiento WCAG AA/AAA, y servicios de Firebase para notificaciones push, analíticas y monitoreo de errores.
 
@@ -73,6 +73,11 @@ La aplicación implementa una arquitectura moderna con gestión de estado median
 | ![Detalle](docs/screenshots/detail.png) | ![Marcadores](docs/screenshots/ookmarks.png) | ![Menú](docs/screenshots/drawer.png) |
 | Contenido HTML renderizado | Posts guardados para después | Navegación principal |
 
+| Calendario Escolar |
+|:------------------:|
+| ![Calendario](docs/screenshots/calendario.png) |
+| Eventos y fechas importantes del semestre |
+
 </div>
 
 ---
@@ -86,6 +91,15 @@ La aplicación implementa una arquitectura moderna con gestión de estado median
   - Sistema de paginación para carga eficiente
   - Caché inteligente con persistencia de 7 días
   - Renderizado completo de contenido HTML/CSS desde WordPress
+
+- **📅 Calendario Escolar**
+  - Consulta eventos académicos organizados por semestre
+  - Fechas importantes: inscripciones, exámenes, vacaciones
+  - Búsqueda y filtrado por tipo de evento
+  - Cache inteligente con funcionamiento offline (7 días)
+  - Actualización manual con pull-to-refresh
+  - Soporte para URLs externas (convocatorias, formularios)
+  - Días inhábiles destacados
 
 - **📚 Áreas de Conocimiento**
   - Explora las diferentes áreas de la psicología disponibles en el plan de estudios
@@ -354,7 +368,8 @@ psicologia_v4/
 │   │   ├── storage_post_model.dart # Modelo para almacenamiento local
 │   │   ├── area_model.dart       # Modelo para áreas de conocimiento
 │   │   ├── teacher_model.dart    # Modelo para profesores
-│   │   └── notification_model.dart # Modelo para notificaciones
+│   │   ├── notification_model.dart # Modelo para notificaciones
+│   │   └── calendario_model.dart # Modelos para calendario escolar
 │   │
 │   ├── providers/                # Gestión de estado (Provider)
 │   │   ├── home_provider.dart    # Estado de la pantalla principal
@@ -366,6 +381,7 @@ psicologia_v4/
 │   │   ├── http_service.dart     # Cliente HTTP con caché (Dio)
 │   │   ├── posts_service.dart    # Servicio de posts con paginación
 │   │   ├── suayed_service.dart   # Operaciones de API de alto nivel
+│   │   ├── calendario_service.dart # Servicio de calendario escolar
 │   │   ├── local_service.dart    # Almacenamiento local
 │   │   ├── firebase_service.dart # Inicialización de Firebase
 │   │   ├── crashlytics_service.dart # Reporte de errores
@@ -378,6 +394,7 @@ psicologia_v4/
 │   │   ├── teacher_detail.dart   # Detalle de profesor
 │   │   ├── areas_screen.dart     # Áreas de conocimiento
 │   │   ├── area_detail.dart      # Detalle de área
+│   │   ├── calendario_screen.dart # Pantalla de calendario escolar
 │   │   ├── bookmarks_screen.dart # Marcadores guardados
 │   │   ├── notifications_screen.dart # Pantalla de notificaciones
 │   │   ├── about_screen.dart     # Acerca de la app
@@ -977,7 +994,7 @@ Para reportar problemas, bugs o sugerencias:
 
 #### Versión 0.10.0 (Q1 2026)
 - [ ] Enlaces a sitios de importancia para los alumnos
-- [ ] Calendario escolar interactivo
+- [x] Calendario escolar interactivo
 - [ ] Pantalla de notificaciones mejorada con categorías
 - [ ] Sistema de búsqueda avanzada
 

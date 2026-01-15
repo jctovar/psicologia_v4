@@ -73,6 +73,12 @@ class _AppDrawerState extends State<AppDrawer> {
             text: 'Coordinación',
             onTap: () => Navigator.pushReplacementNamed(context, Routes.areas),
           ),
+          _createDrawerItem(
+            icon: LineIcons.calendarWithDayFocus,
+            text: 'Calendario Escolar',
+            onTap: () =>
+                Navigator.pushReplacementNamed(context, Routes.calendario),
+          ),
 
           // Separador visual
           const Divider(),
@@ -342,6 +348,8 @@ class _AppDrawerState extends State<AppDrawer> {
         return Routes.teachers;
       case 'Coordinación':
         return Routes.areas;
+      case 'Calendario Escolar':
+        return Routes.calendario;
       case 'Marcadores':
         return Routes.bookmarks;
       case 'Notificaciones':

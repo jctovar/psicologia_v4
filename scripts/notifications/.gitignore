@@ -1,0 +1,18 @@
+# Archivos de configuración con credenciales
+*.key
+*.token
+config.sh
+config.json
+credentials.json
+
+# Logs de pruebas
+*.log
+test_results.log
+
+# Configuraciones personalizadas
+.env
+.env.local
+
+# Archivos temporales
+*.tmp
+*.bak

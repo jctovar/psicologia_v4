@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:suayed/services/logger_service.dart';
 
 /// Modelo raíz del calendario escolar.
 ///
@@ -54,10 +55,8 @@ class CalendarioModel {
             : [],
       );
     } catch (e, stackTrace) {
-      // Log detallado del error
-      print('Error parsing CalendarioModel: $e');
-      print('JSON keys: ${json.keys}');
-      print('Stack trace: $stackTrace');
+      AppLogger.e('Error parsing CalendarioModel', e, stackTrace);
+      AppLogger.d('JSON keys: ${json.keys}');
       rethrow;
     }
   }
@@ -98,9 +97,9 @@ class ContactoModel {
         email: json['email']?.toString() ?? '',
         sitioWeb: json['sitioWeb']?.toString() ?? '',
       );
-    } catch (e) {
-      print('Error parsing ContactoModel: $e');
-      print('JSON: $json');
+    } catch (e, stackTrace) {
+      AppLogger.e('Error parsing ContactoModel', e, stackTrace);
+      AppLogger.d('JSON: $json');
       rethrow;
     }
   }
@@ -152,9 +151,9 @@ class PeriodoModel {
                 .toList()
             : [],
       );
-    } catch (e) {
-      print('Error parsing PeriodoModel: $e');
-      print('JSON: $json');
+    } catch (e, stackTrace) {
+      AppLogger.e('Error parsing PeriodoModel', e, stackTrace);
+      AppLogger.d('JSON: $json');
       rethrow;
     }
   }
@@ -272,10 +271,9 @@ class EventoModel {
                 : null)
             : null,
       );
-    } catch (e) {
-      print('Error parsing EventoModel: $e');
-      print('JSON nombre: ${json['nombre']}');
-      print('JSON tipo: ${json['tipo']}');
+    } catch (e, stackTrace) {
+      AppLogger.e('Error parsing EventoModel', e, stackTrace);
+      AppLogger.d('JSON nombre: ${json['nombre']}, tipo: ${json['tipo']}');
       rethrow;
     }
   }
@@ -372,9 +370,9 @@ class PeriodoFechaModel {
         fechaFin: json['fechaFin']?.toString() ?? '',
         descripcion: json['descripcion']?.toString(),
       );
-    } catch (e) {
-      print('Error parsing PeriodoFechaModel: $e');
-      print('JSON: $json');
+    } catch (e, stackTrace) {
+      AppLogger.e('Error parsing PeriodoFechaModel', e, stackTrace);
+      AppLogger.d('JSON: $json');
       rethrow;
     }
   }
@@ -433,9 +431,9 @@ class DiaInhabilModel {
         semestre: json['semestre']?.toString() ?? '',
         descripcion: json['descripcion']?.toString(),
       );
-    } catch (e) {
-      print('Error parsing DiaInhabilModel: $e');
-      print('JSON: $json');
+    } catch (e, stackTrace) {
+      AppLogger.e('Error parsing DiaInhabilModel', e, stackTrace);
+      AppLogger.d('JSON: $json');
       rethrow;
     }
   }

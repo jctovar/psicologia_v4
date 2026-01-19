@@ -1,0 +1,165 @@
+# ========================================
+# Archivos Sensibles - NUNCA COMMITEAR
+# ========================================
+
+# Credenciales de Firebase Service Account
+service-account.json
+service-account-*.json
+*-service-account.json
+firebase-adminsdk-*.json
+
+# Variables de entorno con tokens y configuración sensible
+.env
+.env.local
+.env.*.local
+
+# Claves y secretos
+*.key
+*.pem
+*.p12
+secrets.json
+credentials.json
+
+# ========================================
+# Entorno Virtual Python
+# ========================================
+
+# UV
+.venv/
+venv/
+uv.lock
+
+# Virtualenv genérico
+env/
+ENV/
+.python-version
+
+# ========================================
+# Archivos Generados Python
+# ========================================
+
+# Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ========================================
+# Logs y Debugging
+# ========================================
+
+# Logs del script
+notification.log
+*.log
+logs/
+
+# pytest cache
+.pytest_cache/
+.cache/
+
+# Coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+
+# ========================================
+# IDEs y Editores
+# ========================================
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# ========================================
+# Sistema Operativo
+# ========================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+
+# ========================================
+# Temporales y Backups
+# ========================================
+
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig
+
+# ========================================
+# Otros
+# ========================================
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Ruff
+.ruff_cache/
+
+# Type checking
+.pytype/
+
+# Profiling
+*.prof

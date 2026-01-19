@@ -1,0 +1,105 @@
+================================================================================
+  GUÍA RÁPIDA: Sistema de Notificaciones Push SUAyED
+================================================================================
+
+📤 ENVIAR NOTIFICACIÓN BÁSICA
+------------------------------
+
+cd /Users/jctovar/Desarrollo/psicologia_v4/messaging
+./send.sh --title "Tu Título" --body "Tu Mensaje"
+
+
+📱 NAVEGACIÓN INTELIGENTE
+-------------------------
+
+El sistema navega automáticamente a la pantalla correcta según el tipo:
+
+1️⃣  NAVEGAR A CALENDARIO
+   ./send.sh \
+     --title "Evento Próximo" \
+     --body "Conferencia - 25 de Enero" \
+     --data '{"type":"event"}'
+
+2️⃣  NAVEGAR A HOME (NOTICIAS)
+   ./send.sh \
+     --title "Nueva Publicación" \
+     --body "Artículo disponible" \
+     --data '{"type":"post"}'
+
+3️⃣  NAVEGAR A ÁREAS
+   ./send.sh \
+     --title "Nuevos Recursos" \
+     --body "Materiales disponibles" \
+     --data '{"type":"resource"}'
+
+4️⃣  NAVEGAR A PROFESORES
+   ./send.sh \
+     --title "Actualización" \
+     --body "Nuevos horarios" \
+     --data '{"type":"teacher_update"}'
+
+
+🖼️  CON IMAGEN
+--------------
+
+./send.sh \
+  --title "Evento Especial" \
+  --body "Mira los detalles" \
+  --image "https://suayed.iztacala.unam.mx/imagen.jpg"
+
+
+👥 MÚLTIPLES DISPOSITIVOS
+-------------------------
+
+./send.sh \
+  --tokens "TOKEN1,TOKEN2,TOKEN3" \
+  --title "Aviso General"
+
+
+⚡ EJEMPLOS RÁPIDOS
+-------------------
+
+# Calificaciones disponibles
+./send.sh --title "Calificaciones" --data '{"type":"grades"}'
+
+# Nuevo recurso educativo
+./send.sh --title "Nuevos Materiales" --data '{"type":"resource"}'
+
+# Recordatorio de examen
+./send.sh --title "Examen Mañana" --data '{"type":"exam_reminder"}'
+
+
+📚 DOCUMENTACIÓN COMPLETA
+-------------------------
+
+README.md        → Guía completa y troubleshooting
+QUICKSTART.md    → Referencia rápida
+EJEMPLOS.md      → 30+ ejemplos por categoría
+PLAN.md          → Detalles técnicos
+
+
+❓ AYUDA
+--------
+
+Si tienes problemas, revisa:
+1. Que el archivo .env tenga el token FCM correcto
+2. Que service-account.json exista
+3. Los logs en notification.log
+4. La sección Troubleshooting en README.md
+
+
+✅ VERIFICACIÓN
+---------------
+
+El sistema está funcionando si:
+- Exit code: 0 al enviar
+- La notificación llega al dispositivo
+- Al tocar navega a la pantalla correcta
+- No hay errores de Navigator
+
+
+================================================================================
+  Desarrollado por: Claude Code para SUAyED Psicología FES Iztacala
+  Fecha: 18 de Enero de 2026
+  Estado: ✅ FUNCIONANDO CORRECTAMENTE
+================================================================================

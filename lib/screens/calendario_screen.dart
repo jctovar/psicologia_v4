@@ -739,26 +739,32 @@ class _CalendarioScreenState extends State<CalendarioScreen> {
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: _tiposEventos.map((tipo) {
-              return RadioListTile<String>(
-                title: Text(tipo),
-                value: tipo,
-                groupValue: _selectedTipoEvento,
-                onChanged: (value) {
+            children: [
+              SegmentedButton<String>(
+                segments: _tiposEventos
+                    .map(
+                      (tipo) => ButtonSegment(
+                        value: tipo,
+                        label: Text(tipo),
+                      ),
+                    )
+                    .toList(),
+                selected: <String>{_selectedTipoEvento ?? 'Todos'},
+                onSelectionChanged: (Set<String> newSelection) {
                   setState(() {
-                    _selectedTipoEvento = value;
+                    _selectedTipoEvento = newSelection.first;
                   });
 
                   // Tracking de analytics
                   Analytics.logEvent(
                     name: 'calendario_filter_applied',
-                    parameters: {'tipo_evento': value ?? 'Todos'},
+                    parameters: {'tipo_evento': newSelection.first},
                   );
 
                   Navigator.pop(context);
                 },
-              );
-            }).toList(),
+              ),
+            ],
           ),
         ),
         actions: [

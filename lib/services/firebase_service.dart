@@ -184,12 +184,50 @@ class FirebaseService {
     AppLogger.d('👆 Handling notification tap');
     AppLogger.d('👆 Data: ${message.data}');
 
-    // Navegar a la pantalla de notificaciones
-    final context = Constants.scaffoldMessengerKey.currentContext;
-    if (context != null) {
-      Navigator.pushNamed(context, 'notifications');
+    // Navegar usando navigatorKey
+    final navigator = Constants.navigatorKey.currentState;
+    if (navigator != null) {
+      // Verificar si hay datos personalizados para navegación específica
+      final data = message.data;
+
+      if (data.containsKey('type')) {
+        final type = data['type'];
+        AppLogger.d('👆 Navigation type: $type');
+
+        // Navegar según el tipo de notificación
+        switch (type) {
+          case 'post':
+            // Si hay ID de post, podríamos navegar directamente al post
+            // Por ahora navegamos a home donde se muestran los posts
+            navigator.pushNamed('/');
+            break;
+          case 'event':
+            navigator.pushNamed('calendario');
+            break;
+          case 'grades':
+          case 'exam':
+          case 'exam_reminder':
+          case 'exam_result':
+            navigator.pushNamed('calendario');
+            break;
+          case 'resource':
+          case 'resources':
+            navigator.pushNamed('areas');
+            break;
+          case 'teacher_update':
+          case 'advisory_cancelled':
+            navigator.pushNamed('teachers');
+            break;
+          default:
+            // Para notificaciones generales, ir a pantalla de notificaciones
+            navigator.pushNamed('notifications');
+        }
+      } else {
+        // Si no hay datos específicos, ir a pantalla de notificaciones
+        navigator.pushNamed('notifications');
+      }
     } else {
-      AppLogger.w('⚠️ Cannot navigate: context is null');
+      AppLogger.w('⚠️ Cannot navigate: Navigator state is null');
     }
   }
 

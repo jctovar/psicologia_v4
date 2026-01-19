@@ -78,6 +78,7 @@ class MyApp extends StatelessWidget {
       builder: (context, themeProvider, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
+          navigatorKey: Constants.navigatorKey,
           scaffoldMessengerKey: Constants.scaffoldMessengerKey,
           theme: iztacalaTheme,
           darkTheme: iztacalaDarkTheme,

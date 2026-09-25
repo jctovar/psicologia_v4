@@ -65,12 +65,13 @@ class _PostCardState extends State<PostCard>
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isWideScreen = screenWidth > 600;
+    final theme = Theme.of(context);
+    final isWideScreen = MediaQuery.sizeOf(context).width > 600;
+    final item = widget.item;
+    final datePub = _datePub(item.date);
 
     return Semantics(
-      label:
-          'Noticia: ${widget.item.title}. Publicada ${_datePub(widget.item.date)}',
+      label: 'Noticia: ${item.title}. Publicada $datePub',
       hint: 'Toca para leer la noticia completa',
       button: true,
       child: MouseRegion(
@@ -87,13 +88,11 @@ class _PostCardState extends State<PostCard>
               // Recorta el contenido para que la imagen llegue hasta los bordes
               clipBehavior: Clip.antiAlias,
               child: InkWell(
-                splashColor: Theme.of(
-                  context,
-                ).colorScheme.primary.withValues(alpha: 0.15),
-                highlightColor: Theme.of(
-                  context,
-                ).colorScheme.primary.withValues(alpha: 0.08),
-                onTap: () => _openFeed(context, widget.item),
+                splashColor: theme.colorScheme.primary.withValues(alpha: 0.15),
+                highlightColor: theme.colorScheme.primary.withValues(
+                  alpha: 0.08,
+                ),
+                onTap: () => _openFeed(context, item),
                 onTapDown: (_) => _animationController.forward(),
                 onTapUp: (_) => _animationController.reverse(),
                 onTapCancel: () => _animationController.reverse(),
@@ -104,15 +103,15 @@ class _PostCardState extends State<PostCard>
                     Expanded(
                       flex: 3,
                       child: Semantics(
-                        label: 'Imagen de portada de ${widget.item.title}',
+                        label: 'Imagen de portada de ${item.title}',
                         image: true,
                         child: Stack(
                           fit: StackFit.expand,
                           children: [
                             Hero(
-                              tag: 'post-image-${widget.item.id}',
+                              tag: 'post-image-${item.id}',
                               child: ThumbnailImage(
-                                imageUrl: widget.item.image,
+                                imageUrl: item.image,
                                 memCacheWidth: 800,
                               ),
                             ),
@@ -153,15 +152,14 @@ class _PostCardState extends State<PostCard>
                             // Título del post
                             Expanded(
                               child: Text(
-                                widget.item.title.toUpperCase(),
+                                item.title.toUpperCase(),
                                 maxLines: isWideScreen ? 2 : 3,
-                                style: Theme.of(context).textTheme.titleMedium
-                                    ?.copyWith(
-                                      fontSize: isWideScreen ? 14.5 : 15.0,
-                                      fontWeight: FontWeight.w700,
-                                      height: 1.3,
-                                      letterSpacing: 0.3,
-                                    ),
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontSize: isWideScreen ? 14.5 : 15.0,
+                                  fontWeight: FontWeight.w700,
+                                  height: 1.3,
+                                  letterSpacing: 0.3,
+                                ),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
@@ -172,16 +170,15 @@ class _PostCardState extends State<PostCard>
                                 Icon(
                                   Icons.access_time,
                                   size: 14,
-                                  color: Theme.of(
-                                    context,
-                                  ).textTheme.bodySmall?.color,
+                                  color: theme.textTheme.bodySmall?.color,
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  _datePub(widget.item.date),
+                                  datePub,
                                   maxLines: 1,
-                                  style: Theme.of(context).textTheme.bodySmall
-                                      ?.copyWith(fontWeight: FontWeight.w700),
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ],
@@ -191,7 +188,7 @@ class _PostCardState extends State<PostCard>
                       ),
                     ),
                     // Botones de acción (compartir, guardar)
-                    PostActions(item: widget.item),
+                    PostActions(item: item),
                   ],
                 ),
               ),
@@ -233,7 +230,7 @@ class PostActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isWideScreen = MediaQuery.of(context).size.width > 600;
+    final isWideScreen = MediaQuery.sizeOf(context).width > 600;
     final iconSize = isWideScreen ? 19.0 : 17.0;
     final padding = isWideScreen ? 16.0 : 12.0;
 

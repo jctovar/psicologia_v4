@@ -564,19 +564,19 @@ class NotificationItemShimmer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ShimmerPlaceholder(
-            width: MediaQuery.of(context).size.width * 0.6,
+            width: MediaQuery.sizeOf(context).width * 0.6,
             height: 16,
             borderRadius: BorderRadius.circular(4),
           ),
           const SizedBox(height: 8),
           ShimmerPlaceholder(
-            width: MediaQuery.of(context).size.width * 0.8,
+            width: MediaQuery.sizeOf(context).width * 0.8,
             height: 14,
             borderRadius: BorderRadius.circular(4),
           ),
           const SizedBox(height: 4),
           ShimmerPlaceholder(
-            width: MediaQuery.of(context).size.width * 0.5,
+            width: MediaQuery.sizeOf(context).width * 0.5,
             height: 14,
             borderRadius: BorderRadius.circular(4),
           ),

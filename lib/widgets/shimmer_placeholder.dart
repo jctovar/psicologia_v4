@@ -98,7 +98,7 @@ class PostCardShimmer extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         ShimmerPlaceholder(
-                          width: MediaQuery.of(context).size.width * 0.7,
+                          width: MediaQuery.sizeOf(context).width * 0.7,
                           height: 15,
                           borderRadius: BorderRadius.circular(6),
                         ),

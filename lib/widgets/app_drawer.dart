@@ -524,7 +524,7 @@ class _AppDrawerState extends State<AppDrawer> {
         final isDark =
             themeProvider.isDarkMode ||
             (themeProvider.isSystemMode &&
-                MediaQuery.of(context).platformBrightness == Brightness.dark);
+                MediaQuery.platformBrightnessOf(context) == Brightness.dark);
 
         return Semantics(
           label: 'Cambiar tema. Tema actual: ${isDark ? 'oscuro' : 'claro'}',

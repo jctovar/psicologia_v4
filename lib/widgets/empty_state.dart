@@ -36,7 +36,7 @@ class EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isWideScreen = MediaQuery.of(context).size.width > 600;
+    final isWideScreen = MediaQuery.sizeOf(context).width > 600;
 
     return Semantics(
       label: '$title. $message',
@@ -140,7 +140,7 @@ class ErrorState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isWideScreen = MediaQuery.of(context).size.width > 600;
+    final isWideScreen = MediaQuery.sizeOf(context).width > 600;
 
     return Semantics(
       label: 'Error: $message',

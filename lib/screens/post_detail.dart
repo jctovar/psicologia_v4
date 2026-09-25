@@ -174,7 +174,7 @@ class _PostDetailState extends State<PostDetail> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.sizeOf(context).width;
     final isWideScreen = screenWidth > 600;
 
     // Calcula padding horizontal para centrar contenido en pantallas anchas

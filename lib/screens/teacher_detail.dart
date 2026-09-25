@@ -125,7 +125,7 @@ class _TeacherDetailState extends State<TeacherDetail> {
 
   HtmlWidget _htmlWidget(String html) {
     final theme = Theme.of(context);
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.sizeOf(context).width;
     final isWideScreen = screenWidth > 600;
 
     return HtmlWidget(

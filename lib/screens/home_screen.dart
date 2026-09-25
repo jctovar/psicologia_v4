@@ -48,7 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
       final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-      if (homeProvider.hasMore && !homeProvider.isLoadingMore) {
+      if (homeProvider.hasMore &&
+          !homeProvider.isLoadingMore &&
+          homeProvider.loadMoreError == null) {
         homeProvider.loadMore();
       }
     }
@@ -60,8 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// - Tablet horizontal (>=900px): 3 columnas
   /// - Tablet vertical (>=600px): 2 columnas
   /// - Móvil (<600px): 1 columna
-  int _getCrossAxisCount(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+  int _getCrossAxisCount(double width) {
     if (width >= 1200) return 4;
     if (width >= 900) return 3;
     if (width >= 600) return 2;
@@ -71,8 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Calcula la proporción de aspecto de las tarjetas según el dispositivo.
   ///
   /// Valores más altos = tarjetas más bajas (compactas)
-  double _getChildAspectRatio(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+  double _getChildAspectRatio(double width) {
     if (width >= 1200) return 0.95; // Desktop
     if (width >= 900) return 0.9; // Tablet horizontal
     if (width >= 600) return 1.0; // Tablet vertical
@@ -81,8 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// Calcula el padding horizontal para centrar el contenido
   /// dentro de un ancho máximo de 1400px
-  double _getHorizontalPadding(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+  double _getHorizontalPadding(double screenWidth) {
     const maxContentWidth = 1400.0;
     final basePadding = screenWidth > 600 ? 16.0 : 4.0;
 
@@ -95,8 +94,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isWideScreen = MediaQuery.of(context).size.width > 600;
-    final horizontalPadding = _getHorizontalPadding(context);
+    final width = MediaQuery.sizeOf(context).width;
+    final isWideScreen = width > 600;
+    final padding = EdgeInsets.symmetric(
+      horizontal: _getHorizontalPadding(width),
+      vertical: isWideScreen ? 8.0 : 4.0,
+    );
+    final gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: _getCrossAxisCount(width),
+      childAspectRatio: _getChildAspectRatio(width),
+      crossAxisSpacing: isWideScreen ? 12.0 : 8.0,
+      mainAxisSpacing: isWideScreen ? 12.0 : 8.0,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -112,16 +121,8 @@ class _HomeScreenState extends State<HomeScreen> {
           // Estado de carga inicial - muestra placeholders shimmer
           if (homeProvider.isLoading && homeProvider.posts.isEmpty) {
             return GridView.builder(
-              padding: EdgeInsets.symmetric(
-                horizontal: horizontalPadding,
-                vertical: isWideScreen ? 8.0 : 4.0,
-              ),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: _getCrossAxisCount(context),
-                childAspectRatio: _getChildAspectRatio(context),
-                crossAxisSpacing: isWideScreen ? 12.0 : 8.0,
-                mainAxisSpacing: isWideScreen ? 12.0 : 8.0,
-              ),
+              padding: padding,
+              gridDelegate: gridDelegate,
               // Muestra 6 placeholders mientras carga
               itemCount: 6,
               itemBuilder: (context, index) {
@@ -152,20 +153,36 @@ class _HomeScreenState extends State<HomeScreen> {
             strokeWidth: 3,
             child: GridView.builder(
               controller: _scrollController,
-              padding: EdgeInsets.symmetric(
-                horizontal: horizontalPadding,
-                vertical: isWideScreen ? 8.0 : 4.0,
-              ),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: _getCrossAxisCount(context),
-                childAspectRatio: _getChildAspectRatio(context),
-                crossAxisSpacing: isWideScreen ? 12.0 : 8.0,
-                mainAxisSpacing: isWideScreen ? 12.0 : 8.0,
-              ),
+              padding: padding,
+              gridDelegate: gridDelegate,
               itemCount: itemCount,
               itemBuilder: (BuildContext context, int index) {
                 // Indicador de carga al final de la lista
                 if (index >= homeProvider.posts.length) {
+                  // Error al cargar la siguiente página: ofrecer reintento
+                  if (homeProvider.loadMoreError != null) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'No se pudieron cargar más noticias.',
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            const SizedBox(height: 8),
+                            TextButton.icon(
+                              onPressed: homeProvider.loadMore,
+                              icon: const Icon(Icons.refresh),
+                              label: const Text('Reintentar'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
                   return Center(
                     child: Padding(
                       padding: const EdgeInsets.all(24.0),
@@ -183,9 +200,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(height: 12),
                           Text(
                             'Cargando más...',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.7),
-                            ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.color
+                                      ?.withValues(alpha: 0.7),
+                                ),
                           ),
                         ],
                       ),

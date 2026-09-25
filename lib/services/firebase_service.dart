@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -62,19 +63,26 @@ class FirebaseService {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     AppLogger.d('📨 Background message handler configured');
 
-    // Solicitar permisos primero
-    await _requestPermissions();
-
-    // Suscribirse a tópicos
-    await _subscribeToTopics();
-
-    // Configurar listeners
+    // Configurar listeners (síncrono, no bloquea el arranque)
     _setupForegroundListener();
     _setupOnMessageOpenedAppListener();
-    _checkInitialMessage();
+  }
 
-    // Obtener y registrar token FCM (útil para debugging)
-    _logFCMToken();
+  /// Configura las partes de Firebase Messaging que dependen de la interacción
+  /// del usuario o de la red: permisos, tópicos, token y mensaje inicial.
+  ///
+  /// Debe llamarse después de `runApp()` (tras el primer frame) para que el
+  /// diálogo de permisos no bloquee el splash y el Navigator ya exista al
+  /// procesar una notificación que abrió la app.
+  static Future<void> setupMessaging() async {
+    // Procesar la notificación que abrió la app desde estado terminado
+    unawaited(_checkInitialMessage());
+
+    // Solicitar permisos antes de suscribirse a tópicos
+    await _requestPermissions();
+
+    // Suscribirse a tópicos y registrar token FCM (útil para debugging)
+    await Future.wait([_subscribeToTopics(), _logFCMToken()]);
 
     AppLogger.i('✅ Firebase Messaging configured');
   }
@@ -168,8 +176,13 @@ class FirebaseService {
 
   static Future<void> _checkInitialMessage() async {
     // Manejar cuando la app se abre desde estado terminado mediante notificación
-    RemoteMessage? initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
+    final RemoteMessage? initialMessage;
+    try {
+      initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    } catch (e) {
+      AppLogger.e('❌ Error getting initial message: $e');
+      return;
+    }
 
     if (initialMessage != null) {
       AppLogger.d('🚀 App opened from terminated state via notification');

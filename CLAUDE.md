@@ -240,7 +240,7 @@ Las rutas estan centralizadas en lib/routes/routes.dart:
 
 ### Sistema Tipográfico
 
-La aplicación usa un sistema tipográfico optimizado con dos fuentes complementarias precargadas al inicio:
+La aplicación usa un sistema tipográfico optimizado con dos fuentes complementarias incluidas en `assets/google_fonts/` y precargadas al inicio:
 
 **Fuentes:**
 - **Poppins**: Títulos grandes y destacados (Display, Headline). Moderna y con personalidad académica.
@@ -434,12 +434,12 @@ AppLogger.f('Error fatal', exception, stackTrace);  // Fatal
 | `firebase_analytics` | ^12.0.3 | Analiticas de eventos y navegación |
 | `firebase_crashlytics` | ^5.0.6 | Reporte y monitoreo de errores |
 | `flutter_widget_from_html_core` | ^0.17.0 | Renderizar HTML/CSS de WordPress API |
-| `cached_network_image` | ^3.1.0 | Cache y display optimizado de imagenes |
-| `google_fonts` | ^7.0.0 | Fuentes Poppins y Montserrat precargadas |
-| `shimmer` | ^3.0.0 | Efecto shimmer para placeholders de carga |
-| `share_plus` | ^12.0.0 | Compartir contenido via sistema nativo |
+| `cached_network_image` | ^4.0.2 | Cache y display optimizado de imagenes |
+| `google_fonts` | ^8.2.1 | Fuentes Poppins, Montserrat y Lora (desde assets) |
+| `shimmer` | ^4.0.0 | Efecto shimmer para placeholders de carga |
+| `share_plus` | ^13.3.0 | Compartir contenido via sistema nativo |
 | `url_launcher` | ^6.3.2 | Abrir URLs, emails y llamadas |
-| `intl` | ^0.19.0 | Formateo de fechas y números en español |
+| `intl` | ^0.20.2 | Formateo de fechas y números en español |
 
 ---
 
@@ -454,6 +454,10 @@ AppLogger.f('Error fatal', exception, stackTrace);  // Fatal
 | iOS | GoogleService-Info.plist | ios/Runner/ |
 | macOS | GoogleService-Info.plist | macos/Runner/ |
 | Dart | firebase_options.dart | lib/ (auto-generado) |
+
+Estos archivos están en `.gitignore` (se retiraron del repo en el commit `0d384dd`). Si faltan, el build falla con `Error when reading 'lib/firebase_options.dart'`. Para regenerarlos: `flutterfire configure`, o restaurarlos del historial con `git show 0d384dd^:<ruta> > <ruta>`. Nunca agregarlos a un commit.
+
+**iOS y macOS usan Swift Package Manager** (sin CocoaPods: no hay `Podfile`). Los plugins se resuelven como Swift Packages; versionar los `Package.resolved` en `*/xcshareddata/swiftpm/`.
 
 ---
 
@@ -638,6 +642,7 @@ Analytics.logEvent(
 | assets/ | Directorio raiz de assets |
 | assets/images/ | Imagenes |
 | assets/icon/ | Iconos de la aplicacion |
+| assets/google_fonts/ | TTF de Poppins, Montserrat y Lora + licencias OFL (sin descarga en runtime) |
 | assets/areas.json | Datos de areas de conocimiento (fallback) |
 | assets/teachers.json | Datos de profesores (fallback) |
 | assets/privacity.html | Aviso de privacidad |
@@ -660,8 +665,8 @@ Analytics.logEvent(
 
 ### Tipografía y Accesibilidad
 
-- **Fuentes**: Poppins (títulos) + Montserrat (cuerpo) - precargadas al inicio de la app
-- **Precarga**: AppFonts.preloadFonts() se llama en main.dart para mejor rendimiento offline
+- **Fuentes**: Poppins (títulos) + Montserrat (cuerpo) + Lora (detalles), incluidas en assets/google_fonts/
+- **Precarga**: AppFonts.preloadFonts() se llama en main.dart (desde assets, funciona offline; `allowRuntimeFetching = false`)
 - **Temas**: Soporte claro/oscuro con transiciones suaves (300ms) y cumplimiento WCAG AA/AAA
 - **Animaciones tema**: Las transiciones de tema usan Curves.easeInOut para mejor UX
 
@@ -677,7 +682,7 @@ Analytics.logEvent(
 - **Limite de posts en memoria**: 200 (para prevenir memory leaks)
 - **Placeholder de imagen**: assets/images/no_image.jpg
 - **Lazy loading**: Implementado en listas con paginación
-- **Precarga de assets**: Fuentes se precargan al iniciar la app
+- **Arranque**: HTTP, fuentes y Firebase se inicializan en paralelo; permisos y tópicos FCM se difieren al primer frame
 
 ### Analytics y Monitoreo
 
@@ -828,31 +833,41 @@ main()
   │     ├─► Hive.initFlutter()
   │     │   └─ Inicializa base de datos local para cache persistente
   │     │
-  │     ├─► initHttpService()
-  │     │   ├─ Crea HiveCacheStore para cache persistente
-  │     │   ├─ Configura CacheOptions (7 días max-stale)
-  │     │   ├─ Inicializa Dio con base URL y timeouts
-  │     │   └─ Añade interceptadores: DioCacheInterceptor + LoggingInterceptor
+  │     ├─► GoogleFonts.config.allowRuntimeFetching = false
+  │     │   └─ _registerFontLicenses(): licencias OFL en LicenseRegistry
   │     │
-  │     ├─► AppFonts.preloadFonts()
-  │     │   ├─ Precarga Poppins con pesos: 400, 500, 600, 700, 800
-  │     │   └─ Precarga Montserrat con pesos: 400, 500, 600, 700, 800
+  │     ├─► Future.wait([...])  (en paralelo)
+  │     │   │
+  │     │   ├─► initHttpService()
+  │     │   │   ├─ Crea HiveCacheStore para cache persistente
+  │     │   │   ├─ Configura CacheOptions (7 días max-stale)
+  │     │   │   ├─ Inicializa Dio con base URL y timeouts
+  │     │   │   └─ Añade interceptadores: DioCacheInterceptor + LoggingInterceptor
+  │     │   │
+  │     │   ├─► _preloadFonts() → AppFonts.preloadFonts()
+  │     │   │   └─ Carga Poppins y Montserrat (400-800) desde assets/google_fonts/
+  │     │   │
+  │     │   └─► FirebaseService.initialize()
+  │     │       ├─ Firebase.initializeApp() con configuración automática
+  │     │       ├─ onBackgroundMessage + listeners onMessage/onMessageOpenedApp
+  │     │       └─► CrashlyticsService.initialize()  (justo después de Core)
   │     │
-  │     ├─► FirebaseService.initialize()
-  │     │   ├─ Firebase.initializeApp() con configuración automática
-  │     │   ├─ Firebase Analytics: logEvent, logScreenView, etc.
-  │     │   └─ Firebase Messaging: FCM para notificaciones push
+  │     ├─► runApp(AppState())
+  │     │   └─ MultiProvider con: ThemeProvider, HomeProvider,
+  │     │      BookmarkProvider, NotificationProvider
   │     │
-  │     ├─► CrashlyticsService.initialize()
-  │     │   ├─ Crashlytics.instance.recordFlutterError()
-  │     │   └─ Captura excepciones no manejadas
-  │     │
-  │     └─► runApp(AppState())
-  │         └─ MultiProvider con: ThemeProvider, HomeProvider,
-  │            BookmarkProvider, NotificationProvider
+  │     └─► addPostFrameCallback → FirebaseService.setupMessaging()
+  │         ├─ _checkInitialMessage() (sin await; no resuelve en macOS)
+  │         ├─ _requestPermissions()
+  │         └─ _subscribeToTopics() + _logFCMToken()
   │
   └─► Manejo de errores asincronos con AppLogger.f()
 ```
+
+**Reglas del arranque:**
+- Antes de `runApp()` solo va lo necesario para pintar el primer frame; nada que dependa de la red o de interacción del usuario.
+- Permisos de notificaciones, tópicos FCM y `getInitialMessage()` van en `setupMessaging()` (después del primer frame): así el diálogo de permisos no bloquea el splash y el `Navigator` ya existe al navegar desde una notificación.
+- Las fuentes **no se descargan**: están en `assets/google_fonts/` con los nombres que espera `google_fonts` (`Familia-Peso.ttf`, ej. `Poppins-SemiBold.ttf`, `Lora-Italic.ttf`). Si se usa un nuevo peso/estilo o una nueva familia, agregar su TTF estático ahí (y su `OFL-<Familia>.txt` en `_registerFontLicenses()`); con `allowRuntimeFetching = false` un archivo faltante produce error en lugar de descargarse.
 
 **Configuración de caché HTTP:**
 - **Política**: Request-based con max-stale de 7 días

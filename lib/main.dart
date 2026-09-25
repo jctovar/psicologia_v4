@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:suayed/screens/home_screen.dart';
 import 'package:suayed/services/http_service.dart';
@@ -25,28 +28,52 @@ Future<void> main() async {
     await Hive.initFlutter();
     AppLogger.i('✅ Hive initialized');
 
-    // Inicializar servicio HTTP con cache persistente
-    await initHttpService();
+    // Las fuentes van incluidas en assets/google_fonts/: no descargarlas
+    GoogleFonts.config.allowRuntimeFetching = false;
+    _registerFontLicenses();
 
-    // Precargar fuentes de la aplicación para mejor rendimiento
-    try {
-      await AppFonts.preloadFonts();
-      AppLogger.i('✅ Fonts preloaded successfully');
-    } catch (e) {
-      AppLogger.w('⚠️ Font preloading failed, will load on demand: $e');
-    }
-
-    // Asegurar que los widgets están inicializados e inicializar servicios de Firebase
-    await FirebaseService.initialize();
-
-    // Inicializar Crashlytics
-    await CrashlyticsService.initialize();
+    // Tareas independientes entre sí: se ejecutan en paralelo
+    await Future.wait([
+      // Inicializar servicio HTTP con cache persistente
+      initHttpService(),
+      // Precargar fuentes desde assets
+      _preloadFonts(),
+      // Inicializar Firebase Core y Crashlytics lo antes posible para
+      // reportar errores del resto del arranque
+      FirebaseService.initialize().then((_) => CrashlyticsService.initialize()),
+    ]);
 
     AppLogger.i('✅ App initialization complete');
     runApp(const AppState());
+
+    // Permisos, tópicos y mensaje inicial no deben bloquear el primer frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FirebaseService.setupMessaging();
+    });
   }, (error, stack) {
     // Captura errores asíncronos no manejados
     AppLogger.f('Unhandled async error: $error', error, stack);
+  });
+}
+
+Future<void> _preloadFonts() async {
+  try {
+    await AppFonts.preloadFonts();
+    AppLogger.i('✅ Fonts preloaded successfully');
+  } catch (e) {
+    AppLogger.w('⚠️ Font preloading failed: $e');
+  }
+}
+
+/// Registra las licencias OFL de las fuentes incluidas en assets.
+void _registerFontLicenses() {
+  const families = ['Poppins', 'Montserrat', 'Lora'];
+  LicenseRegistry.addLicense(() async* {
+    for (final family in families) {
+      final license =
+          await rootBundle.loadString('assets/google_fonts/OFL-$family.txt');
+      yield LicenseEntryWithLineBreaks([family], license);
+    }
   });
 }
 

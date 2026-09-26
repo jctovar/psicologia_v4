@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:suayed/firebase_options.dart';
 import 'package:suayed/models/notification_model.dart';
+import 'package:suayed/routes/routes.dart';
 import 'package:suayed/services/logger_service.dart';
 import 'package:suayed/utils/app_constants.dart';
 import 'package:localstore/localstore.dart';
@@ -212,32 +213,32 @@ class FirebaseService {
           case 'post':
             // Si hay ID de post, podríamos navegar directamente al post
             // Por ahora navegamos a home donde se muestran los posts
-            navigator.pushNamed('/');
+            navigator.pushNamed(Routes.home);
             break;
           case 'event':
-            navigator.pushNamed('calendario');
+            navigator.pushNamed(Routes.calendario);
             break;
           case 'grades':
           case 'exam':
           case 'exam_reminder':
           case 'exam_result':
-            navigator.pushNamed('calendario');
+            navigator.pushNamed(Routes.calendario);
             break;
           case 'resource':
           case 'resources':
-            navigator.pushNamed('areas');
+            navigator.pushNamed(Routes.areas);
             break;
           case 'teacher_update':
           case 'advisory_cancelled':
-            navigator.pushNamed('teachers');
+            navigator.pushNamed(Routes.teachers);
             break;
           default:
             // Para notificaciones generales, ir a pantalla de notificaciones
-            navigator.pushNamed('notifications');
+            navigator.pushNamed(Routes.notifications);
         }
       } else {
         // Si no hay datos específicos, ir a pantalla de notificaciones
-        navigator.pushNamed('notifications');
+        navigator.pushNamed(Routes.notifications);
       }
     } else {
       AppLogger.w('⚠️ Cannot navigate: Navigator state is null');

@@ -19,16 +19,18 @@ class Routes {
   static const String privacy = PrivacyNotice.routeName;
   static const String about = AboutScreen.routeName;
 
-  static Map<String, WidgetBuilder> getRoutes(BuildContext context) {
-    return {
-      Routes.home: (context) => HomeScreen(title: Constants.appName),
-      Routes.teachers: (context) => const TeachersPage(title: 'Profesores'),
-      Routes.areas: (context) => const AreasPage(title: 'Coordinación SUAyED'),
-      Routes.calendario: (context) => const CalendarioScreen(title: 'Calendario Escolar'),
-      Routes.bookmarks: (context) => const BookmarksScreen(title: 'Marcadores'),
-      Routes.notifications: (context) => const NotificationsScreen(title: 'Notificaciones'),
-      Routes.privacy: (context) => const PrivacyNotice(),
-      Routes.about: (context) => const AboutScreen(title: 'Acerca de la aplicación'),
-    };
-  }
+  /// Mapa de rutas de la app. Se crea una sola vez (no en cada build).
+  static final Map<String, WidgetBuilder> routes = {
+    Routes.home: (context) => HomeScreen(title: Constants.appName),
+    Routes.teachers: (context) => const TeachersPage(title: 'Profesores'),
+    Routes.areas: (context) => const AreasPage(title: 'Coordinación SUAyED'),
+    Routes.calendario: (context) =>
+        const CalendarioScreen(title: 'Calendario Escolar'),
+    Routes.bookmarks: (context) => const BookmarksScreen(title: 'Marcadores'),
+    Routes.notifications: (context) =>
+        const NotificationsScreen(title: 'Notificaciones'),
+    Routes.privacy: (context) => const PrivacyNotice(),
+    Routes.about: (context) =>
+        const AboutScreen(title: 'Acerca de la aplicación'),
+  };
 }

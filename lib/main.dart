@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:suayed/screens/home_screen.dart';
 import 'package:suayed/services/http_service.dart';
 import 'package:provider/provider.dart';
 import 'package:suayed/providers/bookmark_provider.dart';
@@ -113,8 +112,7 @@ class MyApp extends StatelessWidget {
           themeAnimationDuration: const Duration(milliseconds: 300),
           themeAnimationCurve: Curves.easeInOut,
           initialRoute: Routes.home,
-          home: const HomeScreen(title: 'Iztacala'),
-          routes: Routes.getRoutes(context),
+          routes: Routes.routes,
           navigatorObservers: [
             Analytics.observer,
           ],

@@ -380,7 +380,6 @@ psicologia_v4/
 │   ├── services/                 # Capa de servicios
 │   │   ├── http_service.dart     # Cliente HTTP con caché (Dio)
 │   │   ├── posts_service.dart    # Servicio de posts con paginación
-│   │   ├── suayed_service.dart   # Operaciones de API de alto nivel
 │   │   ├── calendario_service.dart # Servicio de calendario escolar
 │   │   ├── local_service.dart    # Almacenamiento local
 │   │   ├── firebase_service.dart # Inicialización de Firebase

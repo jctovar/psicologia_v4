@@ -128,7 +128,6 @@ La aplicacion sigue una separacion limpia entre llamadas API y logica de negocio
 | `HttpProvider` | lib/services/posts_service.dart | Obtener posts con paginacion |
 | `HttpService` | lib/services/http_service.dart | Configuracion de Dio con cache |
 | `CalendarioService` | lib/services/calendario_service.dart | Obtener calendario escolar desde JSON externo |
-| `SuayedServices` | lib/services/suayed_service.dart | Operaciones de API de alto nivel (legacy) |
 | `FirebaseService` | lib/services/firebase_service.dart | Inicializacion de Firebase y analytics |
 | `CrashlyticsService` | lib/services/crashlytics_service.dart | Reporte de errores |
 | `LocalService` | lib/services/local_service.dart | Operaciones de almacenamiento local |
@@ -216,18 +215,18 @@ Ubicados en lib/models/:
 
 ### Navegacion
 
-Las rutas estan centralizadas en lib/routes/routes.dart:
+Las rutas estan centralizadas en lib/routes/routes.dart (`Routes.routes`, mapa `static final` creado una sola vez). Los nombres no llevan `/` y `initialRoute` es `Routes.home` (no se usa `MaterialApp.home`, por lo que `'/'` no existe). Navegar siempre con las constantes de `Routes`, nunca con strings literales:
 
-| Ruta | Pantalla | Descripcion |
-|------|----------|-------------|
-| `/` | HomeScreen | Pantalla principal con noticias |
-| `/teachers` | TeachersPage | Lista de profesores |
-| `/areas` | AreasPage | Areas de conocimiento |
-| `/calendario` | CalendarioScreen | Calendario escolar con eventos y periodos academicos |
-| `/bookmarks` | BookmarksScreen | Marcadores guardados |
-| `/notifications` | NotificationsScreen | Historial de notificaciones |
-| `/privacy` | PrivacyNotice | Aviso de privacidad |
-| `/about` | AboutScreen | Informacion de la app |
+| Constante | Nombre | Pantalla | Descripcion |
+|-----------|--------|----------|-------------|
+| `Routes.home` | `home` | HomeScreen | Pantalla principal con noticias |
+| `Routes.teachers` | `teachers` | TeachersPage | Lista de profesores |
+| `Routes.areas` | `areas` | AreasPage | Areas de conocimiento |
+| `Routes.calendario` | `calendario` | CalendarioScreen | Calendario escolar con eventos y periodos academicos |
+| `Routes.bookmarks` | `bookmarks` | BookmarksScreen | Marcadores guardados |
+| `Routes.notifications` | `notifications` | NotificationsScreen | Historial de notificaciones |
+| `Routes.privacy` | `privacity` | PrivacyNotice | Aviso de privacidad |
+| `Routes.about` | `about` | AboutScreen | Informacion de la app |
 
 ### Estructura de UI
 
@@ -316,7 +315,7 @@ Text('Título', style: GoogleFonts.montserrat(fontSize: 16))
 ```dart
 class MiScreen extends StatelessWidget {
   // Siempre definir routeName como constante estatica
-  static const String routeName = '/mi-screen';
+  static const String routeName = 'mi-screen';
 
   final String title;
 
@@ -475,7 +474,7 @@ Estos archivos están en `.gitignore` (se retiraron del repo en el commit `0d384
 ```dart
 // lib/screens/nueva_screen.dart
 class NuevaScreen extends StatelessWidget {
-  static const String routeName = '/nueva';
+  static const String routeName = 'nueva';
 
   final String title;
 
@@ -493,7 +492,7 @@ class NuevaScreen extends StatelessWidget {
 
 // lib/routes/routes.dart - agregar:
 static const String nueva = NuevaScreen.routeName;
-// En getRoutes():
+// En el mapa Routes.routes:
 Routes.nueva: (context) => const NuevaScreen(title: 'Nueva'),
 ```
 

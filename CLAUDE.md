@@ -701,7 +701,8 @@ El proyecto incluye pruebas unitarias:
 test/
 ├── flutter_test_config.dart          # Config global: cwd temporal para localstore
 ├── helpers/
-│   └── test_helpers.dart
+│   ├── fake_wordpress_api.dart       # API de WordPress simulada sobre `dio`
+│   └── test_helpers.dart             # Generadores de PostModel/StoragePost
 ├── models/
 │   ├── area_model_test.dart
 │   ├── notification_model_test.dart
@@ -710,14 +711,30 @@ test/
 │   └── teacher_model_test.dart
 ├── providers/
 │   ├── bookmark_provider_test.dart
-│   ├── home_provider_pagination_test.dart  # Interceptor Dio simulado, sin red
 │   ├── home_provider_test.dart
 │   ├── notification_provider_test.dart
 │   └── theme_provider_test.dart
+├── screens/
+│   └── home_screen_test.dart         # Pruebas de widget: carga, error, scroll, reintento
 └── services/
     ├── http_service_test.dart
     └── posts_service_test.dart
 ```
+
+**Peticiones HTTP en pruebas:** `flutter test` bloquea la red (toda petición recibe 400), así que una prueba que "llama a la API" sin simularla solo ejercita el camino de error. Toda prueba que use `dio` (directo o vía `HttpProvider`/`HomeProvider`) debe instalar `FakeWordPressApi`:
+
+```dart
+late FakeWordPressApi api;
+setUpAll(() async => api = await FakeWordPressApi.install());
+setUp(() => api.reset());
+
+api.setUpPages(3);                                   // 3 páginas de 3 posts
+api.pages[2] = const FakePage.status(500);           // o .dioError(...)
+api.gate = Completer<void>();                        // retener respuestas
+expect(api.requests.map(FakeWordPressApi.pageOf), [1, 2]);
+```
+
+No envolver aserciones en `if (...)` según el resultado de la red: una prueba así pasa sin verificar nada. En pruebas de widget, las peticiones iniciadas dentro de `testWidgets` avanzan con `tester.pump(duración)`, no con `runAsync` (ver `settle()` en `home_screen_test.dart`).
 
 **Almacenamiento en pruebas:** en escritorio, localstore escribe en `Directory.current`. `test/flutter_test_config.dart` cambia el directorio de trabajo a uno temporal (y lo borra al final) para que las pruebas no creen `bookmarks/` ni `notifications/` en el repo. No usar `Localstore.getInstance(customPath:)` ni `setCustomSavePath`: en localstore 1.4.0 el primero ignora la ruta y el segundo entra en recursión infinita. Las pruebas no deben depender de rutas relativas al repo.
 

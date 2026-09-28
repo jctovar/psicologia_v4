@@ -1,31 +1,5 @@
-import 'package:dio/dio.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:suayed/models/post_model.dart';
 import 'package:suayed/models/storage_post_model.dart';
-
-/// Mock de Dio para pruebas HTTP
-class MockDio extends Mock implements Dio {}
-
-/// Mock de RequestOptions para Dio
-class FakeRequestOptions extends Fake implements RequestOptions {}
-
-/// Mock de Response para Dio
-class FakeResponse<T> extends Fake implements Response<T> {
-  @override
-  final T data;
-
-  @override
-  final Headers headers;
-
-  @override
-  final int? statusCode;
-
-  FakeResponse({
-    required this.data,
-    Headers? headers,
-    this.statusCode = 200,
-  }) : headers = headers ?? Headers();
-}
 
 /// Genera un PostModel de prueba
 PostModel createTestPost({
@@ -75,35 +49,4 @@ List<PostModel> createTestPosts(int count) {
       link: 'https://example.com/post-${index + 1}',
     ),
   );
-}
-
-/// Genera JSON de respuesta de API de WordPress
-List<Map<String, dynamic>> createWordPressApiResponse(int count) {
-  return List.generate(
-    count,
-    (index) => {
-      'id': index + 1,
-      'date': DateTime.now().toIso8601String(),
-      'title': {'rendered': 'Post ${index + 1}'},
-      'link': 'https://example.com/post-${index + 1}',
-      'jetpack_featured_media_url': 'https://example.com/image-${index + 1}.jpg',
-      'content': {'rendered': '<p>Content for post ${index + 1}</p>'},
-    },
-  );
-}
-
-/// Crea Headers de respuesta de WordPress con paginación
-Headers createWordPressHeaders({
-  int totalPages = 1,
-  int totalPosts = 15,
-}) {
-  final headers = Headers();
-  headers.set('X-WP-TotalPages', totalPages.toString());
-  headers.set('X-WP-Total', totalPosts.toString());
-  return headers;
-}
-
-/// Registra fallback values para mocktail
-void registerFallbackValues() {
-  registerFallbackValue(FakeRequestOptions());
 }

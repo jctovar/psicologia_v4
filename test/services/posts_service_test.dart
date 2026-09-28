@@ -1,18 +1,22 @@
 import 'package:dio/dio.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:suayed/models/post_model.dart';
 import 'package:suayed/services/posts_service.dart';
 
+import '../helpers/fake_wordpress_api.dart';
 import '../helpers/test_helpers.dart';
 
-/// Mock de Dio para pruebas aisladas
-class MockDio extends Mock implements Dio {}
-
 void main() {
-  setUpAll(() {
-    registerFallbackValues();
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  late FakeWordPressApi api;
+
+  setUpAll(() async {
+    api = await FakeWordPressApi.install();
   });
+
+  setUp(() => api.reset());
 
   group('PostsResponse', () {
     test('se crea correctamente con todos los campos', () {
@@ -27,166 +31,165 @@ void main() {
       expect(response.totalPages, 3);
       expect(response.totalPosts, 45);
     });
+  });
 
-    test('permite lista vacía de posts', () {
-      final response = PostsResponse(
-        posts: [],
-        totalPages: 0,
-        totalPosts: 0,
+  group('HttpProvider.getPosts - Petición', () {
+    test('usa page=1 y per_page=15 por defecto', () async {
+      api.pages[1] = const FakePage.posts([1]);
+
+      await HttpProvider.getPosts();
+
+      expect(
+        api.requests.single.path,
+        '?rest_route=/wp/v2/posts&per_page=15&page=1',
       );
+    });
 
-      expect(response.posts, isEmpty);
-      expect(response.totalPages, 0);
+    test('incluye page y perPage recibidos en el endpoint', () async {
+      api.pages[2] = const FakePage.posts([1]);
+
+      await HttpProvider.getPosts(page: 2, perPage: 10);
+
+      expect(
+        api.requests.single.path,
+        '?rest_route=/wp/v2/posts&per_page=10&page=2',
+      );
+    });
+
+    test('sin refreshCache no fuerza política de cache', () async {
+      api.pages[1] = const FakePage.posts([1]);
+
+      await HttpProvider.getPosts();
+
+      expect(api.requests.single.getCacheOptions(), isNull);
+    });
+
+    test('refreshCache=true usa CachePolicy.refresh', () async {
+      api.pages[1] = const FakePage.posts([1]);
+
+      await HttpProvider.getPosts(refreshCache: true);
+
+      expect(
+        api.requests.single.getCacheOptions()?.policy,
+        CachePolicy.refresh,
+      );
+    });
+  });
+
+  group('HttpProvider.getPosts - Respuesta', () {
+    test('convierte el JSON en PostModel manteniendo el orden', () async {
+      api.pages[1] = const FakePage.posts([30, 20, 10]);
+
+      final response = await HttpProvider.getPosts();
+
+      expect(response.posts, everyElement(isA<PostModel>()));
+      expect(response.posts.map((p) => p.id), [30, 20, 10]);
+      expect(response.posts.first.title, 'Post 30');
+    });
+
+    test('lee totalPages y totalPosts de los headers de WordPress', () async {
+      api.pages[1] = const FakePage.posts([1]);
+      api.totalPagesHeader = '5';
+      api.totalPostsHeader = '75';
+
+      final response = await HttpProvider.getPosts();
+
+      expect(response.totalPages, 5);
+      expect(response.totalPosts, 75);
+    });
+
+    test('usa 1 página y 0 posts si faltan los headers', () async {
+      api.pages[1] = const FakePage.posts([1]);
+      api.totalPagesHeader = null;
+      api.totalPostsHeader = null;
+
+      final response = await HttpProvider.getPosts();
+
+      expect(response.totalPages, 1);
       expect(response.totalPosts, 0);
     });
 
-    test('mantiene orden de posts', () {
-      final posts = [
-        createTestPost(id: 3, title: 'Third'),
-        createTestPost(id: 1, title: 'First'),
-        createTestPost(id: 2, title: 'Second'),
-      ];
+    test('usa los valores por defecto si los headers no son números', () async {
+      api.pages[1] = const FakePage.posts([1]);
+      api.totalPagesHeader = 'invalid';
+      api.totalPostsHeader = 'not-a-number';
 
-      final response = PostsResponse(
-        posts: posts,
-        totalPages: 1,
-        totalPosts: 3,
-      );
+      final response = await HttpProvider.getPosts();
 
-      expect(response.posts[0].id, 3);
-      expect(response.posts[1].id, 1);
-      expect(response.posts[2].id, 2);
+      expect(response.totalPages, 1);
+      expect(response.totalPosts, 0);
+    });
+
+    test('acepta una página vacía', () async {
+      api.pages[1] = const FakePage.posts([]);
+
+      final response = await HttpProvider.getPosts();
+
+      expect(response.posts, isEmpty);
     });
   });
 
   group('HttpProvider.getPosts - Manejo de errores', () {
-    group('DioException types', () {
-      test('connectionTimeout lanza mensaje correcto', () {
-        // Este test documenta el comportamiento esperado
-        // cuando hay timeout de conexión
-        final exception = DioException(
-          type: DioExceptionType.connectionTimeout,
-          requestOptions: RequestOptions(path: '/test'),
-        );
-
-        expect(exception.type, DioExceptionType.connectionTimeout);
-        // El mensaje esperado es:
-        // "No se pudo conectar al servidor. Revisa tu conexión a internet."
-      });
-
-      test('receiveTimeout lanza mensaje correcto', () {
-        final exception = DioException(
-          type: DioExceptionType.receiveTimeout,
-          requestOptions: RequestOptions(path: '/test'),
-        );
-
-        expect(exception.type, DioExceptionType.receiveTimeout);
-        // El mensaje esperado es:
-        // "No se pudo conectar al servidor. Revisa tu conexión a internet."
-      });
-
-      test('badResponse lanza mensaje correcto', () {
-        final exception = DioException(
-          type: DioExceptionType.badResponse,
-          requestOptions: RequestOptions(path: '/test'),
-          response: Response(
-            statusCode: 500,
-            requestOptions: RequestOptions(path: '/test'),
+    Future<void> expectErrorMessage(FakePage page, String message) async {
+      api.pages[1] = page;
+      await expectLater(
+        HttpProvider.getPosts(),
+        throwsA(
+          isA<Exception>().having(
+            (e) => e.toString(),
+            'mensaje',
+            'Exception: $message',
           ),
-        );
+        ),
+      );
+    }
 
-        expect(exception.type, DioExceptionType.badResponse);
-        // El mensaje esperado es:
-        // "Ocurrió un error al procesar la respuesta del servidor."
-      });
+    const sinConexion =
+        'No se pudo conectar al servidor. Revisa tu conexión a internet.';
 
-      test('cancel lanza mensaje correcto', () {
-        final exception = DioException(
-          type: DioExceptionType.cancel,
-          requestOptions: RequestOptions(path: '/test'),
-        );
-
-        expect(exception.type, DioExceptionType.cancel);
-        // El mensaje esperado es:
-        // "La solicitud fue cancelada."
-      });
-
-      test('unknown lanza mensaje genérico', () {
-        final exception = DioException(
-          type: DioExceptionType.unknown,
-          requestOptions: RequestOptions(path: '/test'),
-        );
-
-        expect(exception.type, DioExceptionType.unknown);
-        // El mensaje esperado es:
-        // "Ocurrió un error inesperado."
-      });
-    });
-  });
-
-  group('HttpProvider.getPosts - Parámetros', () {
-    test('valores por defecto son page=1 y perPage=15', () {
-      // Documentar los valores por defecto esperados
-      // page: 1, perPage: 15, refreshCache: false
-      expect(1, 1); // page default
-      expect(15, 15); // perPage default
-      expect(false, false); // refreshCache default
-    });
-
-    test('endpoint construido correctamente', () {
-      const page = 2;
-      const perPage = 10;
-      final expectedEndpoint = '?rest_route=/wp/v2/posts&per_page=$perPage&page=$page';
-
-      expect(
-        expectedEndpoint,
-        '?rest_route=/wp/v2/posts&per_page=10&page=2',
+    test('connectionTimeout → mensaje de conexión', () async {
+      await expectErrorMessage(
+        const FakePage.dioError(DioExceptionType.connectionTimeout),
+        sinConexion,
       );
     });
-  });
 
-  group('Parseo de respuesta de API', () {
-    test('parsea lista de posts correctamente', () {
-      final apiResponse = createWordPressApiResponse(3);
-
-      final posts = apiResponse.map((json) => PostModel.fromJson(json)).toList();
-
-      expect(posts.length, 3);
-      expect(posts[0].id, 1);
-      expect(posts[1].id, 2);
-      expect(posts[2].id, 3);
+    test('receiveTimeout → mensaje de conexión', () async {
+      await expectErrorMessage(
+        const FakePage.dioError(DioExceptionType.receiveTimeout),
+        sinConexion,
+      );
     });
 
-    test('parsea headers de paginación correctamente', () {
-      final headers = createWordPressHeaders(totalPages: 5, totalPosts: 75);
-
-      final totalPages = int.tryParse(headers.value('X-WP-TotalPages') ?? '1') ?? 1;
-      final totalPosts = int.tryParse(headers.value('X-WP-Total') ?? '0') ?? 0;
-
-      expect(totalPages, 5);
-      expect(totalPosts, 75);
+    test('sendTimeout → mensaje de conexión', () async {
+      await expectErrorMessage(
+        const FakePage.dioError(DioExceptionType.sendTimeout),
+        sinConexion,
+      );
     });
 
-    test('usa valores por defecto si headers están ausentes', () {
-      final headers = Headers();
+    test(
+      'respuesta HTTP de error → mensaje de respuesta del servidor',
+      () async {
+        await expectErrorMessage(
+          const FakePage.status(500),
+          'Ocurrió un error al procesar la respuesta del servidor.',
+        );
+      },
+    );
 
-      final totalPages = int.tryParse(headers.value('X-WP-TotalPages') ?? '1') ?? 1;
-      final totalPosts = int.tryParse(headers.value('X-WP-Total') ?? '0') ?? 0;
-
-      expect(totalPages, 1);
-      expect(totalPosts, 0);
+    test('solicitud cancelada → mensaje de cancelación', () async {
+      await expectErrorMessage(
+        const FakePage.dioError(DioExceptionType.cancel),
+        'La solicitud fue cancelada.',
+      );
     });
 
-    test('maneja headers con valores inválidos', () {
-      final headers = Headers();
-      headers.set('X-WP-TotalPages', 'invalid');
-      headers.set('X-WP-Total', 'not-a-number');
-
-      final totalPages = int.tryParse(headers.value('X-WP-TotalPages') ?? '1') ?? 1;
-      final totalPosts = int.tryParse(headers.value('X-WP-Total') ?? '0') ?? 0;
-
-      expect(totalPages, 1); // Fallback
-      expect(totalPosts, 0); // Fallback
+    test('otro error de Dio → mensaje genérico', () async {
+      await expectErrorMessage(
+        const FakePage.dioError(DioExceptionType.connectionError),
+        'Ocurrió un error inesperado.',
+      );
     });
   });
 
@@ -197,7 +200,8 @@ void main() {
         'date': '2024-06-15T10:30:00',
         'title': {'rendered': 'Título del Post'},
         'link': 'https://suayed.iztacala.unam.mx/post/123',
-        'jetpack_featured_media_url': 'https://suayed.iztacala.unam.mx/image.jpg',
+        'jetpack_featured_media_url':
+            'https://suayed.iztacala.unam.mx/image.jpg',
         'content': {'rendered': '<p>Contenido del post</p>'},
       };
 
@@ -210,7 +214,7 @@ void main() {
       expect(post.content, '<p>Contenido del post</p>');
     });
 
-    test('PostModel maneja imagen nula o vacía', () {
+    test('PostModel usa cadena vacía si la imagen es nula', () {
       final jsonWithNullImage = {
         'id': 1,
         'date': '2024-01-01T00:00:00',
@@ -222,8 +226,7 @@ void main() {
 
       final post = PostModel.fromJson(jsonWithNullImage);
 
-      // Dependiendo de la implementación, podría ser null o string vacío
-      expect(post.image, anyOf(isNull, equals(''), equals('null')));
+      expect(post.image, '');
     });
   });
 }

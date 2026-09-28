@@ -699,17 +699,27 @@ El proyecto incluye pruebas unitarias:
 
 ```
 test/
+├── flutter_test_config.dart          # Config global: cwd temporal para localstore
+├── helpers/
+│   └── test_helpers.dart
 ├── models/
+│   ├── area_model_test.dart
+│   ├── notification_model_test.dart
 │   ├── post_model_test.dart
-│   └── storage_post_model_test.dart
+│   ├── storage_post_model_test.dart
+│   └── teacher_model_test.dart
 ├── providers/
 │   ├── bookmark_provider_test.dart
+│   ├── home_provider_pagination_test.dart  # Interceptor Dio simulado, sin red
 │   ├── home_provider_test.dart
 │   ├── notification_provider_test.dart
 │   └── theme_provider_test.dart
 └── services/
-    └── http_service_test.dart
+    ├── http_service_test.dart
+    └── posts_service_test.dart
 ```
+
+**Almacenamiento en pruebas:** en escritorio, localstore escribe en `Directory.current`. `test/flutter_test_config.dart` cambia el directorio de trabajo a uno temporal (y lo borra al final) para que las pruebas no creen `bookmarks/` ni `notifications/` en el repo. No usar `Localstore.getInstance(customPath:)` ni `setCustomSavePath`: en localstore 1.4.0 el primero ignora la ruta y el segundo entra en recursión infinita. Las pruebas no deben depender de rutas relativas al repo.
 
 Para ejecutar pruebas:
 ```bash

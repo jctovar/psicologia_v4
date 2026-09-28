@@ -65,3 +65,9 @@ lib/firebase_options.dart
 
 # MCP configuration files
 .mcp.json
+# Datos de localstore generados al ejecutar pruebas en escritorio
+/bookmarks/
+/notifications/
+
+# Reportes de cobertura (flutter test --coverage)
+/coverage/
